@@ -80,7 +80,7 @@ define FIND_TEST_AND_COPY
     find $(1) -name '*.[hc]*' -exec \cp {} build \;
     find src/utils -name '*.[hc]*' -exec \cp {} build \;
     find src -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
-    cp src/Test_main.ino build/build.ino
+    cp src/test_main.ino build/build.ino
 endef
 
 cp_unity_core: build
