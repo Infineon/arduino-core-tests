@@ -17,7 +17,7 @@
 
 // Arduino includes
 #include <Arduino.h>
-#if defined(TEST_CAN) || defined(TEST_CAN_CONNECTED_NODE1) || defined(TEST_CAN_CONNECTED_NODE2)
+#if defined(TEST_CAN_SINGLE) || defined(TEST_CAN_CONNECTED2_NODE1) || defined(TEST_CAN_CONNECTED2_NODE2)
     #include <CAN.h>
 #endif
 

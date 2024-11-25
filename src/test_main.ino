@@ -1,5 +1,5 @@
 // test includes
-#include "Test_common_includes.h"
+#include "test_common_includes.h"
 
 
 /***
@@ -10,26 +10,24 @@
 void RunAllTests(void)
 {
 
+// CAN\test_can_single.cpp
+#ifdef TEST_CAN_SINGLE
 
-
-// CAN standalone
-#ifdef TEST_CAN
-
-    RUN_TEST_GROUP(CAN);
+    RUN_TEST_GROUP(can_single);
 
 #endif
 
-// CAN with 2 boards connections
-#ifdef TEST_CAN_CONNECTED_NODE1
+// CAN\test_can_connected2_node1.cpp
+#ifdef TEST_CAN_CONNECTED2_NODE1
 
-    RUN_TEST_GROUP(CAN_connected_node1);
+    RUN_TEST_GROUP(can_connected2_node1);
 
 #endif
 
-// CAN with 2 boards connections
-#ifdef TEST_CAN_CONNECTED_NODE2
+// CAN with 2 boards connections node 2, receiver
+#ifdef TEST_CAN_CONNECTED2_NODE2
 
-    RUN_TEST_GROUP(CAN_connected_node2);
+    RUN_TEST_GROUP(can_connected2_node2);
 
 #endif
 

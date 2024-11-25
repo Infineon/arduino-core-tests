@@ -1,7 +1,13 @@
+/* test_can_single.cpp
+ *
+ * This test is used to verify the functionality of the CAN library.
+ * only one board is needed with out any other connections.
+ */
+
 // std includes
 
 // test includes
-#include "Test_common_includes.h"
+#include "test_common_includes.h"
 
 // project includes
 
@@ -11,10 +17,12 @@
 // variables
 
 // Method invoked by Unity before a test suite is run
-void CAN_suiteSetUp() {}
+void CAN_suiteSetUp() {
+}
 
 // Method invoked by Unity after a test suite is run
-void CAN_suiteTearDown() {}
+void CAN_suiteTearDown() {
+}
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
 extern CANXMC CAN;
@@ -22,55 +30,26 @@ extern CANXMC CAN;
 // test includes that may require dut
 
 // define test group name
-TEST_GROUP(CAN);
-TEST_GROUP(CAN_internal);
+TEST_GROUP(can_single);
+TEST_GROUP(can_single_internal);
 
 // Setup method called before every individual test defined for this test group
-static TEST_SETUP(CAN_internal) {}
+static TEST_SETUP(can_single_internal) {
+}
 
 // Tear down method called before every individual test defined for this test group
-static TEST_TEAR_DOWN(CAN_internal) {}
+static TEST_TEAR_DOWN(can_single_internal) {
+}
 
 // Functionality not - yet - supported
-TEST_IFX(CAN_internal, checkUnsupportedFunctionality) {
+TEST_IFX(can_single_internal, checkUnsupportedFunctionality) {
     TEST_ASSERT_FALSE(CAN.observe());
     // TEST_ASSERT_TRUE(CAN.packetRtr() ); Remote frame not tested
 }
 
-TEST_IFX(CAN_internal, checkSupportedFunctionality) {
-    /*TODO: How to test this?
-    TEST_ASSERT_TRUE(CAN.begin() );
-    // TEST_ASSERT_TRUE(CAN.end() );
-    // TEST_ASSERT_TRUE(CAN.endPacket() ); // need to configure
-    // TEST_ASSERT_TRUE(CAN.parsePacket() ); // return value
-    // TEST_ASSERT_TRUE(CAN.onReceive(0) ); // void
-    TEST_ASSERT_TRUE(CAN.filter(0x12, 0x7FF) );
-    TEST_ASSERT_TRUE(CAN.filterExtended(0x12345678, 0x1FFFFFFF) );
-
-    TEST_ASSERT_TRUE(CAN.loopback() );
-
-    // TEST_ASSERT_TRUE(CAN.setIdentifier(0x123) ); // need to be deleted in the future
-    TEST_ASSERT_TRUE(CAN.beginPacket(0x12, 8, false) );
-    TEST_ASSERT_TRUE(CAN.beginExtendedPacket(0xFFF, 8, false) );
-
-    TEST_ASSERT_TRUE(CAN.available() );
-    TEST_ASSERT_TRUE(CAN.read() );
-    TEST_ASSERT_TRUE(CAN.peek() );
-    // TEST_ASSERT_TRUE(CAN.flush() ); // void
-    TEST_ASSERT_TRUE(CAN.write(0x12) );
-    TEST_ASSERT_TRUE(CAN.write((uint8_t*)0x12, 1) );
-
-    TEST_ASSERT_TRUE(CAN.sleep() );
-
-    // TEST_ASSERT_TRUE(CAN.onInterrupt() ); // void
-    // TEST_ASSERT_TRUE(CAN.packetDlc() );
-    // TEST_ASSERT_TRUE(CAN.packetExtended() );
-    // TEST_ASSERT_TRUE(CAN.packetId() );
-    */
-}
 
 // Test case for CAN_msg_tx initialization
-void test_CAN_msg_tx_initialization(void) {
+TEST_IFX(can_single_internal, testCanMsgTxInitialization)  {
     // Get the Tx message object
     XMC_CAN_MO_t *txMessage = CAN.getTxMessage();
 
@@ -85,7 +64,7 @@ void test_CAN_msg_tx_initialization(void) {
 }
 
 // Test case for CAN_msg_rx initialization
-void test_CAN_msg_rx_initialization(void) {
+TEST_IFX(can_single_internal, test_CAN_msg_rx_initialization) {
     // Get the Rx message object
     XMC_CAN_MO_t *rxMessage = CAN.getRxMessage();
 
@@ -101,62 +80,60 @@ void test_CAN_msg_rx_initialization(void) {
 }
 
 // Test case for CAN begin function with different baud rates
-void test_CAN_initialization_with_baudrate_125k(void) {
+TEST_IFX(can_single_internal, test_CAN_initialization_with_baudrate_125k) {
     int result = CAN.begin(125000);
     TEST_ASSERT_EQUAL(1, result);
 }
 
-void test_CAN_initialization_with_baudrate_250k(void) {
+TEST_IFX(can_single_internal, test_CAN_initialization_with_baudrate_250k) {
     int result = CAN.begin(250000);
     TEST_ASSERT_EQUAL(1, result);
 }
 
-void test_CAN_initialization_with_baudrate_500k(void) {
+TEST_IFX(can_single_internal, test_CAN_initialization_with_baudrate_500k) {
     int result = CAN.begin(500000);
     TEST_ASSERT_EQUAL(1, result);
 }
 
-void test_CAN_initialization_with_baudrate_1M(void) {
+TEST_IFX(can_single_internal, test_CAN_initialization_with_baudrate_1M) {
     int result = CAN.begin(1000000);
     TEST_ASSERT_EQUAL(1, result);
 }
 
-void test_CAN_beginPacket(void) {
+TEST_IFX(can_single_internal, test_CAN_beginPacket) {
     int result = CAN.beginPacket(0x123); // Assuming 0x123 is the identifier
     TEST_ASSERT_EQUAL(1, result);
 }
 
-void test_CAN_write(void) {
+TEST_IFX(can_single_internal, test_CAN_write) {
     uint8_t data[] = {0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88};
     size_t result = CAN.write(data, sizeof(data));
     TEST_ASSERT_EQUAL(sizeof(data), result);
 }
 
-void test_CAN_endPacket(void) {
+TEST_IFX(can_single_internal, test_CAN_endPacket) {
     int result = CAN.endPacket();
     TEST_ASSERT_EQUAL(1, result);
 }
 
-// Bundle all tests to be executed for this test group
-static TEST_GROUP_RUNNER(CAN_internal) {
-    RUN_TEST_CASE(CAN_internal, checkUnsupportedFunctionality);
-    RUN_TEST_CASE(CAN_internal, checkSupportedFunctionality);
-    RUN_TEST(test_CAN_msg_tx_initialization);
-    RUN_TEST(test_CAN_msg_rx_initialization);
-    RUN_TEST(test_CAN_initialization_with_baudrate_125k);
-    RUN_TEST(test_CAN_initialization_with_baudrate_250k);
-    RUN_TEST(test_CAN_initialization_with_baudrate_1M);
-    RUN_TEST(test_CAN_initialization_with_baudrate_500k);
-    RUN_TEST(test_CAN_beginPacket);
-    RUN_TEST(test_CAN_write);
-    RUN_TEST(test_CAN_endPacket);
+TEST_GROUP_RUNNER(can_single_internal) {
+    RUN_TEST_CASE(can_single_internal, checkUnsupportedFunctionality);
+    RUN_TEST_CASE(can_single_internal, testCanMsgTxInitialization);
+    RUN_TEST_CASE(can_single_internal, test_CAN_msg_rx_initialization);
+    RUN_TEST_CASE(can_single_internal, test_CAN_initialization_with_baudrate_125k);
+    RUN_TEST_CASE(can_single_internal, test_CAN_initialization_with_baudrate_250k);
+    RUN_TEST_CASE(can_single_internal, test_CAN_initialization_with_baudrate_1M);
+    RUN_TEST_CASE(can_single_internal, test_CAN_initialization_with_baudrate_500k);
+    RUN_TEST_CASE(can_single_internal, test_CAN_beginPacket);
+    RUN_TEST_CASE(can_single_internal, test_CAN_write);
+    RUN_TEST_CASE(can_single_internal, test_CAN_endPacket);
 }
 
 // Bundle all tests to be executed for this test group
-TEST_GROUP_RUNNER(CAN) {
+TEST_GROUP_RUNNER(can_single) {
     CAN_suiteSetUp();
-
-    RUN_TEST_GROUP(CAN_internal);
+    
+    RUN_TEST_GROUP(can_single_internal);
 
     CAN_suiteTearDown();
 }

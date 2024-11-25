@@ -12,61 +12,70 @@ $(info UNITY_PATH : $(UNITY_PATH))
 $(info BAUD_RATE : $(BAUD_RATE))
 
 
-TESTS_CONNECTED=-DTEST_CAN_CONNECTED
-TESTS_NOT_CONNECTED=-DTEST_CAN
+# Clean and create build directory for arduino compilation
+clean:
+	-rm -rf build/*
 
-CAN: TESTS=-DTEST_CAN
-CAN_connected: TESTS=-DTEST_CAN -DTEST_CAN_CONNECTED
-CAN_connected_node1: TESTS=-DTEST_CAN_CONNECTED_NODE1
-CAN_connected_node2: TESTS=-DTEST_CAN_CONNECTED_NODE2
+build: clean
+	mkdir -p build
 
+# CAN module
+
+## CAN Examples targets
+CANReceiver: build
+	cp ../../libraries/CAN/examples//CANReceiver/CANReceiver.ino build/build.ino
+
+CANReceiverCallback: build
+	cp examples/CANReceiverCallback/CANReceiverCallback.ino build/build.ino
+
+CANSender: build
+	cp examples/CANSender/CANSender.ino build/build.ino
+
+CANLoopBack: build
+	cp examples/CANLoopBack/CANLoopBack.ino build/build.ino
+
+
+## CAN tests targets
+test_can_single: TESTS=-DTEST_CAN_SINGLE
+test_can_connected2_node1: TESTS=-DTEST_CAN_CONNECTED2_NODE1
+test_can_connected2_node2: TESTS=-DTEST_CAN_CONNECTED2_NODE2
+
+test_can_single\
+test_can_connected2_node1\
+test_can_connected2_node2\
+\
+: cp_unity_can flash
+
+cp_unity_can: build
+ifeq ($(UNITY_PATH),)
+    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests !")
+else
+	$(call FIND_TEST_AND_COPY, src/corelibs/CAN)
+endif
+
+# Wire(IIC) module
+
+## IIC tests targets
 IIC_pingPong_connected: TESTS=-DTEST_IIC_PINGPONG_CONNECTED
 IIC_pingPong_2BoardsMaster_connected: TESTS=-DTEST_IIC_PINGPONG_2BOARDS_MASTER_CONNECTED
 IIC_pingPong_2BoardsSlave_connected:  TESTS=-DTEST_IIC_PINGPONG_2BOARDS_SLAVE_CONNECTED
-
-CAN_connected CAN CAN_connected_node1 CAN_connected_node2: unity_corelibs_can flash
 
 IIC_pingPong_connected \
 IIC_pingPong_2BoardsMaster_connected \
 IIC_pingPong_2BoardsSlave_connected \
 \
-: unity_corelibs_i2c flash
+: cp_unity_i2c flash
 
-test_all: TESTS=$(TESTS_CONNECTED) $(TESTS_NOT_CONNECTED)
-test_connected: TESTS=$(TESTS_CONNECTED)
-test: TESTS=$(TESTS_NOT_CONNECTED)
-
-test_all \
-test_connected \
-test: unity_corelibs flash
-
-
-EXAMPLES= CANReceiver CANReceiverCallback CANSender CANLoopBack
-
-clean:
-	-rm -rf build/*
-
-arduino: clean
-	mkdir -p build
-# copy library files (not needed for bundled libraries)
-#	cp -r src/* build
-#	find src -name '*.[hc]*' -a \( \! -name '*mtb*' \) -print -exec cp {} build \;
-.PHONY: CANReceiver CANReceiverCallback CANSender CANLoopBack
-CANReceiver: arduino
-	cp examples/CANReceiver/CANReceiver.ino build/build.ino
-
-CANReceiverCallback: arduino
-	cp examples/CANReceiverCallback/CANReceiverCallback.ino build/build.ino
-
-CANSender: arduino
-	cp examples/CANSender/CANSender.ino build/build.ino
-
-CANLoopBack: arduino
-	cp examples/CANLoopBack/CANLoopBack.ino build/build.ino
+cp_unity_i2c: build
+ifeq ($(UNITY_PATH),)
+    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests !")
+else
+	$(call FIND_TEST_AND_COPY, src/corelibs/Wire)
+endif
 
 
-# install Unity from https://www.throwtheswitch.org/unity or git
-define FIND_UNITY_AND_COPY
+# Copy Unity files and core libs to build directory
+define FIND_TEST_AND_COPY
     find $(UNITY_PATH) -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
     find $(1) -name '*.[hc]*' -exec \cp {} build \;
     find src/utils -name '*.[hc]*' -exec \cp {} build \;
@@ -74,27 +83,16 @@ define FIND_UNITY_AND_COPY
     cp src/Test_main.ino build/build.ino
 endef
 
-unity_corelibs: arduino
+cp_unity_core: build
 ifeq ($(UNITY_PATH),)
     $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests !")
 else
-	$(call FIND_UNITY_AND_COPY,src/corelibs)
+	$(call FIND_TEST_AND_COPY, src/corelibs)
 endif
 
-unity_corelibs_can: arduino
-ifeq ($(UNITY_PATH),)
-    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests !")
-else
-	$(call FIND_UNITY_AND_COPY,src/corelibs/CAN)
-endif
 
-unity_corelibs_i2c: arduino
-ifeq ($(UNITY_PATH),)
-    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests !")
-else
-	$(call FIND_UNITY_AND_COPY,src/corelibs/Wire)
-endif
 
+# Arduino-cli commands
 
 # For WSL and Windows :
 # download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
@@ -167,4 +165,3 @@ else
 						-p $(PORT) \
 						--fqbn $(FQBN)
 endif
-

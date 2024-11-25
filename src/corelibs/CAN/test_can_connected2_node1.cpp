@@ -1,7 +1,18 @@
+/* test_can_connected2_node1.cpp 
+ *
+ * This test is used to verify the functionality of the CAN library.
+ * It will test the can communcation between two nodes. 
+ * 2 boards must be used and connected the can_tx, can_rx, vcc and ground pins. (termination resistor is optional)
+ * ONLY WORKS WITH OTHER BOARD HAS BEEN FLASHED test_can_connected2_node2.cpp 
+ * This board work as a sender.
+ *
+ */
+
+
 // std includes
 
 // test includes
-#include "Test_common_includes.h"
+#include "test_common_includes.h"
 
 // project includes
 
@@ -44,17 +55,17 @@ void CAN_connected_node1_suiteSetup() {
 void CAN_connected_node1_suiteTearDown() { CAN.end(); }
 
 // define test group name
-TEST_GROUP(CAN_connected_node1);
-TEST_GROUP(CAN_connected_node1Internal);
+TEST_GROUP(can_connected2_node1);
+TEST_GROUP(can_connected2_node1_internal);
 
 // Setup method called by Unity before every individual test defined for this test group.
-static TEST_SETUP(CAN_connected_node1Internal) {
+static TEST_SETUP(can_connected2_node1_internal) {
     memset(node1Data, 0, sizeof(node1Data));
     memset(receivedData, 0, sizeof(receivedData));
 }
 
 // Tear down method called by Unity after every individual test defined for this test group.
-static TEST_TEAR_DOWN(CAN_connected_node1Internal) {}
+static TEST_TEAR_DOWN(can_connected2_node1_internal) {}
 
 void testSendReceive(uint8_t dataLength, uint8_t iterations) {
     canDataLength = dataLength;
@@ -84,17 +95,17 @@ void testSendReceive(uint8_t dataLength, uint8_t iterations) {
     }
 }
 
-TEST_IFX(CAN_connected_node1Internal, checkPingPong) { testSendReceive(3, 5); }
+TEST_IFX(can_connected2_node1_internal, checkPingPong) { testSendReceive(3, 5); }
 
-static TEST_GROUP_RUNNER(CAN_connected_node1Internal) {
-    RUN_TEST_CASE(CAN_connected_node1Internal, checkPingPong);
+static TEST_GROUP_RUNNER(can_connected2_node1_internal) {
+    RUN_TEST_CASE(can_connected2_node1_internal, checkPingPong);
 }
 
 // Bundle all tests to be executed for this test group
-TEST_GROUP_RUNNER(CAN_connected_node1) {
+TEST_GROUP_RUNNER(can_connected2_node1) {
     CAN_connected_node1_suiteSetup();
 
-    RUN_TEST_GROUP(CAN_connected_node1Internal);
+    RUN_TEST_GROUP(can_connected2_node1_internal);
 
     CAN_connected_node1_suiteTearDown();
 }
