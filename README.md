@@ -20,7 +20,7 @@ Currently this test set relies only on arduino-cli for all compilation and uploa
 Please refer to the Makefile and its comments for details.
 
 ### Test Architecture
-- all test source file naming follow the conventions, e.g.`test_module_connection_testname.cpp`.
+- all test source file naming follow the conventions, e.g.`test_module_connection_testname.cpp`. The make target also have same name, e.g.
 - The preprocessor macro / test flag is all uppercase, e.g. `TEST_MODULE_CONNECTION_TESTNAME`.
 - The naming of test goup and all related functions removes prefix `test`, e.g. `module_connection_testname`.
 - `TEST_IFX()` is used for define test case. There is no naming convention for test case. As long as it explains the functionality to be tested.
