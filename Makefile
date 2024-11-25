@@ -56,13 +56,13 @@ endif
 # Wire(IIC) module
 
 ## IIC tests targets
-IIC_pingPong_connected: TESTS=-DTEST_IIC_PINGPONG_CONNECTED
-IIC_pingPong_2BoardsMaster_connected: TESTS=-DTEST_IIC_PINGPONG_2BOARDS_MASTER_CONNECTED
-IIC_pingPong_2BoardsSlave_connected:  TESTS=-DTEST_IIC_PINGPONG_2BOARDS_SLAVE_CONNECTED
+wire_connected1_pingpong: TESTS=-DTEST_WIRE_CONNECTED1_PINGPONG
+wire_connected2_masterpingpong: TESTS=-DTEST_WIRE_CONNECTED2_MASTERPINGPONG
+wire_connected2_slavepingpong:  TESTS=-DTEST_WIRE_CONNECTED2_SLAVEPINGPONG
 
-IIC_pingPong_connected \
-IIC_pingPong_2BoardsMaster_connected \
-IIC_pingPong_2BoardsSlave_connected \
+wire_connected1_pingpong \
+wire_connected2_masterpingpong \
+wire_connected2_slavepingpong \
 \
 : cp_unity_i2c flash
 

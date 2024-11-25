@@ -33,25 +33,25 @@ void RunAllTests(void)
 
 
 // IIC with connections
-#ifdef TEST_IIC_PINGPONG_CONNECTED
+#ifdef TEST_WIRE_CONNECTED1_PINGPONG
 
-    RUN_TEST_GROUP(IIC_pingPong_connected);
-
-#endif
-
-
-// IIC with connections
-#ifdef TEST_IIC_PINGPONG_2BOARDS_MASTER_CONNECTED
-
-    RUN_TEST_GROUP(IIC_pingPong2BoardsMaster_connected);
+    RUN_TEST_GROUP(wire_connected1_pingpong);
 
 #endif
 
 
 // IIC with connections
-#ifdef TEST_IIC_PINGPONG_2BOARDS_SLAVE_CONNECTED
+#ifdef TEST_WIRE_CONNECTED2_MASTERPINGPONG
 
-    RUN_TEST_GROUP(IIC_pingPong2BoardsSlave_connected);
+    RUN_TEST_GROUP(test_wire_connected2_slaverpingpong);
+
+#endif
+
+
+// IIC with connections
+#ifdef TEST_WIRE_CONNECTED2_SLAVEPINGPONG
+
+    RUN_TEST_GROUP(test_wire_connected2_masterpingpong);
 
 #endif
 

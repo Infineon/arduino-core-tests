@@ -23,28 +23,28 @@ static TwoWire *master = nullptr;
 
 
 // Method invoked before a test suite is run.
-static void IIC_pingPong2BoardsMaster_connected_suiteSetup() {
+static void test_wire_connected2_slaverpingpong_suite_setup() {
     master = &Wire;
 
     master->begin();
 }
 
 // Method invoked after a test suite is run.
-static void IIC_pingPong2BoardsMaster_connected_suiteTearDown() { master->end(); }
+static void test_wire_connected2_slaverpingpong_suite_teardown() { master->end(); }
 
 // define test group name
-TEST_GROUP(IIC_pingPong2BoardsMaster_connected);
-TEST_GROUP(IIC_pingPong2BoardsMaster_connectedInternal);
+TEST_GROUP(test_wire_connected2_slaverpingpong);
+TEST_GROUP(test_wire_connected2_slaverpingpong_internal);
 
 // Setup method called by Unity before every individual test defined for this test group.
-static TEST_SETUP(IIC_pingPong2BoardsMaster_connectedInternal) {
+static TEST_SETUP(test_wire_connected2_slaverpingpong_internal) {
     for (uint8_t count = 0; count < globalQuantity; ++count) {
         masterData[count] = 0;
     }
 }
 
 // Tear down method called by Unity after every individual test defined for this test group.
-static TEST_TEAR_DOWN(IIC_pingPong2BoardsMaster_connectedInternal) {}
+static TEST_TEAR_DOWN(test_wire_connected2_slaverpingpong_internal) {}
 
 static bool masterSend(const uint8_t *data, const uint8_t quantity) {
     master->beginTransmission(slaveAddress);
@@ -112,7 +112,7 @@ static void IIC_pingPong(uint8_t quantity, uint8_t iterations) {
     }
 }
 
-TEST_IFX(IIC_pingPong2BoardsMaster_connectedInternal, checkPingPong) {
+TEST_IFX(test_wire_connected2_slaverpingpong_internal, checkPingPong) {
     // TODO: Loop over different amounts of data, clock frequencies and other parameters !
     // Must set variable globalQuantity identically in slave and master ! This can be done by
     // communicating that value from master to slave, thereby allowing for a more dynamic behaviour.
@@ -121,15 +121,15 @@ TEST_IFX(IIC_pingPong2BoardsMaster_connectedInternal, checkPingPong) {
     IIC_pingPong(8, 15);
 }
 
-static TEST_GROUP_RUNNER(IIC_pingPong2BoardsMaster_connectedInternal) {
-    RUN_TEST_CASE(IIC_pingPong2BoardsMaster_connectedInternal, checkPingPong);
+static TEST_GROUP_RUNNER(test_wire_connected2_slaverpingpong_internal) {
+    RUN_TEST_CASE(test_wire_connected2_slaverpingpong_internal, checkPingPong);
 }
 
 // Bundle all tests to be executed for this test group
-TEST_GROUP_RUNNER(IIC_pingPong2BoardsMaster_connected) {
-    IIC_pingPong2BoardsMaster_connected_suiteSetup();
+TEST_GROUP_RUNNER(test_wire_connected2_slaverpingpong) {
+    test_wire_connected2_slaverpingpong_suite_setup();
 
-    RUN_TEST_GROUP(IIC_pingPong2BoardsMaster_connectedInternal);
+    RUN_TEST_GROUP(test_wire_connected2_slaverpingpong_internal);
 
-    IIC_pingPong2BoardsMaster_connected_suiteTearDown();
+    test_wire_connected2_slaverpingpong_suite_teardown();
 }

@@ -45,14 +45,14 @@ void receiveEventNode1(int packetSize) {
 }
 
 // Method invoked before a test suite is run.
-void CAN_connected_node1_suiteSetup() {
+void CAN_connected_node1_suite_setup() {
     CAN.begin();
     CAN.filter(CAN_ID_2, 0x7FF); // Set filter to receive messages with CAN_ID_2
     CAN.onReceive(receiveEventNode1);
 }
 
 // Method invoked after a test suite is run.
-void CAN_connected_node1_suiteTearDown() { CAN.end(); }
+void CAN_connected_node1_suite_teardown() { CAN.end(); }
 
 // define test group name
 TEST_GROUP(can_connected2_node1);
@@ -103,9 +103,9 @@ static TEST_GROUP_RUNNER(can_connected2_node1_internal) {
 
 // Bundle all tests to be executed for this test group
 TEST_GROUP_RUNNER(can_connected2_node1) {
-    CAN_connected_node1_suiteSetup();
+    CAN_connected_node1_suite_setup();
 
     RUN_TEST_GROUP(can_connected2_node1_internal);
 
-    CAN_connected_node1_suiteTearDown();
+    CAN_connected_node1_suite_teardown();
 }

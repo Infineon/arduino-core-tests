@@ -17,11 +17,11 @@
 // variables
 
 // Method invoked by Unity before a test suite is run
-void CAN_suiteSetUp() {
+void can_single_suite_setup() {
 }
 
 // Method invoked by Unity after a test suite is run
-void CAN_suiteTearDown() {
+void can_single_suite_teardown() {
 }
 
 // variables used in the tests below that have to be accessed in the setup and tear down methods
@@ -131,9 +131,9 @@ TEST_GROUP_RUNNER(can_single_internal) {
 
 // Bundle all tests to be executed for this test group
 TEST_GROUP_RUNNER(can_single) {
-    CAN_suiteSetUp();
+    can_single_suite_setup();
     
     RUN_TEST_GROUP(can_single_internal);
 
-    CAN_suiteTearDown();
+    can_single_suite_teardown();
 }

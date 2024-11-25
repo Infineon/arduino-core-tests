@@ -50,7 +50,7 @@ static void slaveRequestEventIIC() {
 }
 
 // Method invoked before a test suite is run.
-static void IIC_pingPong2BoardsSlave_connected_suiteSetup() {
+static void test_wire_connected2_masterpingpong_suite_setup() {
     slave = &Wire;
 
     slave->begin(slaveAddress);
@@ -59,21 +59,21 @@ static void IIC_pingPong2BoardsSlave_connected_suiteSetup() {
 }
 
 // Method invoked after a test suite is run.
-static void IIC_pingPong2BoardsSlave_connected_suiteTearDown() {
+static void test_wire_connected2_masterpingpong_suite_teardown() {
     // slave->end(); // TODO: Why can end() not be called here without disrupting the execution ?
 }
 
 // define test group name
-TEST_GROUP(IIC_pingPong2BoardsSlave_connected);
-TEST_GROUP(IIC_pingPong2BoardsSlave_connectedInternal);
+TEST_GROUP(test_wire_connected2_masterpingpong);
+TEST_GROUP(test_wire_connected2_masterpingpong_internal);
 
 // Setup method called by Unity before every individual test defined for this test group.
-static TEST_SETUP(IIC_pingPong2BoardsSlave_connectedInternal) {}
+static TEST_SETUP(test_wire_connected2_masterpingpong_internal) {}
 
 // Tear down method called by Unity after every individual test defined for this test group.
-static TEST_TEAR_DOWN(IIC_pingPong2BoardsSlave_connectedInternal) {}
+static TEST_TEAR_DOWN(test_wire_connected2_masterpingpong_internal) {}
 
-TEST_IFX(IIC_pingPong2BoardsSlave_connectedInternal, checkPingPong) {
+TEST_IFX(test_wire_connected2_masterpingpong_internal, checkPingPong) {
 #ifdef TRACE_OUTPUT
 
     printArray("\nslaveData", slaveData, globalQuantity);
@@ -100,15 +100,15 @@ TEST_IFX(IIC_pingPong2BoardsSlave_connectedInternal, checkPingPong) {
     TEST_ASSERT_EQUAL_UINT8(globalQuantity, bytesWrittenCopy);
 }
 
-static TEST_GROUP_RUNNER(IIC_pingPong2BoardsSlave_connectedInternal) {
-    RUN_TEST_CASE(IIC_pingPong2BoardsSlave_connectedInternal, checkPingPong);
+static TEST_GROUP_RUNNER(test_wire_connected2_masterpingpong_internal) {
+    RUN_TEST_CASE(test_wire_connected2_masterpingpong_internal, checkPingPong);
 }
 
 // Bundle all tests to be executed for this test group
-TEST_GROUP_RUNNER(IIC_pingPong2BoardsSlave_connected) {
-    IIC_pingPong2BoardsSlave_connected_suiteSetup();
+TEST_GROUP_RUNNER(test_wire_connected2_masterpingpong) {
+    test_wire_connected2_masterpingpong_suite_setup();
 
-    RUN_TEST_GROUP(IIC_pingPong2BoardsSlave_connectedInternal);
+    RUN_TEST_GROUP(test_wire_connected2_masterpingpong_internal);
 
-    IIC_pingPong2BoardsSlave_connected_suiteTearDown();
+    test_wire_connected2_masterpingpong_suite_teardown();
 }
