@@ -43,7 +43,7 @@ void RunAllTests(void)
 // IIC with connections
 #ifdef TEST_WIRE_CONNECTED2_MASTERPINGPONG
 
-    RUN_TEST_GROUP(test_wire_connected2_slaverpingpong);
+    RUN_TEST_GROUP(wire_connected2_masterpingpong);
 
 #endif
 
@@ -51,7 +51,7 @@ void RunAllTests(void)
 // IIC with connections
 #ifdef TEST_WIRE_CONNECTED2_SLAVEPINGPONG
 
-    RUN_TEST_GROUP(test_wire_connected2_masterpingpong);
+    RUN_TEST_GROUP(wire_connected2_slavepingpong);
 
 #endif
 

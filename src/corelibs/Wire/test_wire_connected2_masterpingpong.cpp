@@ -50,7 +50,7 @@ static void slaveRequestEventIIC() {
 }
 
 // Method invoked before a test suite is run.
-static void test_wire_connected2_masterpingpong_suite_setup() {
+static void wire_connected2_masterpingpong_suite_setup() {
     slave = &Wire;
 
     slave->begin(slaveAddress);
@@ -59,21 +59,21 @@ static void test_wire_connected2_masterpingpong_suite_setup() {
 }
 
 // Method invoked after a test suite is run.
-static void test_wire_connected2_masterpingpong_suite_teardown() {
+static void wire_connected2_masterpingpong_suite_teardown() {
     // slave->end(); // TODO: Why can end() not be called here without disrupting the execution ?
 }
 
 // define test group name
-TEST_GROUP(test_wire_connected2_masterpingpong);
-TEST_GROUP(test_wire_connected2_masterpingpong_internal);
+TEST_GROUP(wire_connected2_masterpingpong);
+TEST_GROUP(wire_connected2_masterpingpong_internal);
 
 // Setup method called by Unity before every individual test defined for this test group.
-static TEST_SETUP(test_wire_connected2_masterpingpong_internal) {}
+static TEST_SETUP(wire_connected2_masterpingpong_internal) {}
 
 // Tear down method called by Unity after every individual test defined for this test group.
-static TEST_TEAR_DOWN(test_wire_connected2_masterpingpong_internal) {}
+static TEST_TEAR_DOWN(wire_connected2_masterpingpong_internal) {}
 
-TEST_IFX(test_wire_connected2_masterpingpong_internal, checkPingPong) {
+TEST_IFX(wire_connected2_masterpingpong_internal, checkPingPong) {
 #ifdef TRACE_OUTPUT
 
     printArray("\nslaveData", slaveData, globalQuantity);
@@ -100,15 +100,15 @@ TEST_IFX(test_wire_connected2_masterpingpong_internal, checkPingPong) {
     TEST_ASSERT_EQUAL_UINT8(globalQuantity, bytesWrittenCopy);
 }
 
-static TEST_GROUP_RUNNER(test_wire_connected2_masterpingpong_internal) {
-    RUN_TEST_CASE(test_wire_connected2_masterpingpong_internal, checkPingPong);
+static TEST_GROUP_RUNNER(wire_connected2_masterpingpong_internal) {
+    RUN_TEST_CASE(wire_connected2_masterpingpong_internal, checkPingPong);
 }
 
 // Bundle all tests to be executed for this test group
-TEST_GROUP_RUNNER(test_wire_connected2_masterpingpong) {
-    test_wire_connected2_masterpingpong_suite_setup();
+TEST_GROUP_RUNNER(wire_connected2_masterpingpong) {
+    wire_connected2_masterpingpong_suite_setup();
 
-    RUN_TEST_GROUP(test_wire_connected2_masterpingpong_internal);
+    RUN_TEST_GROUP(wire_connected2_masterpingpong_internal);
 
-    test_wire_connected2_masterpingpong_suite_teardown();
+    wire_connected2_masterpingpong_suite_teardown();
 }

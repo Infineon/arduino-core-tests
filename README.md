@@ -56,7 +56,7 @@ Please refer to the Makefile and its comments for details.
     │   │   └───Wire
     │   │           test_wire_connected1_pingpong.cpp
     │   │           test_wire_connected2_masterpingpong.cpp
-    │   │           test_wire_connected2_slaverpingpong.cpp
+    │   │           test_wire_connected2_slavepingpong.cpp
     │   │
     │   └───utils
     │           utilities.cpp
