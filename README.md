@@ -48,15 +48,24 @@ Please refer to the Makefile and its comments for details.
     │   │   unity_ifx.h
     │   │
     │   ├───corelibs // Tests for all Built-in library and core modules
-    │   │   ├───can // module name, lower case!
+    │   │   ├───module // module name, lower case!
+    │   │   │       test_module_connection_name1.cpp
+    │   │   │       test_module_connection_name2.cpp
+    │   │   │       test_module_single.cpp
+    │   │   │
+    │   │   ├───can 
     │   │   │       test_can_connected2_node1.cpp
     │   │   │       test_can_connected2_node2.cpp
     │   │   │       test_can_single.cpp
     │   │   │
-    │   │   └───wire
-    │   │           test_wire_connected1_pingpong.cpp
-    │   │           test_wire_connected2_masterpingpong.cpp
-    │   │           test_wire_connected2_slavepingpong.cpp
+    │   │   ├───wire 
+    │   │   │       test_wire_connected1_pingpong.cpp
+    │   │   │       test_wire_connected2_masterpingpong.cpp
+    │   │   │       test_wire_connected2_slavepingpong.cpp
+    │   │   │
+    │   │   └───....
+    │   │           
+    │   │    
     │   │
     │   └───utils
     │           utilities.cpp

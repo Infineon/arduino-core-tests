@@ -2,7 +2,7 @@
 FQBN  ?=
 PORT  ?=
 TESTS ?=
-UNITY_PATH ?= \Unity
+UNITY_PATH ?= Unity
 BAUD_RATE ?= 115200
 
 # Info for debugging
@@ -59,21 +59,6 @@ test_can_connected2_node2: TESTS=-DTEST_CAN_CONNECTED2_NODE2
 test_wire_connected1_pingpong: TESTS=-DTEST_WIRE_CONNECTED1_PINGPONG
 test_wire_connected2_masterpingpong: TESTS=-DTEST_WIRE_CONNECTED2_MASTERPINGPONG
 test_wire_connected2_slavepingpong:  TESTS=-DTEST_WIRE_CONNECTED2_SLAVEPINGPONG
-
-
-# CAN Examples targets
-example_CANReceiver: build
-	cp ../../libraries/CAN/examples/CANReceiver/CANReceiver.ino build/build.ino
-
-example_CANReceiverCallback: build
-	cp ../../libraries/CAN/examples/CANReceiverCallback/CANReceiverCallback.ino build/build.ino
-
-example_CANSender: build
-	cp ../../libraries/CAN/examples/CANSender/CANSender.ino build/build.ino
-
-example_CANLoopBack: build
-	cp ../../libraries/CAN/examples/CANLoopBack/CANLoopBack.ino build/build.ino
-
 
 # Arduino-cli commands
 
