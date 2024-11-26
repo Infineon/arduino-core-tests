@@ -53,7 +53,7 @@ test_%: build check_unity_path
 ## CAN tests targets
 test_can_single: TESTS=-DTEST_CAN_SINGLE
 test_can_connected2_node1: TESTS=-DTEST_CAN_CONNECTED2_NODE1
-test_can_connected2_node2: TESTS=-DTEST_CAN_CONNECTED2_NODE
+test_can_connected2_node2: TESTS=-DTEST_CAN_CONNECTED2_NODE2
 
 ## IIC tests targets
 test_wire_connected1_pingpong: TESTS=-DTEST_WIRE_CONNECTED1_PINGPONG
