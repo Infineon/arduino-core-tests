@@ -20,7 +20,7 @@ Currently this test set relies only on arduino-cli for all compilation and uploa
 Please refer to the Makefile and its comments for details.
 
 ### Test Architecture
-- all test source file naming follow the conventions, e.g.`test_module_connection_testname.cpp`. The make target also have same name, e.g.
+- all test source file naming follow the conventions, e.g.`test_module_connection_testname.cpp`. The make target also have same name, e.g. `test_module_connection_testname`. 
 - The preprocessor macro / test flag is all uppercase, e.g. `TEST_MODULE_CONNECTION_TESTNAME`.
 - The naming of test goup and all related functions removes prefix `test`, e.g. `module_connection_testname`.
 - `TEST_IFX()` is used for define test case. There is no naming convention for test case. As long as it explains the functionality to be tested.
@@ -48,12 +48,12 @@ Please refer to the Makefile and its comments for details.
     │   │   unity_ifx.h
     │   │
     │   ├───corelibs // Tests for all Built-in library and core modules
-    │   │   ├───CAN
+    │   │   ├───can // module name, lower case!
     │   │   │       test_can_connected2_node1.cpp
     │   │   │       test_can_connected2_node2.cpp
     │   │   │       test_can_single.cpp
     │   │   │
-    │   │   └───Wire
+    │   │   └───wire
     │   │           test_wire_connected1_pingpong.cpp
     │   │           test_wire_connected2_masterpingpong.cpp
     │   │           test_wire_connected2_slavepingpong.cpp

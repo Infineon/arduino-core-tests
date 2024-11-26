@@ -2,7 +2,7 @@
 FQBN  ?=
 PORT  ?=
 TESTS ?=
-UNITY_PATH ?=
+UNITY_PATH ?= \Unity
 BAUD_RATE ?= 115200
 
 # Info for debugging
@@ -12,6 +12,8 @@ $(info UNITY_PATH : $(UNITY_PATH))
 $(info BAUD_RATE : $(BAUD_RATE))
 
 
+.PHONY: flash compile upload monitor
+
 # Clean and create build directory for arduino compilation
 clean:
 	-rm -rf build/*
@@ -19,83 +21,66 @@ clean:
 build: clean
 	mkdir -p build
 
-# CAN module
+# Check if UNITY_PATH variable is set
+check_unity_path:
+ifndef UNITY_PATH
+    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests!")
+endif
 
-## CAN Examples targets
-CANReceiver: build
-	cp ../../libraries/CAN/examples//CANReceiver/CANReceiver.ino build/build.ino
 
-CANReceiverCallback: build
-	cp examples/CANReceiverCallback/CANReceiverCallback.ino build/build.ino
+# Copy common files and test-specific files to build directory
+define COPY_COMMON_FILES
+    find $(UNITY_PATH) -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
+    find src/utils -name '*.[hc]*' -exec \cp {} build \;
+    find src -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
+    cp src/test_main.ino build/build.ino
+endef
 
-CANSender: build
-	cp examples/CANSender/CANSender.ino build/build.ino
+# Copy specific target C file to build directory
+define COPY_TARGET_FILE
+	find src/corelibs/$(call strip,$(1)) -name '$(call strip,$(2)).cpp' -exec \cp {} build \;
+endef
 
-CANLoopBack: build
-	cp examples/CANLoopBack/CANLoopBack.ino build/build.ino
+# create build folder for test target	
+test_%: build check_unity_path
+	$(call COPY_COMMON_FILES)
+	$(call COPY_TARGET_FILE, $(shell echo $(@:test_%=%) | cut -d"_" -f1), $(@))
+	$(MAKE) flash TESTS=$(TESTS)
+
+
 
 
 ## CAN tests targets
 test_can_single: TESTS=-DTEST_CAN_SINGLE
 test_can_connected2_node1: TESTS=-DTEST_CAN_CONNECTED2_NODE1
-test_can_connected2_node2: TESTS=-DTEST_CAN_CONNECTED2_NODE2
-
-test_can_single\
-test_can_connected2_node1\
-test_can_connected2_node2\
-\
-: cp_unity_can flash
-
-cp_unity_can: build
-ifeq ($(UNITY_PATH),)
-    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests !")
-else
-	$(call FIND_TEST_AND_COPY, src/corelibs/CAN)
-endif
-
-# Wire(IIC) module
+test_can_connected2_node2: TESTS=-DTEST_CAN_CONNECTED2_NODE
 
 ## IIC tests targets
 test_wire_connected1_pingpong: TESTS=-DTEST_WIRE_CONNECTED1_PINGPONG
 test_wire_connected2_masterpingpong: TESTS=-DTEST_WIRE_CONNECTED2_MASTERPINGPONG
 test_wire_connected2_slavepingpong:  TESTS=-DTEST_WIRE_CONNECTED2_SLAVEPINGPONG
 
-test_wire_connected1_pingpong \
-test_wire_connected2_masterpingpong \
-test_wire_connected2_slavepingpong \
-\
-: cp_unity_i2c flash
 
-cp_unity_i2c: build
-ifeq ($(UNITY_PATH),)
-    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests !")
-else
-	$(call FIND_TEST_AND_COPY, src/corelibs/Wire)
-endif
+# CAN Examples targets
+example_CANReceiver: build
+	cp ../../libraries/CAN/examples/CANReceiver/CANReceiver.ino build/build.ino
 
+example_CANReceiverCallback: build
+	cp ../../libraries/CAN/examples/CANReceiverCallback/CANReceiverCallback.ino build/build.ino
 
-# Copy Unity files and core libs to build directory
-define FIND_TEST_AND_COPY
-    find $(UNITY_PATH) -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
-    find $(1) -name '*.[hc]*' -exec \cp {} build \;
-    find src/utils -name '*.[hc]*' -exec \cp {} build \;
-    find src -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
-    cp src/test_main.ino build/build.ino
-endef
+example_CANSender: build
+	cp ../../libraries/CAN/examples/CANSender/CANSender.ino build/build.ino
 
-cp_unity_core: build
-ifeq ($(UNITY_PATH),)
-    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests !")
-else
-	$(call FIND_TEST_AND_COPY, src/corelibs)
-endif
-
+example_CANLoopBack: build
+	cp ../../libraries/CAN/examples/CANLoopBack/CANLoopBack.ino build/build.ino
 
 
 # Arduino-cli commands
 
 # For WSL and Windows :
 # download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
+.PHONY: flash compile upload monitor
+
 compile:
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
