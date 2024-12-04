@@ -10,6 +10,19 @@
 void RunAllTests(void)
 {
 
+#ifdef TEST_UART_CONNECTED2_TX
+
+    RUN_TEST_GROUP(uart_connected2_tx);
+
+#endif
+
+
+#ifdef TEST_UART_CONNECTED2_RX
+
+    RUN_TEST_GROUP(uart_connected2_rx);
+
+#endif
+
 // CAN\test_can_single.cpp
 #ifdef TEST_CAN_SINGLE
 
@@ -61,7 +74,6 @@ void RunAllTests(void)
 //
 void setup() {
     Serial.begin(115200);
-
     Serial.println("setup done.");
 }
 
