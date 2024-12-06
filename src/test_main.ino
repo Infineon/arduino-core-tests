@@ -68,6 +68,13 @@ void RunAllTests(void)
 
 #endif
 
+
+#ifdef TEST_MATH
+
+   RUN_TEST_GROUP(math);
+
+#endif
+
 }
 
 

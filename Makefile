@@ -39,6 +39,7 @@ endef
 # Copy specific target C file to build directory
 define COPY_TARGET_FILE
 	find src/corelibs/$(call strip,$(1)) -name '$(call strip,$(2)).cpp' -exec \cp {} build \;
+	find src/api/$(call strip,$(1)) -name '$(call strip,$(2)).cpp' -exec \cp {} build \;
 endef
 
 # create build folder for test target	
@@ -61,6 +62,10 @@ test_can_connected2_node2: TESTS=-DTEST_CAN_CONNECTED2_NODE2
 test_wire_connected1_pingpong: TESTS=-DTEST_WIRE_CONNECTED1_PINGPONG
 test_wire_connected2_masterpingpong: TESTS=-DTEST_WIRE_CONNECTED2_MASTERPINGPONG
 test_wire_connected2_slavepingpong:  TESTS=-DTEST_WIRE_CONNECTED2_SLAVEPINGPONG
+
+## API tests targets
+
+test_math: TESTS=-DTEST_MATH
 
 # Arduino-cli commands
 
