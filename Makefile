@@ -46,7 +46,7 @@ test_%: build check_unity_path
 	$(call COPY_COMMON_FILES)
 	$(call COPY_TARGET_FILE, $(shell echo $(@:test_%=%) | cut -d"_" -f1), $(@))
 	$(MAKE) compile TESTS=$(TESTS)
-
+ 
 # UART tests targets
 test_uart_connected2_tx: TESTS=-DTEST_UART_CONNECTED2_TX
 test_uart_connected2_rx: TESTS=-DTEST_UART_CONNECTED2_RX
