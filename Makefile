@@ -73,6 +73,14 @@ ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
+	echo "Any config:"
+	arduino-cli config dump
+	echo ""
+	echo ""
+	echo "root config :"
+	arduino-cli config dump --config-file /root/.arduino15/arduino-cli.yaml
+	echo ""
+	echo ""
 	arduino-cli compile \
 						--config-file /root/.arduino15/arduino-cli.yaml \
 						--clean \
@@ -92,14 +100,6 @@ ifeq ($(FQBN),)
 else
 # compiler.c.extra_flags : switch to -std=c23 whenever XMCLib is conforming; currently neither c99 nor c11 work !
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	echo "Any config:"
-	arduino-cli config dump
-	echo ""
-	echo ""
-	echo "root config :"
-	arduino-cli config dump --config-file /root/.arduino15/arduino-cli.yaml
-	echo ""
-	echo ""
 	arduino-cli compile \
 						--config-file /root/.arduino15/arduino-cli.yaml \
 						--clean \
