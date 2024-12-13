@@ -73,8 +73,6 @@ ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	echo "Any config:"
-	arduino-cli config dump
 	echo ""
 	echo ""
 	echo "root config :"
