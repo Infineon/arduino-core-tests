@@ -74,6 +74,7 @@ ifeq ($(FQBN),)
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
 	arduino-cli compile \
+						--config-file ~/.arduino15/arduino-cli.yaml \
 						--clean \
 						--log \
 						--warnings all \
@@ -92,6 +93,7 @@ else
 # compiler.c.extra_flags : switch to -std=c23 whenever XMCLib is conforming; currently neither c99 nor c11 work !
 # CAUTION : only use '=' when assigning values to vars, not '+='
 	arduino-cli compile \
+						 --config-file ~/.arduino15/arduino-cli.yaml \
 						--clean \
 						--log \
 						--warnings all \
