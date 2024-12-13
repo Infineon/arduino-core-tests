@@ -74,7 +74,7 @@ ifeq ($(FQBN),)
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
 	arduino-cli compile \
-						--config-file ~/.arduino15/arduino-cli.yaml \
+						--config-file /root/.arduino15/arduino-cli.yaml \
 						--clean \
 						--log \
 						--warnings all \
