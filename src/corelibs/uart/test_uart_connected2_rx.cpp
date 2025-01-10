@@ -110,9 +110,56 @@ TEST_IFX(uart_connected2_rx_internal, checkPingPong_baudRate_115200){
     checkPingPongForBaudRate(115200);
 }
 
+// Test case to check all serial functions at different baud rates
+void checkAllSerialFunctionsForBaudRate(uint32_t baudRate) {
+    uart->begin(baudRate);
+    
+    // Clear UART buffer after initializing UART
+    while (uart->available()) {
+        uart->read();
+    }
+
+        // Wait for handshake signal
+    while (!uart->available() || uart->read() != 'H') {
+        delay(100);
+    }
+    uart->write('A');
+
+    while (uart->available()) {
+        uart->read();
+    }
+    // Test available, availableForWrite, peek, read, write, and flush functions
+    TEST_ASSERT_EQUAL(0, uart->available());
+    TEST_ASSERT_GREATER_THAN(0, uart->availableForWrite());
+    TEST_ASSERT_EQUAL(-1, uart->peek());
+    TEST_ASSERT_EQUAL(-1, uart->read());
+    uart->flush();
+
+    
+    // Wait for handshake signal
+    while (!uart->available() || uart->read() != 'H') {
+        delay(100);
+    }
+    uart->write('A');
+    TEST_ASSERT_EQUAL(1, uart->write('A'));
+    delay(1000);
+    uart->end();
+}
+
+
+TEST_IFX(uart_connected2_rx_internal, checkAllSerialFunctions_baudRate_9600) {
+    checkAllSerialFunctionsForBaudRate(9600);
+}
+
+TEST_IFX(uart_connected2_rx_internal, checkAllSerialFunctions_baudRate_115200) {
+    checkAllSerialFunctionsForBaudRate(115200);
+}
+
 static TEST_GROUP_RUNNER(uart_connected2_rx_internal) {
     RUN_TEST_CASE(uart_connected2_rx_internal, checkPingPong_baudRate_9600);
     RUN_TEST_CASE(uart_connected2_rx_internal, checkPingPong_baudRate_115200);
+    RUN_TEST_CASE(uart_connected2_rx_internal, checkAllSerialFunctions_baudRate_9600);
+    RUN_TEST_CASE(uart_connected2_rx_internal, checkAllSerialFunctions_baudRate_115200);
 }
 
 // Bundle all tests to be executed for this test group
