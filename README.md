@@ -29,7 +29,7 @@ Please refer to the Makefile and its comments for details.
 
 ### Folder stucture
 ```
-└───unity
+└───arduino-core-tests
     │   .gitignore
     │   .gitmodules
     │   LICENSE
@@ -72,5 +72,7 @@ Please refer to the Makefile and its comments for details.
     │           utilities.hpp
     │
     └───Unity
+└───hil-unity-checklist.yaml // project specific test list to run in CI/CD HIL setup
+└───test_config.h // project specific test configurations, e.g. test pins
 ```
 

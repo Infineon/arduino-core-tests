@@ -33,6 +33,7 @@ define COPY_COMMON_FILES
     find $(UNITY_PATH) -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
     find src/utils -name '*.[hc]*' -exec \cp {} build \;
     find src -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
+	find ../ -maxdepth 1 -name 'test_config.h' -exec \cp {} build \;
     cp src/test_main.ino build/build.ino
 endef
 
@@ -51,6 +52,11 @@ test_%: build check_unity_path
 test_uart_connected2_tx: TESTS=-DTEST_UART_CONNECTED2_TX
 test_uart_connected2_rx: TESTS=-DTEST_UART_CONNECTED2_RX
 
+# Time tests targets
+test_time_single: TESTS=-DTEST_TIME_SINGLE
+
+# Digital IO tests targets
+test_digitalio_single: TESTS=-DTEST_DIGITALIO_SINGLE
 
 ## CAN tests targets
 test_can_single: TESTS=-DTEST_CAN_SINGLE
