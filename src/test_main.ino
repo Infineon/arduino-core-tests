@@ -10,6 +10,18 @@
 void RunAllTests(void)
 {
 
+#ifdef TEST_TIME_SINGLE
+
+    RUN_TEST_GROUP(time_single);
+
+#endif
+
+#ifdef TEST_DIGITALIO_SINGLE
+
+    RUN_TEST_GROUP(digitalio_single);
+
+#endif
+
 #ifdef TEST_UART_CONNECTED2_TX
 
     RUN_TEST_GROUP(uart_connected2_tx);
