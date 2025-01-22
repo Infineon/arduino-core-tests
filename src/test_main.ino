@@ -22,6 +22,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_INTERRUPTS_SINGLE
+
+    RUN_TEST_GROUP(gpio_interrupts_single);
+
+#endif
+
 #ifdef TEST_UART_CONNECTED2_TX
 
     RUN_TEST_GROUP(uart_connected2_tx);

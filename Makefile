@@ -58,6 +58,9 @@ test_time_single: TESTS=-DTEST_TIME_SINGLE
 # Digital IO tests targets
 test_digitalio_single: TESTS=-DTEST_DIGITALIO_SINGLE
 
+# GPIO Interrupts tests targets
+test_interrupts_single: TESTS=-DTEST_INTERRUPTS_SINGLE
+
 ## CAN tests targets
 test_can_single: TESTS=-DTEST_CAN_SINGLE
 test_can_connected2_node1: TESTS=-DTEST_CAN_CONNECTED2_NODE1
