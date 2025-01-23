@@ -4,22 +4,29 @@ PORT  ?=
 TESTS ?=
 UNITY_PATH ?= Unity
 BAUD_RATE ?= 115200
+Q?=@
 
+print_args:
+	@:
 # Info for debugging
-$(info FQBN : $(FQBN))
-$(info PORT : $(PORT))
-$(info UNITY_PATH : $(UNITY_PATH))
-$(info BAUD_RATE : $(BAUD_RATE))
+	$(info )
+	$(info Test configuration)
+	$(info ----------------------------------)
+	$(info FQBN      : $(FQBN))
+	$(info PORT      : $(PORT))
+	$(info BAUD_RATE : $(BAUD_RATE))
+	$(info ----------------------------------)
+	$(info )
 
 
 .PHONY: flash compile upload monitor
 
 # Clean and create build directory for arduino compilation
 clean:
-	-rm -rf build/*
+	$(Q) -rm -rf build/*
 
-build: clean
-	mkdir -p build
+create_build_dir: clean
+	$(Q) mkdir -p build
 
 # Check if UNITY_PATH variable is set
 check_unity_path:
@@ -30,23 +37,26 @@ endif
 
 # Copy common files and test-specific files to build directory
 define COPY_COMMON_FILES
-    find $(UNITY_PATH) -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
-    find src/utils -name '*.[hc]*' -exec \cp {} build \;
-    find src -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
-	find ../ -maxdepth 1 -name 'test_config.h' -exec \cp {} build \;
-    cp src/test_main.ino build/build.ino
+    $(Q) find $(UNITY_PATH) -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
+    $(Q) find src/utils -name '*.[hc]*' -exec \cp {} build \;
+	$(Q) find src -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
+	$(Q) find ../ -maxdepth 1 -name 'test_config.h' -exec \cp {} build \;
+    $(Q) cp src/test_main.ino build/build.ino
 endef
 
 # Copy specific target C file to build directory
 define COPY_TARGET_FILE
-	find src/corelibs/$(call strip,$(1)) -name '$(call strip,$(2)).cpp' -exec \cp {} build \;
+	$(Q) find src/corelibs/$(call strip,$(1)) -name '$(call strip,$(2)).cpp' -exec \cp {} build \;
 endef
 
 # create build folder for test target	
-test_%: build check_unity_path
-	$(call COPY_COMMON_FILES)
-	$(call COPY_TARGET_FILE, $(shell echo $(@:test_%=%) | cut -d"_" -f1), $(@))
-	$(MAKE) flash TESTS=$(TESTS)
+test_%: create_build_dir check_unity_path print_args
+	$(Q) $(call COPY_COMMON_FILES)
+	$(Q) $(call COPY_TARGET_FILE, $(shell echo $(@:test_%=%) | cut -d"_" -f1), $(@))
+	$(info )
+	$(info Testing $(@:test_%=%)...)
+	$(Q) $(MAKE) flash TESTS=$(TESTS) --no-print-directory
+	$(Q) $(MAKE) monitor PORT=$(PORT) FQBN=$(FQBN) --no-print-directory
 
 # UART tests targets
 test_uart_connected2_tx: TESTS=-DTEST_UART_CONNECTED2_TX
@@ -71,10 +81,14 @@ test_wire_connected1_pingpong: TESTS=-DTEST_WIRE_CONNECTED1_PINGPONG
 test_wire_connected2_masterpingpong: TESTS=-DTEST_WIRE_CONNECTED2_MASTERPINGPONG
 test_wire_connected2_slavepingpong:  TESTS=-DTEST_WIRE_CONNECTED2_SLAVEPINGPONG
 
+## WiFi tests targets
+test_wifi_sta: TESTS=-DTEST_WIFI_STA
+test_wifi_ap: TESTS=-DTEST_WIFI_AP
+
 # Arduino-cli commands
 
 # For WSL and Windows :
-# download arduino-cli.exe from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
+# download arduino-cli from : https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip
 .PHONY: flash compile upload monitor
 
 compile:
@@ -82,9 +96,9 @@ ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	arduino-cli.exe compile \
+	$(info Compiling test...)
+	$(Q) arduino-cli compile \
 						--clean \
-						--log \
 						--warnings all \
 						--fqbn $(FQBN) \
 						--build-property "compiler.c.extra_flags=\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
@@ -100,9 +114,8 @@ ifeq ($(FQBN),)
 else
 # compiler.c.extra_flags : switch to -std=c23 whenever XMCLib is conforming; currently neither c99 nor c11 work !
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	arduino-cli.exe compile \
+	$(Q) arduino-cli compile \
 						--clean \
-						--log \
 						--warnings all \
 						--fqbn $(FQBN) \
 						--build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\" -DNDEBUG -flto -fno-fat-lto-objects -Wextra -Wall -Wfloat-equal -Wconversion -Wredundant-decls -Wswitch-default -Wdouble-promotion -Wpedantic -Wunreachable-code -fanalyzer -std=c20 " \
@@ -123,10 +136,9 @@ endif
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
 else
-	arduino-cli.exe upload \
-						-p $(PORT) \
-						--fqbn $(FQBN) \
-						--verbose \
+	$(Q) arduino-cli upload \
+					-p $(PORT) \
+					--fqbn $(FQBN) \
 					build
 endif
 
@@ -141,7 +153,8 @@ endif
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
 else
-	arduino-cli.exe monitor \
+	$(info Uploading test...)
+	$(Q) arduino-cli monitor \
 						-c baudrate=$(BAUD_RATE) \
 						-p $(PORT) \
 						--fqbn $(FQBN)
