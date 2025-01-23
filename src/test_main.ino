@@ -86,17 +86,27 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_WIFI_STA
+
+    RUN_TEST_GROUP(wifi_sta);
+
+#endif
+
+#ifdef TEST_WIFI_AP
+
+    RUN_TEST_GROUP(wifi_ap);
+
+#endif
+
 }
 
 
-//
 void setup() {
     Serial.begin(115200);
     Serial.println("setup done.");
 }
 
 
-//
 void loop() {
     Serial.println("\n");
 
