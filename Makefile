@@ -71,6 +71,10 @@ test_wire_connected1_pingpong: TESTS=-DTEST_WIRE_CONNECTED1_PINGPONG
 test_wire_connected2_masterpingpong: TESTS=-DTEST_WIRE_CONNECTED2_MASTERPINGPONG
 test_wire_connected2_slavepingpong:  TESTS=-DTEST_WIRE_CONNECTED2_SLAVEPINGPONG
 
+## WiFi tests targets
+test_wifi_sta: TESTS=-DTEST_WIFI_STA
+test_wifi_ap: TESTS=-DTEST_WIFI_AP
+
 # Arduino-cli commands
 
 # For WSL and Windows :
