@@ -86,7 +86,7 @@ ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	arduino-cli.exe compile \
+	arduino-cli compile \
 						--clean \
 						--log \
 						--warnings all \
@@ -104,7 +104,7 @@ ifeq ($(FQBN),)
 else
 # compiler.c.extra_flags : switch to -std=c23 whenever XMCLib is conforming; currently neither c99 nor c11 work !
 # CAUTION : only use '=' when assigning values to vars, not '+='
-	arduino-cli.exe compile \
+	arduino-cli compile \
 						--clean \
 						--log \
 						--warnings all \
@@ -127,7 +127,7 @@ endif
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
 else
-	arduino-cli.exe upload \
+	arduino-cli upload \
 						-p $(PORT) \
 						--fqbn $(FQBN) \
 						--verbose \
@@ -145,7 +145,7 @@ endif
 ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
 else
-	arduino-cli.exe monitor \
+	arduino-cli monitor \
 						-c baudrate=$(BAUD_RATE) \
 						-p $(PORT) \
 						--fqbn $(FQBN)
