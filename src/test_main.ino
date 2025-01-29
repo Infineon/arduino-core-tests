@@ -98,6 +98,18 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_WIFI_CLIENT
+
+    RUN_TEST_GROUP(wifi_client);
+
+#endif
+
+#ifdef TEST_WIFI_SERVER
+
+    RUN_TEST_GROUP(wifi_server);
+
+#endif
+
 }
 
 
