@@ -34,7 +34,12 @@ TEST_IFX(wifi_server, server_begin) {
 }
 
 TEST_IFX(wifi_server, server_available) {
-    
+    WiFiClient client;
+
+    while(!client) {
+        client = server.available();
+    }
+    TEST_ASSERT_TRUE(client);
 }
 
 TEST_IFX(wifi_server, server_end) {
