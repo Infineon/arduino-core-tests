@@ -32,7 +32,9 @@ WiFiClient client;
 TEST_IFX(wifi_client, client_connect) {
     /* This will be replaced for gateway address.*/
     IPAddress ip(192, 168, 0, 1);
+    TEST_ASSERT_FALSE(client.connected());
     TEST_ASSERT_TRUE(client.connect(ip, 80));
+    TEST_ASSERT_TRUE(client.connected());
 }
 
 
