@@ -37,6 +37,35 @@ TEST_IFX(wifi_client, client_connect) {
     TEST_ASSERT_TRUE(client.connected());
 }
 
+TEST_IFX(wifi_client, client_write) {
+    const char msg[] = "hello server!";
+
+    size_t written_bytes = client.write(msg[0]);
+    TEST_ASSERT_EQUAL_INT(1, written_bytes);
+    
+    written_bytes = client.write((const uint8_t *)&msg[1], strlen(msg) - 1);
+    TEST_ASSERT_EQUAL_INT(strlen(msg) - 1, written_bytes);
+}
+
+TEST_IFX(wifi_client, client_available) {
+    /* Wait for the client to have available data */
+    while(!client.available()) { }
+    /* Assertion not required. 
+    Pass upon when blocking wait ends.*/
+}
+
+TEST_IFX(wifi_client, client_read) {
+    char expected_msg[] = "yo yo client!";
+    char rcvd_msg[16] = {0};
+
+    rcvd_msg[0] = client.read();
+    TEST_ASSERT_EQUAL_CHAR(expected_msg[0],rcvd_msg[0]);
+
+    int read_bytes = client.read((uint8_t *)&rcvd_msg[1], strlen(expected_msg) - 1);
+    
+    TEST_ASSERT_EQUAL_INT(strlen(expected_msg) - 1, read_bytes);
+    TEST_ASSERT_EQUAL_STRING(expected_msg, rcvd_msg);
+}
 
 TEST_IFX(wifi_client, wifi_end) {
     WiFi.end();
@@ -46,5 +75,11 @@ TEST_GROUP_RUNNER(wifi_client) {
     RUN_TEST_CASE(wifi_client, wifi_connect_to_ap);
     RUN_TEST_CASE(wifi_client, check_local_ip);
     RUN_TEST_CASE(wifi_client, client_connect);
+    RUN_TEST_CASE(wifi_client, client_write);
+    RUN_TEST_CASE(wifi_client, client_available);
+    RUN_TEST_CASE(wifi_client, client_read);
+    /* We cannot yet end, otherwise the other end will
+    not be able to complete the transaction.*/
+    while(true) {};
     RUN_TEST_CASE(wifi_client, wifi_end);
 }
