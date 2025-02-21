@@ -110,6 +110,13 @@ void RunAllTests(void)
 
 #endif
 
+
+#ifdef TEST_WIFI_EXTRAS
+
+    RUN_TEST_GROUP(wifi_extras);
+
+#endif
+
 }
 
 

@@ -86,6 +86,7 @@ test_wifi_sta: TESTS=-DTEST_WIFI_STA
 test_wifi_ap: TESTS=-DTEST_WIFI_AP
 test_wifi_client: TESTS=-DTEST_WIFI_CLIENT
 test_wifi_server: TESTS=-DTEST_WIFI_SERVER
+test_wifi_extras: TESTS=-DTEST_WIFI_EXTRAS
 
 # Arduino-cli commands
 
