@@ -14,7 +14,7 @@ static TEST_TEAR_DOWN(wifi_server) {
 
 TEST_IFX(wifi_server, wifi_begin_ap) {
     int result = WiFi.beginAP("arduino-wifi-ap", "wifi-ap-password", 1);
-    TEST_ASSERT_EQUAL_INT(WL_AP_CONNECTED, result);
+    TEST_ASSERT_EQUAL_INT(WL_AP_LISTENING, result);
 }
 
 TEST_IFX(wifi_server, check_local_ip) {
