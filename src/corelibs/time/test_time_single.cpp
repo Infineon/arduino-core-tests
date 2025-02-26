@@ -8,6 +8,7 @@
 
 // test includes
 #include "test_common_includes.h"
+#include "time.h"
 
 // project includes
 
@@ -56,15 +57,15 @@ static TEST_TEAR_DOWN(time_single_internal)
 TEST_IFX(time_single_internal, testDelay)
 {
     unsigned long start_time, end_time;
-    unsigned long expected_delay = 1000; // 1000 milliseconds
+    unsigned long expected_delay_ms = 1000; 
 
     start_time = millis();
-    delay(expected_delay);
+    delay(expected_delay_ms);
     end_time = millis();
-    
+
     unsigned long actual_delay = end_time - start_time;
     
-    TEST_ASSERT_UINT32_WITHIN(TOLERANCE_MS, expected_delay, actual_delay);
+    TEST_ASSERT_UINT32_WITHIN(TOLERANCE_MS, expected_delay_ms, actual_delay);
 }
 
 /**
@@ -73,7 +74,7 @@ TEST_IFX(time_single_internal, testDelay)
 TEST_IFX(time_single_internal, testDelayMicroseconds)
 {
     unsigned long start_time, end_time;
-    unsigned long expected_delay_us = 500000; // 500000 microseconds
+    unsigned long expected_delay_us = 500000; 
 
     start_time = micros();
     delayMicroseconds(expected_delay_us);
@@ -90,15 +91,15 @@ TEST_IFX(time_single_internal, testDelayMicroseconds)
 TEST_IFX(time_single_internal, testSmallDelay)
 {
     unsigned long start_time, end_time;
-    unsigned long expected_delay = 1; // 1 millisecond
+    unsigned long expected_delay_ms = 1; 
 
     start_time = millis();
-    delay(expected_delay);
+    delay(expected_delay_ms);
     end_time = millis();
     
     unsigned long actual_delay = end_time - start_time;
     
-    TEST_ASSERT_UINT32_WITHIN(TOLERANCE_MS, expected_delay, actual_delay);
+    TEST_ASSERT_UINT32_WITHIN(TOLERANCE_MS, expected_delay_ms, actual_delay);
 }
 
 /**
@@ -107,7 +108,7 @@ TEST_IFX(time_single_internal, testSmallDelay)
 TEST_IFX(time_single_internal, testSmallDelayMicroseconds) 
 {
     unsigned long start_time, end_time;
-    unsigned long expected_delay_us = 1; // 1 microsecond
+    unsigned long expected_delay_us = 1; 
 
     start_time = micros();
     delayMicroseconds(expected_delay_us);
@@ -124,15 +125,15 @@ TEST_IFX(time_single_internal, testSmallDelayMicroseconds)
 TEST_IFX(time_single_internal, testLongDelay)
 {
     unsigned long start_time, end_time;
-    unsigned long expected_delay = 10000; // 10000 milliseconds (10 seconds)
+    unsigned long expected_delay_ms = 10000;
 
     start_time = millis();
-    delay(expected_delay);
+    delay(expected_delay_ms);
     end_time = millis();
     
     unsigned long actual_delay = end_time - start_time;
     
-    TEST_ASSERT_UINT32_WITHIN(TOLERANCE_MS * 10, expected_delay, actual_delay);
+    TEST_ASSERT_UINT32_WITHIN(TOLERANCE_MS * 10, expected_delay_ms, actual_delay);
 }
 
 /**
@@ -141,7 +142,8 @@ TEST_IFX(time_single_internal, testLongDelay)
 TEST_IFX(time_single_internal, testPrintMillis)
 {
     unsigned long current_millis = millis();
-    printf("Current millis: %lu\n", current_millis);
+    Serial.print("Current millis: ");
+    Serial.println(current_millis);
 }
 
 /**
@@ -150,7 +152,8 @@ TEST_IFX(time_single_internal, testPrintMillis)
 TEST_IFX(time_single_internal, testPrintMicros)
 {
     unsigned long current_micros = micros();
-    printf("Current micros: %lu\n", current_micros);
+    Serial.print("Current micros: ");
+    Serial.println(current_micros);
 }
 
 /**
