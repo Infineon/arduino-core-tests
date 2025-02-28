@@ -30,6 +30,14 @@ TEST_IFX(wifi_sta, check_local_ip) {
     TEST_ASSERT_EQUAL_INT(2, ip[3]);
 }
 
+TEST_IFX(wifi_sta, check_gateway_ip) {
+    IPAddress ip = WiFi.gatewayIP();
+    TEST_ASSERT_EQUAL_INT(192, ip[0]);
+    TEST_ASSERT_EQUAL_INT(168, ip[1]);
+    TEST_ASSERT_EQUAL_INT(0, ip[2]);
+    TEST_ASSERT_EQUAL_INT(1, ip[3]);
+}
+
 TEST_IFX(wifi_sta, wifi_end) {
     WiFi.end();
 }
@@ -37,8 +45,10 @@ TEST_IFX(wifi_sta, wifi_end) {
 TEST_GROUP_RUNNER(wifi_sta) {
     RUN_TEST_CASE(wifi_sta, connect_to_ap);
     RUN_TEST_CASE(wifi_sta, is_status_connected);
-    RUN_TEST_CASE(wifi_sta, check_local_ip);  
+    RUN_TEST_CASE(wifi_sta, check_local_ip); 
+    RUN_TEST_CASE(wifi_sta, check_gateway_ip);
     RUN_TEST_CASE(wifi_sta, wifi_end);  
+    while(true) {};
 }
 
 

@@ -43,6 +43,17 @@ TEST_IFX(wifi_extras, client_connect_by_hostname) {
     client.stop();
 }
 
+TEST_IFX(wifi_extras, check_host_by_name) {
+    IPAddress ip; 
+    IPAddress ip_expected = IPAddress(127, 0, 0, 1);
+    /* This domain provides a fix IP for testing */
+    const char *hostname = "localhost";
+
+    int ret = WiFi.hostByName(hostname, ip);
+    TEST_ASSERT_TRUE(ret);
+    TEST_ASSERT_EQUAL_STRING(ip_expected.toString().c_str(), ip.toString().c_str());
+}
+
 TEST_IFX(wifi_extras, wifi_end) {
     WiFi.end();
 }
@@ -50,6 +61,7 @@ TEST_IFX(wifi_extras, wifi_end) {
 TEST_GROUP_RUNNER(wifi_extras) {
     RUN_TEST_CASE(wifi_extras, wifi_connect_to_ap);
     RUN_TEST_CASE(wifi_extras, client_connect_by_hostname);
+    RUN_TEST_CASE(wifi_extras, check_host_by_name);
     RUN_TEST_CASE(wifi_extras, wifi_end);    
     /** 
      * TODO: Remove when this is added to cicd 
