@@ -12,11 +12,11 @@ static TEST_TEAR_DOWN(wifi_ap) {
 
 TEST_IFX(wifi_ap, begin_ap) {
     int result = WiFi.beginAP("arduino-wifi-ap", "wifi-ap-password", 1);
-    TEST_ASSERT_EQUAL_INT(WL_AP_CONNECTED, result);
+    TEST_ASSERT_EQUAL_INT(WL_AP_LISTENING, result);
 }
 
-TEST_IFX(wifi_ap, is_status_connected) {
-    TEST_ASSERT_EQUAL_INT(WL_AP_CONNECTED, WiFi.status());
+TEST_IFX(wifi_ap, is_status_listening) {
+    TEST_ASSERT_EQUAL_INT(WL_AP_LISTENING, WiFi.status());
 }
 
 TEST_IFX(wifi_ap, check_local_ip) {
@@ -41,7 +41,7 @@ TEST_IFX(wifi_ap, wifi_end) {
 
 TEST_GROUP_RUNNER(wifi_ap) {
     RUN_TEST_CASE(wifi_ap, begin_ap);
-    RUN_TEST_CASE(wifi_ap, is_status_connected);
+    RUN_TEST_CASE(wifi_ap, is_status_listening);
     RUN_TEST_CASE(wifi_ap, check_local_ip);
     RUN_TEST_CASE(wifi_ap, check_gateway_ip);
     /* Wait forever for now. */
