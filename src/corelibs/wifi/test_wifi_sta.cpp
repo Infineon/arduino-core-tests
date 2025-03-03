@@ -38,8 +38,14 @@ TEST_IFX(wifi_sta, check_gateway_ip) {
     TEST_ASSERT_EQUAL_INT(1, ip[3]);
 }
 
+TEST_IFX(wifi_sta, disconnect) {
+    WiFi.disconnect();
+    TEST_ASSERT_EQUAL_INT(WIFI_STATE_STA_DISCONNECTED, WiFi.status());
+}
+
 TEST_IFX(wifi_sta, wifi_end) {
     WiFi.end();
+    TEST_ASSERT_EQUAL_UINT8(WIFI_STATE_UNINITED, WiFi.status());
 }
 
 TEST_GROUP_RUNNER(wifi_sta) {
@@ -47,6 +53,7 @@ TEST_GROUP_RUNNER(wifi_sta) {
     RUN_TEST_CASE(wifi_sta, is_status_connected);
     RUN_TEST_CASE(wifi_sta, check_local_ip); 
     RUN_TEST_CASE(wifi_sta, check_gateway_ip);
+    RUN_TEST_CASE(wifi_sta, disconnect);
     RUN_TEST_CASE(wifi_sta, wifi_end);  
     while(true) {};
 }
