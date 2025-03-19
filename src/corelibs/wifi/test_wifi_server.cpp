@@ -131,8 +131,14 @@ TEST_IFX(wifi_server, server_end) {
     TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_DELETED, server.status());
 }
 
+TEST_IFX(wifi_server, wifi_disconnect) {
+    WiFi.disconnect();
+    TEST_ASSERT_EQUAL_INT(WIFI_STATUS_STA_DISCONNECTED, WiFi.status());
+}
+
 TEST_IFX(wifi_server, wifi_end) {
     WiFi.end();
+    TEST_ASSERT_EQUAL_UINT8(WIFI_STATUS_UNINITED, WiFi.status());
 }
 
 TEST_GROUP_RUNNER(wifi_server) {
@@ -146,6 +152,7 @@ TEST_GROUP_RUNNER(wifi_server) {
     RUN_TEST_CASE(wifi_server, server_print_to_all_clients);
     RUN_TEST_CASE(wifi_server, server_client_stop);
     RUN_TEST_CASE(wifi_server, server_end);
+    RUN_TEST_CASE(wifi_server, wifi_disconnect);
     RUN_TEST_CASE(wifi_server, wifi_end);
     /** 
      * TODO: Remove when this is added to cicd 
