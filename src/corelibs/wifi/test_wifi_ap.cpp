@@ -35,8 +35,14 @@ TEST_IFX(wifi_ap, check_gateway_ip) {
     TEST_ASSERT_EQUAL_INT(1, ip[3]);
 }
 
+TEST_IFX(wifi_ap, disconnect) {
+    WiFi.disconnect();
+    TEST_ASSERT_EQUAL_INT(WIFI_STATUS_AP_DISCONNECTED, WiFi.status());
+}
+
 TEST_IFX(wifi_ap, wifi_end) {
     WiFi.end();
+    TEST_ASSERT_EQUAL_INT(WIFI_STATUS_UNINITED, WiFi.status());
 }
 
 TEST_GROUP_RUNNER(wifi_ap) {
@@ -48,6 +54,7 @@ TEST_GROUP_RUNNER(wifi_ap) {
     /* This allows to check the sta
     test manually. */
     while(true) {};
+    RUN_TEST_CASE(wifi_ap, disconnect);
     RUN_TEST_CASE(wifi_ap, wifi_end);
 }
 
