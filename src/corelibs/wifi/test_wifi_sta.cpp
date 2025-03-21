@@ -38,6 +38,11 @@ TEST_IFX(wifi_sta, check_gateway_ip) {
     TEST_ASSERT_EQUAL_INT(1, ip[3]);
 }
 
+TEST_IFX(wifi_sta, check_ssid) {
+    const char *ssid = WiFi.SSID();
+    TEST_ASSERT_EQUAL_STRING("arduino-wifi-ap", ssid);
+}
+
 TEST_IFX(wifi_sta, disconnect) {
     WiFi.disconnect();
     TEST_ASSERT_EQUAL_INT(WIFI_STATUS_STA_DISCONNECTED, WiFi.status());
@@ -53,6 +58,7 @@ TEST_GROUP_RUNNER(wifi_sta) {
     RUN_TEST_CASE(wifi_sta, is_status_connected);
     RUN_TEST_CASE(wifi_sta, check_local_ip); 
     RUN_TEST_CASE(wifi_sta, check_gateway_ip);
+    RUN_TEST_CASE(wifi_sta, check_ssid);
     RUN_TEST_CASE(wifi_sta, disconnect);
     RUN_TEST_CASE(wifi_sta, wifi_end);  
     while(true) {};
