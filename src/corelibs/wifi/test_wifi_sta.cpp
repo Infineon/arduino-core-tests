@@ -82,6 +82,11 @@ TEST_IFX(wifi_sta, check_rssi) {
     TEST_ASSERT_TRUE(-50 < rssi && rssi < 50);
 }
 
+TEST_IFX(wifi_sta, check_encryption_type) {
+    uint8_t encryption = WiFi.encryptionType();
+    TEST_ASSERT_EQUAL_INT(AUTH_MODE_WPA2, encryption);
+}
+
 TEST_IFX(wifi_sta, disconnect) {
     WiFi.disconnect();
     TEST_ASSERT_EQUAL_INT(WIFI_STATUS_STA_DISCONNECTED, WiFi.status());
@@ -102,6 +107,7 @@ TEST_GROUP_RUNNER(wifi_sta) {
     RUN_TEST_CASE(wifi_sta, check_ssid);
     RUN_TEST_CASE(wifi_sta, check_bssid);
     RUN_TEST_CASE(wifi_sta, check_rssi);
+    RUN_TEST_CASE(wifi_sta, check_encryption_type);
     RUN_TEST_CASE(wifi_sta, disconnect);
     RUN_TEST_CASE(wifi_sta, wifi_end);  
     while(true) {};
