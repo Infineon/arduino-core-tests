@@ -42,6 +42,14 @@ TEST_IFX(wifi_sta, check_local_ip) {
     TEST_ASSERT_EQUAL_INT(2, ip[3]);
 }
 
+TEST_IFX(wifi_sta, check_subnet_mask) {
+    IPAddress ip = WiFi.subnetMask();
+    TEST_ASSERT_EQUAL_INT(255, ip[0]);
+    TEST_ASSERT_EQUAL_INT(255, ip[1]);
+    TEST_ASSERT_EQUAL_INT(255, ip[2]);
+    TEST_ASSERT_EQUAL_INT(0, ip[3]);
+}
+
 TEST_IFX(wifi_sta, check_gateway_ip) {
     IPAddress ip = WiFi.gatewayIP();
     TEST_ASSERT_EQUAL_INT(192, ip[0]);
@@ -88,7 +96,8 @@ TEST_GROUP_RUNNER(wifi_sta) {
     RUN_TEST_CASE(wifi_sta, connect_to_ap);
     RUN_TEST_CASE(wifi_sta, is_status_connected);
     RUN_TEST_CASE(wifi_sta, check_mac_address);
-    RUN_TEST_CASE(wifi_sta, check_local_ip); 
+    RUN_TEST_CASE(wifi_sta, check_local_ip);
+    RUN_TEST_CASE(wifi_sta, check_subnet_mask);
     RUN_TEST_CASE(wifi_sta, check_gateway_ip);
     RUN_TEST_CASE(wifi_sta, check_ssid);
     RUN_TEST_CASE(wifi_sta, check_bssid);
