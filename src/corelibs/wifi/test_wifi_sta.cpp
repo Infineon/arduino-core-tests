@@ -22,6 +22,18 @@ TEST_IFX(wifi_sta, is_status_connected) {
     TEST_ASSERT_EQUAL_INT(WL_CONNECTED, WiFi.status());
 }
 
+TEST_IFX(wifi_sta, check_mac_address) {
+    uint8_t mac[6];
+    WiFi.macAddress(mac);
+    Serial.print("MAC address: ");
+    for (int i = 0; i < 6; i++) {
+        Serial.print(mac[i], HEX);
+        if (i < 5) {
+            Serial.print(":");
+        }
+    }
+}
+
 TEST_IFX(wifi_sta, check_local_ip) {
     IPAddress ip = WiFi.localIP();
     TEST_ASSERT_EQUAL_INT(192, ip[0]);
@@ -41,6 +53,18 @@ TEST_IFX(wifi_sta, check_gateway_ip) {
 TEST_IFX(wifi_sta, check_ssid) {
     const char *ssid = WiFi.SSID();
     TEST_ASSERT_EQUAL_STRING("arduino-wifi-ap", ssid);
+}
+
+TEST_IFX(wifi_sta, check_bssid) {
+    uint8_t bssid[6];
+    WiFi.BSSID(bssid);
+    Serial.print("BSSID: ");
+    for (int i = 0; i < 6; i++) {
+        Serial.print(bssid[i], HEX);
+        if (i < 5) {
+            Serial.print(":");
+        }
+    }
 }
 
 TEST_IFX(wifi_sta, check_rssi) {
@@ -63,9 +87,11 @@ TEST_IFX(wifi_sta, wifi_end) {
 TEST_GROUP_RUNNER(wifi_sta) {
     RUN_TEST_CASE(wifi_sta, connect_to_ap);
     RUN_TEST_CASE(wifi_sta, is_status_connected);
+    RUN_TEST_CASE(wifi_sta, check_mac_address);
     RUN_TEST_CASE(wifi_sta, check_local_ip); 
     RUN_TEST_CASE(wifi_sta, check_gateway_ip);
     RUN_TEST_CASE(wifi_sta, check_ssid);
+    RUN_TEST_CASE(wifi_sta, check_bssid);
     RUN_TEST_CASE(wifi_sta, check_rssi);
     RUN_TEST_CASE(wifi_sta, disconnect);
     RUN_TEST_CASE(wifi_sta, wifi_end);  
