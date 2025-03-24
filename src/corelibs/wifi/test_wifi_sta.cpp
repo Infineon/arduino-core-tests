@@ -43,6 +43,13 @@ TEST_IFX(wifi_sta, check_ssid) {
     TEST_ASSERT_EQUAL_STRING("arduino-wifi-ap", ssid);
 }
 
+TEST_IFX(wifi_sta, check_rssi) {
+    int32_t rssi = WiFi.RSSI();
+    TEST_ASSERT_TRUE(rssi > INT32_MIN);
+    /* Assuming the boards are a few cm separate from each other. */
+    TEST_ASSERT_TRUE(-50 < rssi && rssi < 50);
+}
+
 TEST_IFX(wifi_sta, disconnect) {
     WiFi.disconnect();
     TEST_ASSERT_EQUAL_INT(WIFI_STATUS_STA_DISCONNECTED, WiFi.status());
@@ -59,6 +66,7 @@ TEST_GROUP_RUNNER(wifi_sta) {
     RUN_TEST_CASE(wifi_sta, check_local_ip); 
     RUN_TEST_CASE(wifi_sta, check_gateway_ip);
     RUN_TEST_CASE(wifi_sta, check_ssid);
+    RUN_TEST_CASE(wifi_sta, check_rssi);
     RUN_TEST_CASE(wifi_sta, disconnect);
     RUN_TEST_CASE(wifi_sta, wifi_end);  
     while(true) {};
