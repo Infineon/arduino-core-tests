@@ -72,6 +72,11 @@ TEST_IFX(wifi_ap, check_bssid) {
     }
 }
 
+TEST_IFX(wifi_ap, check_encryption_type) {
+    uint8_t encryption = WiFi.encryptionType();
+    TEST_ASSERT_EQUAL_INT(AUTH_MODE_WPA2, encryption);
+}
+
 TEST_IFX(wifi_ap, disconnect) {
     WiFi.disconnect();
     TEST_ASSERT_EQUAL_INT(WIFI_STATUS_AP_DISCONNECTED, WiFi.status());
@@ -91,6 +96,7 @@ TEST_GROUP_RUNNER(wifi_ap) {
     RUN_TEST_CASE(wifi_ap, check_gateway_ip);
     RUN_TEST_CASE(wifi_ap, check_ssid);
     RUN_TEST_CASE(wifi_ap, check_bssid);
+    RUN_TEST_CASE(wifi_ap, check_encryption_type);
     /* Wait forever for now. */
     /* This allows to check the sta
     test manually. */
