@@ -10,6 +10,37 @@ static TEST_SETUP(wifi_sta) {
 static TEST_TEAR_DOWN(wifi_sta) {
 }
 
+TEST_IFX(wifi_sta, check_scan_networks) {
+    int8_t num_networks = WiFi.scanNetworks();
+    /* Look for the AP matching SSID */
+    int8_t net_index = 0;
+    for (; net_index < num_networks; net_index++) {
+        const char *ssid = WiFi.SSID(net_index);
+        if(strcmp(ssid, "arduino-wifi-ap") == 0) {
+            break;
+        }
+    }
+
+    TEST_ASSERT_EQUAL_STRING("arduino-wifi-ap", WiFi.SSID(net_index));
+
+    /* Network bssid */
+    uint8_t bssid[6];
+    WiFi.BSSID(net_index, bssid);
+    Serial.print("BSSID: ");
+    for (int i = 0; i < 6; i++) {
+        Serial.print(bssid[i], HEX);
+        if (i < 5) {
+            Serial.print(":");
+        }
+    }
+
+    int32_t rssi = WiFi.RSSI(net_index);
+    /* Assuming the boards are a few cm separate from each other. */
+    TEST_ASSERT_TRUE(-50 < rssi && rssi < 50);
+
+    TEST_ASSERT_EQUAL_INT(AUTH_MODE_WPA2, WiFi.encryptionType(net_index));
+}
+
 TEST_IFX(wifi_sta, connect_to_ap) {
     /* This AP is created by the test_wifi_ap.
        Currently the test tools does provide a way to and synch multitest. 
@@ -98,6 +129,7 @@ TEST_IFX(wifi_sta, wifi_end) {
 }
 
 TEST_GROUP_RUNNER(wifi_sta) {
+    RUN_TEST_CASE(wifi_sta, check_scan_networks);
     RUN_TEST_CASE(wifi_sta, connect_to_ap);
     RUN_TEST_CASE(wifi_sta, is_status_connected);
     RUN_TEST_CASE(wifi_sta, check_mac_address);
