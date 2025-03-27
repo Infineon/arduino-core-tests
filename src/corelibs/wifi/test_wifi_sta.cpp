@@ -10,7 +10,7 @@ static TEST_SETUP(wifi_sta) {
 static TEST_TEAR_DOWN(wifi_sta) {
 }
 
-TEST_IFX(wifi_sta, check_scan_networks) {
+TEST_IFX(wifi_sta, scan_networks) {
     int8_t num_networks = WiFi.scanNetworks();
     /* Look for the AP matching SSID */
     int8_t net_index = 0;
@@ -41,6 +41,17 @@ TEST_IFX(wifi_sta, check_scan_networks) {
     TEST_ASSERT_EQUAL_INT(AUTH_MODE_WPA2, WiFi.encryptionType(net_index));
 }
 
+TEST_IFX(wifi_sta, config_ip_static) {
+    /* The settings of these values
+    will be evaluated after beginAP()
+    with the corresponding getter functions. */
+    IPAddress local_ip(12, 34, 56, 111);
+    IPAddress dns_server(192, 168, 0, 1);
+    IPAddress gateway(12, 34, 56, 78);
+    IPAddress subnet(255, 255, 128, 0);
+    WiFi.config(local_ip, dns_server, gateway, subnet);
+}
+
 TEST_IFX(wifi_sta, connect_to_ap) {
     /* This AP is created by the test_wifi_ap.
        Currently the test tools does provide a way to and synch multitest. 
@@ -67,26 +78,26 @@ TEST_IFX(wifi_sta, check_mac_address) {
 
 TEST_IFX(wifi_sta, check_local_ip) {
     IPAddress ip = WiFi.localIP();
-    TEST_ASSERT_EQUAL_INT(192, ip[0]);
-    TEST_ASSERT_EQUAL_INT(168, ip[1]);
-    TEST_ASSERT_EQUAL_INT(0, ip[2]);
-    TEST_ASSERT_EQUAL_INT(2, ip[3]);
+    TEST_ASSERT_EQUAL_INT(12, ip[0]);
+    TEST_ASSERT_EQUAL_INT(34, ip[1]);
+    TEST_ASSERT_EQUAL_INT(56, ip[2]);
+    TEST_ASSERT_EQUAL_INT(111, ip[3]);
 }
 
 TEST_IFX(wifi_sta, check_subnet_mask) {
     IPAddress ip = WiFi.subnetMask();
     TEST_ASSERT_EQUAL_INT(255, ip[0]);
     TEST_ASSERT_EQUAL_INT(255, ip[1]);
-    TEST_ASSERT_EQUAL_INT(255, ip[2]);
+    TEST_ASSERT_EQUAL_INT(128, ip[2]);
     TEST_ASSERT_EQUAL_INT(0, ip[3]);
 }
 
 TEST_IFX(wifi_sta, check_gateway_ip) {
     IPAddress ip = WiFi.gatewayIP();
-    TEST_ASSERT_EQUAL_INT(192, ip[0]);
-    TEST_ASSERT_EQUAL_INT(168, ip[1]);
-    TEST_ASSERT_EQUAL_INT(0, ip[2]);
-    TEST_ASSERT_EQUAL_INT(1, ip[3]);
+    TEST_ASSERT_EQUAL_INT(12, ip[0]);
+    TEST_ASSERT_EQUAL_INT(34, ip[1]);
+    TEST_ASSERT_EQUAL_INT(56, ip[2]);
+    TEST_ASSERT_EQUAL_INT(78, ip[3]);
 }
 
 TEST_IFX(wifi_sta, check_ssid) {
@@ -129,7 +140,8 @@ TEST_IFX(wifi_sta, wifi_end) {
 }
 
 TEST_GROUP_RUNNER(wifi_sta) {
-    RUN_TEST_CASE(wifi_sta, check_scan_networks);
+    RUN_TEST_CASE(wifi_sta, scan_networks);
+    RUN_TEST_CASE(wifi_sta, config_ip_static);
     RUN_TEST_CASE(wifi_sta, connect_to_ap);
     RUN_TEST_CASE(wifi_sta, is_status_connected);
     RUN_TEST_CASE(wifi_sta, check_mac_address);

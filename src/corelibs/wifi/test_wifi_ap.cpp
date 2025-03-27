@@ -10,6 +10,17 @@ static TEST_SETUP(wifi_ap) {
 static TEST_TEAR_DOWN(wifi_ap) {
 }
 
+TEST_IFX(wifi_ap, config) {
+    /* The settings of these values
+    will be evaluated after beginAP()
+    with the corresponding getter functions. */
+    IPAddress local_ip(12, 34, 56, 78);
+    IPAddress dns_server(192, 168, 0, 1);
+    IPAddress gateway(12, 34, 56, 78);
+    IPAddress subnet(255, 255, 128, 0);
+    WiFi.config(local_ip, dns_server, gateway, subnet);
+}
+
 TEST_IFX(wifi_ap, begin_ap) {
     int result = WiFi.beginAP("arduino-wifi-ap", "wifi-ap-password", 1);
     TEST_ASSERT_EQUAL_INT(WL_AP_LISTENING, result);
@@ -33,26 +44,26 @@ TEST_IFX(wifi_ap, check_mac_address) {
 
 TEST_IFX(wifi_ap, check_local_ip) {
     IPAddress ip = WiFi.localIP();
-    TEST_ASSERT_EQUAL_INT(192, ip[0]);
-    TEST_ASSERT_EQUAL_INT(168, ip[1]);
-    TEST_ASSERT_EQUAL_INT(0, ip[2]);
-    TEST_ASSERT_EQUAL_INT(1, ip[3]);
+    TEST_ASSERT_EQUAL_INT(12, ip[0]);
+    TEST_ASSERT_EQUAL_INT(34, ip[1]);
+    TEST_ASSERT_EQUAL_INT(56, ip[2]);
+    TEST_ASSERT_EQUAL_INT(78, ip[3]);
 }
 
 TEST_IFX(wifi_ap, check_subnet_mask) {
     IPAddress ip = WiFi.subnetMask();
     TEST_ASSERT_EQUAL_INT(255, ip[0]);
     TEST_ASSERT_EQUAL_INT(255, ip[1]);
-    TEST_ASSERT_EQUAL_INT(255, ip[2]);
+    TEST_ASSERT_EQUAL_INT(128, ip[2]);
     TEST_ASSERT_EQUAL_INT(0, ip[3]);
 }
 
 TEST_IFX(wifi_ap, check_gateway_ip) {
     IPAddress ip = WiFi.gatewayIP();
-    TEST_ASSERT_EQUAL_INT(192, ip[0]);
-    TEST_ASSERT_EQUAL_INT(168, ip[1]);
-    TEST_ASSERT_EQUAL_INT(0, ip[2]);
-    TEST_ASSERT_EQUAL_INT(1, ip[3]);
+    TEST_ASSERT_EQUAL_INT(12, ip[0]);
+    TEST_ASSERT_EQUAL_INT(34, ip[1]);
+    TEST_ASSERT_EQUAL_INT(56, ip[2]);
+    TEST_ASSERT_EQUAL_INT(78, ip[3]);    
 }
 
 TEST_IFX(wifi_ap, check_ssid) {
@@ -88,6 +99,7 @@ TEST_IFX(wifi_ap, wifi_end) {
 }
 
 TEST_GROUP_RUNNER(wifi_ap) {
+    RUN_TEST_CASE(wifi_ap, config);
     RUN_TEST_CASE(wifi_ap, begin_ap);
     RUN_TEST_CASE(wifi_ap, is_status_listening);
     RUN_TEST_CASE(wifi_ap, check_mac_address);
