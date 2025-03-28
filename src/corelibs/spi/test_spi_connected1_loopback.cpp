@@ -5,6 +5,8 @@
  * MISO pin for the test cases to work as expected.
  */
 
+ // This is a test in Branch: added_spi
+
 // std includes
 #include "test_common_includes.h"
 
