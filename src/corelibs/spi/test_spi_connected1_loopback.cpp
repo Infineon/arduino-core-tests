@@ -5,8 +5,8 @@
  * MISO pin for the test cases to work as expected.
  */
 
- // THIS IS THE BRANCH OF 3XPre
-
+ // THIS IS THE BRANCH ADD_SPI
+ 
 // std includes
 #include "test_common_includes.h"
 
