@@ -54,6 +54,17 @@ TEST_IFX(wifi_extras, check_host_by_name) {
     TEST_ASSERT_EQUAL_STRING(ip_expected.toString().c_str(), ip.toString().c_str());
 }
 
+TEST_IFX(wifi_extras, check_dns) {
+    IPAddress dns_ip = WiFi.dnsIP(0);
+    Serial.print("DNS: ");
+    for (int i = 0; i < 4; i++) {
+        Serial.print(dns_ip[i], DEC);
+        if (i < 3) {
+            Serial.print(".");
+        }
+    }
+}
+
 TEST_IFX(wifi_extras, check_ping) {
     int ret = WiFi.ping("github.com");
     TEST_ASSERT_EQUAL_INT(WIFI_ERROR_NONE, ret);
@@ -75,6 +86,7 @@ TEST_GROUP_RUNNER(wifi_extras) {
     RUN_TEST_CASE(wifi_extras, wifi_connect_to_ap);
     RUN_TEST_CASE(wifi_extras, client_connect_by_hostname);
     RUN_TEST_CASE(wifi_extras, check_host_by_name);
+    RUN_TEST_CASE(wifi_extras, check_dns);
     RUN_TEST_CASE(wifi_extras, check_ping);
     RUN_TEST_CASE(wifi_extras, wifi_disconnect);
     RUN_TEST_CASE(wifi_extras, wifi_end);    

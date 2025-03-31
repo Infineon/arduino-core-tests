@@ -15,7 +15,7 @@ TEST_IFX(wifi_ap, config) {
     will be evaluated after beginAP()
     with the corresponding getter functions. */
     IPAddress local_ip(12, 34, 56, 78);
-    IPAddress dns_server(192, 168, 0, 1);
+    IPAddress dns_server(8, 8, 8, 4);
     IPAddress gateway(12, 34, 56, 78);
     IPAddress subnet(255, 255, 128, 0);
     WiFi.config(local_ip, dns_server, gateway, subnet);
@@ -66,6 +66,14 @@ TEST_IFX(wifi_ap, check_gateway_ip) {
     TEST_ASSERT_EQUAL_INT(78, ip[3]);    
 }
 
+TEST_IFX(wifi_ap, check_dns) {
+    IPAddress dns_ip = WiFi.dnsIP(0);
+    TEST_ASSERT_EQUAL_INT(8, dns_ip[0]);
+    TEST_ASSERT_EQUAL_INT(8, dns_ip[1]);
+    TEST_ASSERT_EQUAL_INT(8, dns_ip[2]);
+    TEST_ASSERT_EQUAL_INT(4, dns_ip[3]);
+}
+
 TEST_IFX(wifi_ap, check_ssid) {
     const char *ssid = WiFi.SSID();
     TEST_ASSERT_EQUAL_STRING("arduino-wifi-ap", ssid);
@@ -106,6 +114,7 @@ TEST_GROUP_RUNNER(wifi_ap) {
     RUN_TEST_CASE(wifi_ap, check_local_ip);
     RUN_TEST_CASE(wifi_ap, check_subnet_mask);
     RUN_TEST_CASE(wifi_ap, check_gateway_ip);
+    RUN_TEST_CASE(wifi_ap, check_dns);
     RUN_TEST_CASE(wifi_ap, check_ssid);
     RUN_TEST_CASE(wifi_ap, check_bssid);
     RUN_TEST_CASE(wifi_ap, check_encryption_type);
