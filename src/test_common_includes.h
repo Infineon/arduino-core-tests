@@ -7,6 +7,7 @@
 // project c includes
 
 // test includes
+#include "test_config.h"
 
 // Unity c includes
 #include "unity.h"
