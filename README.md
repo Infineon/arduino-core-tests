@@ -5,12 +5,12 @@ Repo as shared ardino core tests using unity platform.
 ## Pre-conditions
 Before running Unity tests, please ensure the following pre-conditions are met:
 
-1. **Install Arduino CLI**:
-   - Download and install Arduino CLI. You can download the Windows version of Arduino CLI from the following link:
-     [Arduino CLI Download Link](https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Windows_64bit.zip)
-   - Add `arduino-cli.exe` to your system's PATH environment variable to access it from the command line.
-
-2. **Update submodule**:
+### Install Arduino CLI:
+   - Download and install Arduino CLI: https://arduino.github.io/arduino-cli/latest/installation/
+      You may need to add it to your system's PATH environment variable to access it from terminal.
+### Install Make:
+   - Install GNU make: https://www.gnu.org/software/make/. We use currently Makefile to manage how we execute different tests.
+### Update submodule:
    - The Unity test framework is included as submodule in this project. The Unity test framework files should be located in the `unity` folder. Run  `git submodule update --init --recursive` to update them.  If you are nor familiar with submodules, check out: https://git-scm.com/book/en/v2/Git-Tools-Submodules 
 
 ## Usage
