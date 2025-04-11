@@ -1,9 +1,10 @@
-/* test_spi_connected1_loopback.cpp
+/** 
+ * @name test_spi_connected1_loopback.cpp
  *
- * This test is used to verify the functionality of the SPI functions.
- * only one board is needed with MOSI pin looped back to 
- * MISO pin for the test cases to work as expected.
- */
+ * @details This test is used to verify the functionality of the SPI functions.
+ *          only one board is needed with MOSI pin looped back to 
+ *          MISO pin for the test cases to work as expected.
+ **/
 
 // std includes
 #include "test_common_includes.h"
@@ -52,7 +53,6 @@ TEST_IFX(spi_connected1_loopback, test_spi_transfer_buffer) {
 }
 
 TEST_IFX(spi_connected1_loopback, test_spi_mode_configuration) {
-    spi->endTransaction();
     arduino::SPISettings testSettings1(500000, MSBFIRST, SPI_MODE0);
     spi->beginTransaction(testSettings1);
     
@@ -60,11 +60,14 @@ TEST_IFX(spi_connected1_loopback, test_spi_mode_configuration) {
     TEST_ASSERT_EQUAL_HEX16_MESSAGE(testDataWord, receivedData, "SPI transfer word failed");
 
     spi->endTransaction();
+
     arduino::SPISettings testSettings2(1000000, LSBFIRST, SPI_MODE3);
     spi->beginTransaction(testSettings2);
     
     receivedData = spi->transfer16(testDataWord);
     TEST_ASSERT_EQUAL_HEX16_MESSAGE(testDataWord, receivedData, "SPI transfer word failed");
+    
+    spi->endTransaction();
 }
 
 TEST_IFX(spi_connected1_loopback, test_spi_reinitialization) {

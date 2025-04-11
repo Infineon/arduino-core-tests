@@ -123,6 +123,18 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_SPI_CONNECTED2_MASTERPINGPONG
+
+    RUN_TEST_GROUP(spi_connected2_masterpingpong);
+
+#endif
+
+#ifdef TEST_SPI_CONNECTED2_SLAVEPINGPONG
+
+    RUN_TEST_GROUP(spi_connected2_slavepingpong);
+
+#endif
+
 }
 
 
