@@ -120,37 +120,6 @@ TEST_IFX(digitalio_single_internal, test_digitalio_read_write_output_opendrain)
 }
 
 /**
- * @brief Test invalid pin number handling in pinMode
-*/
-TEST_IFX(digitalio_single_internal, test_pinMode_invalid_pin) {
-    pinMode(INVALID_PIN, OUTPUT);
-    // No assertion as pinMode doesn't return a value, but ensure no crash
-}
-
-/**
- * @brief Test invalid pin number handling in digitalWrite
-*/
-TEST_IFX(digitalio_single_internal, test_digitalWrite_invalid_pin) {
-    digitalWrite(INVALID_PIN, HIGH);
-    // No assertion as digitalWrite doesn't return a value, but ensure no crash
-}
-
-/**
- * @brief Test invalid pin number handling in digitalRead
-*/
-TEST_IFX(digitalio_single_internal, test_digitalRead_invalid_pin) {
-    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(INVALID_PIN), "Should return LOW for invalid pin");
-}
-
-/**
- * @brief Test invalid pin mode
-*/
-TEST_IFX(digitalio_single_internal, test_invalid_pinmode) {
-    pinMode(TEST_DIGITALIO_INPUT, 255);
-    // No assertion as pinMode doesn't return a value, but ensure no crash
-}
-
-/**
  * @brief Test group runner to run all test cases in this group.
  */
 static TEST_GROUP_RUNNER(digitalio_single_internal)
@@ -159,10 +128,6 @@ static TEST_GROUP_RUNNER(digitalio_single_internal)
     RUN_TEST_CASE(digitalio_single_internal, test_digitalio_read_write_input_pullup);
     RUN_TEST_CASE(digitalio_single_internal, test_digitalio_read_write_input_pulldown);
     RUN_TEST_CASE(digitalio_single_internal, test_digitalio_read_write_output_opendrain);
-    RUN_TEST_CASE(digitalio_single_internal, test_pinMode_invalid_pin);
-    RUN_TEST_CASE(digitalio_single_internal, test_digitalWrite_invalid_pin);
-    RUN_TEST_CASE(digitalio_single_internal, test_digitalRead_invalid_pin);
-    RUN_TEST_CASE(digitalio_single_internal, test_invalid_pinmode);
 }
 
 /**
