@@ -1,13 +1,24 @@
+/**
+ * @brief This test runs some basic check on WiFi station API 
+ * functions which require internet access.
+ * 
+ * @details The tested function are those require domain name handling like ping
+ * or connection by domain name.
+ * 
+ * This test is meant as a happy path verification. Exception and corner/edge cases
+ * are not covered in this test. 
+ * 
+ * @note The tests need to be run with an access point with internet access.
+ */
 #include "test_common_includes.h"
 
 #include <WiFi.h>
 #include <WiFiClient.h>
 
 /** 
- * These tests need to be run with an access point with internet access
- * Therefore, it won´t be part of the automated tests.
- * Add your SSID_NAME and SSID_PASS to the secrets.h file.
-*/
+ * Add your SSID_NAME and SSID_PASS to the secrets.h file. 
+ * Place the "secrets.h" file directly in the src/ directory.
+ */
 #include "secrets.h"
 
 TEST_GROUP(wifi_extras);
@@ -56,6 +67,8 @@ TEST_IFX(wifi_extras, check_host_by_name) {
 
 TEST_IFX(wifi_extras, check_dns) {
     IPAddress dns_ip = WiFi.dnsIP(0);
+    /* No assertion possible here, as the DNS
+    address is not set upfront */
     Serial.print("DNS: ");
     for (int i = 0; i < 4; i++) {
         Serial.print(dns_ip[i], DEC);
