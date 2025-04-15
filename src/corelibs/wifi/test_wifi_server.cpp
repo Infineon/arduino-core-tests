@@ -1,3 +1,29 @@
+/**
+ * @brief This test starts a WiFi (TCP) server to which multiple WiFi
+ * clients connect and communicate with testing the WiFiServer API functions.
+ * 
+ * @details The tests runs the following sequence:
+ * - Start the server
+ * - Check the server is listening
+ * - Check the local IP address
+ * - Wait for a client to connect
+ * - Read from the client
+ * - Write to the client
+ * - Read from the client using print()
+ * - Print to all clients
+ * - Wait for the client to disconnect
+ * - Stop the server
+ * - Disconnect the WiFi connection
+ * - End the WiFi
+ * 
+ * This test is meant as a happy path verification. Exception and corner/edge cases
+ * are not covered in this test. 
+ * 
+ * This test is paired in the "test_wifi_client.cpp" test, which needs to be executed in 
+ * a second board to operate the clients connecting to this server.
+ * 
+ * @note This test must be run before the "test_wifi_client.cpp" test.
+ */
 #include "test_common_includes.h"
 
 #include <WiFi.h>

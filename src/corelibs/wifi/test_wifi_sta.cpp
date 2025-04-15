@@ -1,3 +1,19 @@
+/**
+ * @brief This test will establish a connection as a WiFi station with a WiFi 
+ * access point.
+ * 
+ * @details It validates the basic settings for a connected WiFi station.
+ * This test is meant as a happy path verification of the API functions for 
+ * station mode. 
+ * 
+ * Exception and corner/edge cases are not covered in this test. 
+ * 
+ * This test is paired with the "test_wifi_ap.cpp"s test, which
+ * running on a second board will provide the access point to which 
+ * the board running this tests connects to. 
+ * 
+ * @note This test must be run after the "test_wifi_ap.cpp" test. 
+ */
 #include "test_common_includes.h"
 
 #include <WiFi.h>
@@ -10,6 +26,18 @@ static TEST_SETUP(wifi_sta) {
 static TEST_TEAR_DOWN(wifi_sta) {
 }
 
+/**
+ * @brief Scan available WiFi networks and searches for the expected SSID
+ *        of the access point created by the "test_wifi_ap.cpp" test.
+ * 
+ * @details Once the SSID is found, it also checks the BSSID, RSSI and encryption type.
+ * 
+ * @note The test rssi assert expects that the station and the access point are physically closed 
+ *       to each other (as they would be in a hardware-in-the-loop setup)
+ * 
+ * @note If the SSID is not found, the subsequent test requiring a established
+ *       connection will fail.
+ */
 TEST_IFX(wifi_sta, scan_networks) {
     int8_t num_networks = WiFi.scanNetworks();
     /* Look for the AP matching SSID */
@@ -26,6 +54,8 @@ TEST_IFX(wifi_sta, scan_networks) {
     /* Network bssid */
     uint8_t bssid[6];
     WiFi.BSSID(net_index, bssid);
+    /* No assertion possible here, as the
+    device adddress is not known upfront */
     Serial.print("BSSID: ");
     for (int i = 0; i < 6; i++) {
         Serial.print(bssid[i], HEX);
@@ -54,7 +84,7 @@ TEST_IFX(wifi_sta, config_ip_static) {
 
 TEST_IFX(wifi_sta, connect_to_ap) {
     /* This AP is created by the test_wifi_ap.
-       Currently the test tools does provide a way to and synch multitest. 
+       Currently the test tools does NOT provide a way to and synch multitest. 
        It has only be validated manually. */
     int result = WiFi.begin("arduino-wifi-ap", "wifi-ap-password");
     TEST_ASSERT_EQUAL_INT(WL_CONNECTED, result);
@@ -67,6 +97,8 @@ TEST_IFX(wifi_sta, is_status_connected) {
 TEST_IFX(wifi_sta, check_mac_address) {
     uint8_t mac[6];
     WiFi.macAddress(mac);
+    /* No assertion possible here, as the
+    device adddress is not known upfront */
     Serial.print("MAC address: ");
     for (int i = 0; i < 6; i++) {
         Serial.print(mac[i], HEX);
@@ -116,6 +148,8 @@ TEST_IFX(wifi_sta, check_ssid) {
 TEST_IFX(wifi_sta, check_bssid) {
     uint8_t bssid[6];
     WiFi.BSSID(bssid);
+    /* No assertion possible here, as the
+    device adddress is not known upfront */
     Serial.print("BSSID: ");
     for (int i = 0; i < 6; i++) {
         Serial.print(bssid[i], HEX);
@@ -125,10 +159,15 @@ TEST_IFX(wifi_sta, check_bssid) {
     }
 }
 
+/**
+ * @brief Check the rssi level of the access point.
+ * 
+ * @note The tests requires the access point board and the station to be a few cm apart.
+ *       This is assumed to be the case in a hardware-in-the-loop setup. 
+ */
 TEST_IFX(wifi_sta, check_rssi) {
     int32_t rssi = WiFi.RSSI();
     TEST_ASSERT_TRUE(rssi > INT32_MIN);
-    /* Assuming the boards are a few cm separate from each other. */
     TEST_ASSERT_TRUE(-50 < rssi && rssi < 50);
 }
 

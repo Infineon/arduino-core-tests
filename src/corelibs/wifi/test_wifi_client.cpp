@@ -1,3 +1,30 @@
+/**
+ * @brief This test creates a WiFi (TCP) client and connects to a WiFi server 
+ * and communicates with testing the WiFiClient API functions.
+ * 
+ * @details The tests runs the following sequence:
+ * - Connect to the access point created by the test_wifi_ap.cpp test
+ * - Check the local IP address
+ * - Connect to the server
+ * - Write to the server
+ * - Read from the server
+ * - Print to the server
+ * - Connect a second client to the server
+ * - Read from the server with both clients
+ * - Peek and flush the second client
+ * - Stop the first client
+ * - Waits for the server to disconnect
+ * - Disconnect the wifi connection and end the WiFi
+ * 
+ * This test is meant as a happy path verification. Exception and corner/edge cases
+ * are not covered in this test. 
+ * 
+ * This test is paired in the "test_wifi_server.cpp" test, which needs to be executed in 
+ * a second board to provide the server to which the client connects to.
+ * 
+ * @note This test must be run after the "test_wifi_server.cpp" test.
+ */
+
 #include "test_common_includes.h"
 
 #include <WiFi.h>
@@ -13,7 +40,7 @@ static TEST_TEAR_DOWN(wifi_client) {
 
 TEST_IFX(wifi_client, wifi_connect_to_ap) {
    /* This AP is created by the test_wifi_ap.
-    Currently the test tools does provide a way to and synch multitest. 
+    Currently the test tools does provide NOT a way to and synch multitest. 
     It has only be validated manually. */
     int result = WiFi.begin("arduino-wifi-ap", "wifi-ap-password");
     TEST_ASSERT_EQUAL_INT(WL_CONNECTED, result);

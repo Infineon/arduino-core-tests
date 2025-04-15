@@ -1,3 +1,15 @@
+/**
+ * @brief This test will set up a WiFi access point and set/get the basic settings.
+ * 
+ * @details This test is meant as a happy path verification of the API functions for 
+ * Access Point mode. 
+ * 
+ * Exception and corner/edge cases are not covered in this test. 
+ * 
+ * This test is paired with the "test_wifi_sta.cpp"s test, which
+ * running on a second board will connect to the AP created by this test.
+ */
+
 #include "test_common_includes.h"
 
 #include <WiFi.h>
@@ -33,6 +45,8 @@ TEST_IFX(wifi_ap, is_status_listening) {
 TEST_IFX(wifi_ap, check_mac_address) {
     uint8_t mac[6];
     WiFi.macAddress(mac);
+    /* No assertion possible here, as the
+    device adddress is not known upfront */
     Serial.print("MAC address: ");
     for (int i = 0; i < 6; i++) {
         Serial.print(mac[i], HEX);
@@ -82,6 +96,8 @@ TEST_IFX(wifi_ap, check_ssid) {
 TEST_IFX(wifi_ap, check_bssid) {
     uint8_t bssid[6];
     WiFi.BSSID(bssid);
+    /* No assertion possible here, as the
+    device adddress is not known upfront */
     Serial.print("BSSID: ");
     for (int i = 0; i < 6; i++) {
         Serial.print(bssid[i], HEX);
