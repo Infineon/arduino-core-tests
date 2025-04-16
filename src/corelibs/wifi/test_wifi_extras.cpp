@@ -85,6 +85,17 @@ TEST_IFX(wifi_extras, check_ping) {
     TEST_ASSERT_EQUAL_INT(WIFI_ERROR_NONE, ret);
 }
 
+TEST_IFX(wifi_extras, check_set_DNS){
+    IPAddress dns1(8, 8, 8, 8);
+    IPAddress dns2(8, 8, 4, 4);
+    WiFi.setDNS(dns1);
+    Serial.println(WiFi.dnsIP(0).toString().c_str());
+    TEST_ASSERT_EQUAL_STRING(dns1.toString().c_str(), WiFi.dnsIP(0).toString().c_str());
+    WiFi.setDNS(dns1, dns2);
+    TEST_ASSERT_EQUAL_STRING(dns1.toString().c_str(), WiFi.dnsIP(0).toString().c_str());
+    TEST_ASSERT_EQUAL_STRING(dns2.toString().c_str(), WiFi.dnsIP(1).toString().c_str());
+}
+
 TEST_IFX(wifi_extras, wifi_disconnect) {
     WiFi.disconnect();
     TEST_ASSERT_EQUAL_INT(WIFI_STATUS_STA_DISCONNECTED, WiFi.status());
@@ -101,6 +112,7 @@ TEST_GROUP_RUNNER(wifi_extras) {
     RUN_TEST_CASE(wifi_extras, check_host_by_name);
     RUN_TEST_CASE(wifi_extras, check_dns);
     RUN_TEST_CASE(wifi_extras, check_ping);
+    RUN_TEST_CASE(wifi_extras, check_set_DNS);
     RUN_TEST_CASE(wifi_extras, wifi_disconnect);
     RUN_TEST_CASE(wifi_extras, wifi_end);    
     /** 
