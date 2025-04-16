@@ -117,6 +117,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_WIFI_EXCEPTIONS
+
+    RUN_TEST_GROUP(wifi_exceptions);
+
+#endif
+
 #ifdef TEST_SPI_CONNECTED1_LOOPBACK
 
     RUN_TEST_GROUP(spi_connected1_loopback);
