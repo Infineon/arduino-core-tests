@@ -61,6 +61,8 @@ test_%: create_build_dir check_unity_path print_args
 # UART tests targets
 test_uart_connected2_tx: TESTS=-DTEST_UART_CONNECTED2_TX
 test_uart_connected2_rx: TESTS=-DTEST_UART_CONNECTED2_RX
+test_uart_rx: TESTS=-DTEST_UART_RX
+test_uart_tx: TESTS=-DTEST_UART_TX
 
 # Time tests targets
 test_time_single: TESTS=-DTEST_TIME_SINGLE
