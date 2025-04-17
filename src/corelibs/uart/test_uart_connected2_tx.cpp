@@ -1,3 +1,28 @@
+/* 
+ * test_uart_connected2_tx.cpp
+ *
+ * This file contains tests for UART communication using the Arduino framework.
+ * It verifies the ability to send and receive data between UART devices at 
+ * different baud rates and ensures the proper functioning of UART APIs.
+ * 
+ * The tests use Serial1 (or more Serial instances) for UART communication 
+ * and Serial for reporting test results.
+ * To run this test file, you need two boards, each with two or more serial ports enabled, 
+ * with their respective TX and RX ports connected.
+ *
+ * Example for each Serial:
+ *
+ *           terminal
+ *          |       ^
+ *          v Serial |
+ *          RX  ^  TX
+ *              |
+ *        report status
+ *              |
+ *         TX <---> RX
+ *           Serial1
+ */
+
 // std includes
 
 // test includes
