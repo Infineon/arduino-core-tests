@@ -41,6 +41,18 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_UART_RX
+
+    RUN_TEST_GROUP(uart_rx);
+
+#endif
+
+#ifdef TEST_UART_TX
+
+    RUN_TEST_GROUP(uart_tx);
+
+#endif
+
 // CAN\test_can_single.cpp
 #ifdef TEST_CAN_SINGLE
 
