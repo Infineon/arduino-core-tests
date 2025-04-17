@@ -163,8 +163,20 @@ TEST_IFX(uart_tx, write_longer_than_writable) {
 TEST_IFX(uart_tx, read_reply) {
     char expected_msg[] = "All went well so far. We can close now. Bye. Thanks!";
 
-    /* Wait for the expected data to be available */
-    while(Serial1.available() < (int)strlen(expected_msg)) {}
+    /* Wait for the expected data to be available.
+    A timeout is added to avoid an infinite loop. 
+    That will prevent the teardown to deinit the synch mechanism.
+    And recurrent restart of the test with RX can fail (as the signal
+    will remain high)
+    */
+    unsigned long time_start_ms = millis();
+    unsigned long timeout_ms = 3000; 
+    while(Serial1.available() < (int)strlen(expected_msg)) {
+        if(millis() - time_start_ms >= timeout_ms) {
+            TEST_FAIL_MESSAGE("Timeout waiting for reply from UART RX");
+            return;
+        }
+    }
     
     char received_msg[sizeof(expected_msg)] = {0};
     size_t received_msg_len = Serial1.readBytes(received_msg, strlen(expected_msg));
