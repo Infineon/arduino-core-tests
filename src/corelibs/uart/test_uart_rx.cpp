@@ -64,8 +64,7 @@ TEST_IFX(uart_rx, wait_for_synch_signal) {
 
 TEST_IFX(uart_rx, begin) {
     Serial1.begin(UART_TEST_BAUDRATE);
-    /* No assertion. Just checking that this calls
-    does not crash. */
+    TEST_ASSERT_TRUE(Serial1);
 }
 
 TEST_IFX(uart_rx, wait_and_read_one_byte) {
@@ -192,6 +191,7 @@ TEST_IFX(uart_rx, end) {
      to avoid read errors due to closing the bus too early.*/
     delay(300);
     Serial1.end();
+    TEST_ASSERT_FALSE(Serial1);
     /* No assertion. Just checking that this calls
     does not crash. */
 }

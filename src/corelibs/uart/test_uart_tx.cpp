@@ -72,10 +72,16 @@ TEST_IFX(uart_tx, notify_readiness_to_uart_rx) {
     delay(500);
 }
 
+TEST_IFX(uart_tx, not_ready) {
+    TEST_ASSERT_FALSE(Serial1);
+}
+
 TEST_IFX(uart_tx, begin) {
     Serial1.begin(UART_TEST_BAUDRATE);
     /* No assertion. Just checking that this calls
     does not crash. */
+    /* Evaluating bool operator */
+    TEST_ASSERT_TRUE(Serial1);
 }
 
 TEST_IFX(uart_tx, write_one_byte) {
@@ -187,6 +193,7 @@ TEST_IFX(uart_tx, read_reply) {
 
 TEST_IFX(uart_tx, end) {
     Serial1.end();
+    TEST_ASSERT_FALSE(Serial1);
     /* No assertion. Just checking that this calls
     does not crash. */
 }
@@ -194,6 +201,7 @@ TEST_IFX(uart_tx, end) {
 TEST_GROUP_RUNNER(uart_tx) {
     uart_tx_suite_setup();
     RUN_TEST_CASE(uart_tx, notify_readiness_to_uart_rx);
+    RUN_TEST_CASE(uart_tx, not_ready);
     RUN_TEST_CASE(uart_tx, begin);
     RUN_TEST_CASE(uart_tx, write_one_byte);
     RUN_TEST_CASE(uart_tx, write_bytes);
