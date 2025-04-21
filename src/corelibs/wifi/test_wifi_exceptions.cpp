@@ -29,6 +29,15 @@ TEST_IFX(wifi_exceptions, wifi_timeout) {
     TEST_ASSERT_EQUAL_INT(WIFI_STATUS_STA_DISCONNECTED, WiFi.status());
 }
 
+/// Test for WiFi.reasonCode()
+TEST_IFX(wifi_exceptions, wifi_reasoncode){    
+    uint8_t reason_code = WiFi.reasonCode();
+    TEST_ASSERT_EQUAL_UINT8(WIFI_ERROR_STA_CONNECT_FAILED, reason_code);
+    reason_code = WiFi.ping("google.com");
+    TEST_ASSERT_EQUAL_UINT8(WIFI_ERROR_PING_FAILED, reason_code);
+}
+
 TEST_GROUP_RUNNER(wifi_exceptions) {
     RUN_TEST_CASE(wifi_exceptions, wifi_timeout);
+    RUN_TEST_CASE(wifi_exceptions, wifi_reasoncode);
 }
