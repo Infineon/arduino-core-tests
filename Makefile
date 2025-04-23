@@ -90,6 +90,7 @@ test_wifi_extras: TESTS=-DTEST_WIFI_EXTRAS
 
 ## SPI tests targets
 test_spi_connected1_loopback: TESTS=-DTEST_SPI_CONNECTED1_LOOPBACK
+test_spi_3wire: TESTS=-DTEST_SPI_3WIRE
 
 # Arduino-cli commands
 

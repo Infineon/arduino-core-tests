@@ -123,6 +123,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_SPI_3WIRE
+
+    RUN_TEST_GROUP(spi_3wire);
+
+#endif
+
 }
 
 
