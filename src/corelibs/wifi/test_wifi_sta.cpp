@@ -69,6 +69,7 @@ TEST_IFX(wifi_sta, scan_networks) {
     TEST_ASSERT_TRUE(-50 < rssi && rssi < 50);
 
     TEST_ASSERT_EQUAL_INT(AUTH_MODE_WPA2, WiFi.encryptionType(net_index));
+    TEST_ASSERT_EQUAL_INT(1, WiFi.channel(net_index));
 }
 
 TEST_IFX(wifi_sta, config_ip_static) {
