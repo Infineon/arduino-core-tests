@@ -22,6 +22,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_ANALOGIO_SINGLE
+
+    RUN_TEST_GROUP(analogio_single);
+
+#endif
+
 #ifdef TEST_INTERRUPTS_SINGLE
 
     RUN_TEST_GROUP(gpio_interrupts_single);
