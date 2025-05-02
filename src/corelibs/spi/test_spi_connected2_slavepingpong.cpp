@@ -25,12 +25,12 @@ const uint8_t MAX_TEST_ITERATION = 10;
 
 static uint8_t testTransmitBuff[MAX_BUFFER_SIZE] = {0};
 static uint8_t expectedReceiveBuff[MAX_BUFFER_SIZE] = {0};
-static SPIClassPSOC SPI1 = SPIClassPSOC(PIN_SPI_MOSI, PIN_SPI_MISO, PIN_SPI_SCK, TEST_SPI_SLAVE_SELECT, true);
+static SPIClassPSOC SPI1 = SPIClassPSOC(PIN_SPI_MOSI, PIN_SPI_MISO, PIN_SPI_SCK, TEST_PIN_SPI_SSEL, true);
 static SPIClassPSOC *spi_slave = &SPI1;
 
 // Method invoked before a test suite is run.
 static void spi_connected2_slavepingpong_suite_setup() {
-    pinMode(TEST_SYNC_INPUT_OUTPUT, INPUT_PULLDOWN);
+    pinMode(TEST_PIN_SYNC_IO, INPUT_PULLDOWN);
     spi_slave->begin();
 }
 
@@ -63,7 +63,7 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_byte) {
     uint8_t testReceiveByte = 0xAA;
     uint8_t expectedReceiveByte = testReceiveByte;
     
-    while (digitalRead(TEST_SYNC_INPUT_OUTPUT) == LOW) {
+    while (digitalRead(TEST_PIN_SYNC_IO) == LOW) {
         // Wait for the master to pull the sync pin high
     }
 
@@ -91,7 +91,7 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_word) {
     uint16_t testReceiveWord = 0x4433; // first word read from master
     uint16_t expectedReceiveWord = testReceiveWord;
     
-    while (digitalRead(TEST_SYNC_INPUT_OUTPUT) == LOW) {
+    while (digitalRead(TEST_PIN_SYNC_IO) == LOW) {
         // Wait for the master to pull the sync pin high
     }
 
@@ -116,7 +116,7 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_buffer) {
         expectedReceiveBuff[i] = 0xAA + i;
     }
 
-    while (digitalRead(TEST_SYNC_INPUT_OUTPUT) == LOW) {
+    while (digitalRead(TEST_PIN_SYNC_IO) == LOW) {
         // Wait for the master to pull the sync pin high
     }
 

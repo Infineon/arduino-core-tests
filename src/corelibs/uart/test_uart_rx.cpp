@@ -58,8 +58,8 @@ static TEST_TEAR_DOWN(uart_rx) {
  * And that can lead to potential reception of invalid data.
  */
 TEST_IFX(uart_rx, wait_for_synch_signal) {
-    pinMode(TEST_SYNC_INPUT_OUTPUT, INPUT_PULLDOWN);
-    while (digitalRead(TEST_SYNC_INPUT_OUTPUT) == LOW) {}
+    pinMode(TEST_PIN_SYNC_IO, INPUT_PULLDOWN);
+    while (digitalRead(TEST_PIN_SYNC_IO) == LOW) {}
 }
 
 TEST_IFX(uart_rx, begin) {
