@@ -1,5 +1,5 @@
 /**
- * @brief test_analogio_single.cpp
+ * @brief test_analogio_adc.cpp
  *
  * @details This test is used to verify the functionality of the Analog IO module.
  * only one board is needed with 
@@ -52,7 +52,7 @@ static bool validate_adc_raw_value(int expected_value, int actual_value) {
 /**
  * @brief Suite setup function, runs before test suite execution begins.
  */
-static void analogio_single_suite_setup() {
+static void analogio_adc_suite_setup() {
     
 }
 
@@ -60,23 +60,23 @@ static void analogio_single_suite_setup() {
 /**
  * @brief Suite teardown function, runs after test suite execution is complete.
  */
-static void analogio_single_suite_teardown() {
+static void analogio_adc_suite_teardown() {
     
 }
 
 // Define test group name
-TEST_GROUP(analogio_single);
+TEST_GROUP(analogio_adc);
 
 /**
  * @brief Setup method called by Unity before every test in this test group.
  */
-static TEST_SETUP(analogio_single) { 
+static TEST_SETUP(analogio_adc) { 
 }
 
 /**
  * @brief Tear down method called by Unity after every test in this test group.
  */
-static TEST_TEAR_DOWN(analogio_single) {
+static TEST_TEAR_DOWN(analogio_adc) {
 }
 
 #ifdef TEST_PIN_ANALOG_IO_VREF 
@@ -84,7 +84,7 @@ static TEST_TEAR_DOWN(analogio_single) {
 /**
  * @brief Verify ADC value for the DEFAULT volatage reference on the pin that is connected to VDDA
  */
-TEST_IFX(analogio_single, test_adc_read_default_vdda_vref_pin)
+TEST_IFX(analogio_adc, test_adc_read_default_vdda_vref_pin)
 {
     analogReference(DEFAULT); 
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_VREF);
@@ -99,7 +99,7 @@ TEST_IFX(analogio_single, test_adc_read_default_vdda_vref_pin)
 /**
  * @brief Verify ADC value for the DEFAULT volatage reference on the pin that is connected to voltage divider.
  */
-TEST_IFX(analogio_single, test_adc_read_default_vdda_divider_pin)
+TEST_IFX(analogio_adc, test_adc_read_default_vdda_divider_pin)
 {
     analogReference(DEFAULT); // Configure reference to VDDA
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DIVIDER);
@@ -114,7 +114,7 @@ TEST_IFX(analogio_single, test_adc_read_default_vdda_divider_pin)
 /**
  * @brief Verify ADC value for the DEFAULT volatage reference on the pin that is connected to ground.
  */
-TEST_IFX(analogio_single, test_adc_read_default_gnd_pin)
+TEST_IFX(analogio_adc, test_adc_read_default_gnd_pin)
 {
     analogReference(DEFAULT); 
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_GND);
@@ -128,21 +128,21 @@ TEST_IFX(analogio_single, test_adc_read_default_gnd_pin)
 /**
  * @brief Bundle all tests to be executed for this test group.
  */
-TEST_GROUP_RUNNER(analogio_single)
+TEST_GROUP_RUNNER(analogio_adc)
 {
-    analogio_single_suite_setup();
+    analogio_adc_suite_setup();
 
 #ifdef TEST_PIN_ANALOG_IO_VREF 
-    RUN_TEST_CASE(analogio_single, test_adc_read_default_vdda_vref_pin);
+    RUN_TEST_CASE(analogio_adc, test_adc_read_default_vdda_vref_pin);
 #endif
 
 #ifdef TEST_PIN_ANALOG_IO_DIVIDER
-    RUN_TEST_CASE(analogio_single, test_adc_read_default_vdda_divider_pin);
+    RUN_TEST_CASE(analogio_adc, test_adc_read_default_vdda_divider_pin);
 #endif
 
 #ifdef TEST_PIN_ANALOG_IO_GND
-    RUN_TEST_CASE(analogio_single, test_adc_read_default_gnd_pin);
+    RUN_TEST_CASE(analogio_adc, test_adc_read_default_gnd_pin);
 #endif
 
-    analogio_single_suite_teardown();
+    analogio_adc_suite_teardown();
 }
