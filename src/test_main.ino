@@ -28,6 +28,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_ANALOGIO_PWM
+
+    RUN_TEST_GROUP(analogio_pwm);
+
+#endif
+
 #ifdef TEST_INTERRUPTS_SINGLE
 
     RUN_TEST_GROUP(gpio_interrupts_single);
