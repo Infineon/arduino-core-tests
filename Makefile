@@ -94,6 +94,8 @@ test_wifi_client: TESTS=-DTEST_WIFI_CLIENT
 test_wifi_server: TESTS=-DTEST_WIFI_SERVER
 test_wifi_extras: TESTS=-DTEST_WIFI_EXTRAS
 test_wifi_exceptions: TESTS=-DTEST_WIFI_EXCEPTIONS
+test_wifi_udp_client: TESTS=-DTEST_WIFI_UDP_CLIENT
+test_wifi_udp_server: TESTS=-DTEST_WIFI_UDP_SERVER
 
 ## SPI tests targets
 test_spi_connected1_loopback: TESTS=-DTEST_SPI_CONNECTED1_LOOPBACK
