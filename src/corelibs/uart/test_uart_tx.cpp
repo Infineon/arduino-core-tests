@@ -44,12 +44,12 @@
 TEST_GROUP(uart_tx);
 
 static void uart_tx_suite_setup() {
-    pinMode(TEST_SYNC_INPUT_OUTPUT, OUTPUT);
-    digitalWrite(TEST_SYNC_INPUT_OUTPUT, LOW);
+    pinMode(TEST_PIN_SYNC_IO, OUTPUT);
+    digitalWrite(TEST_PIN_SYNC_IO, LOW);
 }
 
 static void uart_tx_suite_teardown() {
-    digitalWrite(TEST_SYNC_INPUT_OUTPUT, LOW);
+    digitalWrite(TEST_PIN_SYNC_IO, LOW);
 }
 
 static TEST_SETUP(uart_tx) {
@@ -66,7 +66,7 @@ static TEST_TEAR_DOWN(uart_tx) {
  * And that can lead to potential reception of invalid data.
  */
 TEST_IFX(uart_tx, notify_readiness_to_uart_rx) {
-    digitalWrite(TEST_SYNC_INPUT_OUTPUT, HIGH);
+    digitalWrite(TEST_PIN_SYNC_IO, HIGH);
     /* Let some time for the other to initialize 
     and be ready for the communication. */
     delay(500);

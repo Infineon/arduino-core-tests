@@ -1,8 +1,8 @@
 /* test_digitalio_single.cpp
  *
  * This test is used to verify the functionality of the Digital IO module.
- * only one board is needed with TEST_DIGITALIO_OUTPUT pin connected to 
- * TEST_DIGITALIO_INPUT pin for the test cases to work as expected.
+ * only one board is needed with TEST_PIN_DIGITAL_IO_OUTPUT pin connected to 
+ * TEST_PIN_DIGITAL_IO_INPUT pin for the test cases to work as expected.
  */
 
 // std includes
@@ -52,71 +52,71 @@ static TEST_TEAR_DOWN(digitalio_single_internal) {
 /**
  * @brief This test is to verify digitalWrite and digitalRead functions when input pin is set to INPUT mode.
  * 
- * @note: Assumption is made that TEST_DIGITALIO_OUTPUT is connected to TEST_DIGITALIO_INPUT
+ * @note: Assumption is made that TEST_PIN_DIGITAL_IO_OUTPUT is connected to TEST_PIN_DIGITAL_IO_INPUT
  *       for the test cases to work as expected.
  */
 TEST_IFX(digitalio_single_internal, test_digitalio_read_write_input_normal)
 {
-    pinMode(TEST_DIGITALIO_OUTPUT, OUTPUT);
-    pinMode(TEST_DIGITALIO_INPUT, INPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_INPUT, INPUT);
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH);
-    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to HIGH");
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW);
-    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to LOW");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
+    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
+    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 }
 
 /**
  * @brief This test is to verify digitalWrite and digitalRead functions when input pin is set to INPUT_PULLUP mode.
  * 
- * @note: Assumption is made that TEST_DIGITALIO_OUTPUT is connected to TEST_DIGITALIO_INPUT
+ * @note: Assumption is made that TEST_PIN_DIGITAL_IO_OUTPUT is connected to TEST_PIN_DIGITAL_IO_INPUT
  *       for the test cases to work as expected.
  */
 TEST_IFX(digitalio_single_internal, test_digitalio_read_write_input_pullup)
 {
-    pinMode(TEST_DIGITALIO_OUTPUT, OUTPUT);
-    pinMode(TEST_DIGITALIO_INPUT, INPUT_PULLUP);
+    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_INPUT, INPUT_PULLUP);
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH);
-    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to HIGH");
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW);
-    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to LOW");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
+    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
+    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 }
 
 /**
  * @brief This test is to verify digitalWrite and digitalRead functions when input pin is set to INPUT_PULLDOWN mode.
  * 
- * @note: Assumption is made that TEST_DIGITALIO_OUTPUT is connected to TEST_DIGITALIO_INPUT
+ * @note: Assumption is made that TEST_PIN_DIGITAL_IO_OUTPUT is connected to TEST_PIN_DIGITAL_IO_INPUT
  *       for the test cases to work as expected.
  */
 TEST_IFX(digitalio_single_internal, test_digitalio_read_write_input_pulldown) 
 {
-    pinMode(TEST_DIGITALIO_OUTPUT, OUTPUT);
-    pinMode(TEST_DIGITALIO_INPUT, INPUT_PULLDOWN);
+    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_INPUT, INPUT_PULLDOWN);
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH);
-    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to HIGH");
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW);
-    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to LOW");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
+    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
+    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 }
 
 /**
  * @brief This test is to verify digitalWrite and digitalRead functions when output pin is set to OPENDRAIN mode.
  * 
- * @note: Assumption is made that TEST_DIGITALIO_OUTPUT is connected to TEST_DIGITALIO_INPUT
+ * @note: Assumption is made that TEST_PIN_DIGITAL_IO_OUTPUT is connected to TEST_PIN_DIGITAL_IO_INPUT
  *       for the test cases to work as expected.
  */
 TEST_IFX(digitalio_single_internal, test_digitalio_read_write_output_opendrain)
 {
-    pinMode(TEST_DIGITALIO_OUTPUT, OUTPUT_OPENDRAIN);
-    pinMode(TEST_DIGITALIO_INPUT, INPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT_OPENDRAIN);
+    pinMode(TEST_PIN_DIGITAL_IO_INPUT, INPUT);
 
-    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to LOW initially");
+    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW initially");
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH);
-    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to HIGH");
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW);
-    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to LOW");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
+    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
+    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 }
 
 /**
@@ -146,7 +146,7 @@ TEST_IFX(digitalio_single_internal, test_digitalRead_invalid_pin) {
  * @brief Test invalid pin mode
 */
 TEST_IFX(digitalio_single_internal, test_invalid_pinmode) {
-    pinMode(TEST_DIGITALIO_INPUT, 255);
+    pinMode(TEST_PIN_DIGITAL_IO_INPUT, 255);
     // No assertion as pinMode doesn't return a value, but ensure no crash
 }
 

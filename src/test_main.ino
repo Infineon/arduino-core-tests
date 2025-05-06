@@ -22,9 +22,15 @@ void RunAllTests(void)
 
 #endif
 
-#ifdef TEST_ANALOGIO_SINGLE
+#ifdef TEST_ANALOGIO_ADC
 
-    RUN_TEST_GROUP(analogio_single);
+    RUN_TEST_GROUP(analogio_adc);
+
+#endif
+
+#ifdef TEST_ANALOGIO_PWM
+
+    RUN_TEST_GROUP(analogio_pwm);
 
 #endif
 

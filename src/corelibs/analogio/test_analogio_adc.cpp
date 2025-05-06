@@ -1,12 +1,12 @@
 /**
- * @brief test_analogio_single.cpp
+ * @brief test_analogio_adc.cpp
  *
  * @details This test is used to verify the functionality of the Analog IO module.
  * only one board is needed with 
  * 
- * TEST_ANALOG_IO_VREF pin connected to VDDA,
- * TEST_ANALOG_IO_DIVIDER pin connected to voltage divider,
- * TEST_ADC_PIN_GND pin connected to Ground.
+ * TEST_PIN_ANALOG_IO_VREF pin connected to VDDA,
+ * TEST_PIN_ANALOG_IO_DIVIDER pin connected to voltage divider,
+ * TEST_PIN_ANALOG_IO_GND pin connected to Ground.
  * Depending on the pins availability, the test can be run on any board.
  * 
  * 
@@ -16,13 +16,11 @@
  *      |
  *      [R1]   <-- Resistor R1
  *      |
- *      +-------> A1 (Mid-Point connected to Analog Input pin TEST_ANALOG_IO_DIVIDER)
+ *      +-------> A1 (Mid-Point connected to Analog Input pin TEST_PIN_ANALOG_IO_DIVIDER)
  *      |
  *      [R2]   <-- Resistor R2
  *      |
  *      GND (0V)
- * 
- * @note: The test cases are designed to work with the assumption that the VDDA and RESOLUTION values are set in test_config.h.
  * 
  */
 
@@ -54,7 +52,7 @@ static bool validate_adc_raw_value(int expected_value, int actual_value) {
 /**
  * @brief Suite setup function, runs before test suite execution begins.
  */
-static void analogio_single_suite_setup() {
+static void analogio_adc_suite_setup() {
     
 }
 
@@ -62,89 +60,89 @@ static void analogio_single_suite_setup() {
 /**
  * @brief Suite teardown function, runs after test suite execution is complete.
  */
-static void analogio_single_suite_teardown() {
+static void analogio_adc_suite_teardown() {
     
 }
 
 // Define test group name
-TEST_GROUP(analogio_single);
+TEST_GROUP(analogio_adc);
 
 /**
  * @brief Setup method called by Unity before every test in this test group.
  */
-static TEST_SETUP(analogio_single) { 
+static TEST_SETUP(analogio_adc) { 
 }
 
 /**
  * @brief Tear down method called by Unity after every test in this test group.
  */
-static TEST_TEAR_DOWN(analogio_single) {
+static TEST_TEAR_DOWN(analogio_adc) {
 }
 
-#ifdef TEST_ANALOG_IO_VREF 
+#ifdef TEST_PIN_ANALOG_IO_VREF 
 
 /**
  * @brief Verify ADC value for the DEFAULT volatage reference on the pin that is connected to VDDA
  */
-TEST_IFX(analogio_single, test_adc_read_default_vdda_vref_pin)
+TEST_IFX(analogio_adc, test_adc_read_default_vdda_vref_pin)
 {
     analogReference(DEFAULT); 
-    int adc_value = analogRead(TEST_ANALOG_IO_VREF);
-    int expected_value = RESOLUTION;
+    int adc_value = analogRead(TEST_PIN_ANALOG_IO_VREF);
+    int expected_value = ADC_RESOLUTION;
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value), "ADC value is not within the expected range");
 }
 
-#endif // TEST_ANALOG_IO_VREF
+#endif // TEST_PIN_ANALOG_IO_VREF
 
-#ifdef TEST_ANALOG_IO_DIVIDER 
+#ifdef TEST_PIN_ANALOG_IO_DIVIDER 
 
 /**
  * @brief Verify ADC value for the DEFAULT volatage reference on the pin that is connected to voltage divider.
  */
-TEST_IFX(analogio_single, test_adc_read_default_vdda_divider_pin)
+TEST_IFX(analogio_adc, test_adc_read_default_vdda_divider_pin)
 {
     analogReference(DEFAULT); // Configure reference to VDDA
-    int adc_value = analogRead(TEST_ANALOG_IO_DIVIDER);
-    int expected_value = RESOLUTION / 2;
+    int adc_value = analogRead(TEST_PIN_ANALOG_IO_DIVIDER);
+    int expected_value = ADC_RESOLUTION / 2;
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value), "ADC value is not within the expected range");
 }
 
-#endif // TEST_ANALOG_IO_DIVIDER
+#endif // TEST_PIN_ANALOG_IO_DIVIDER
 
-#ifdef TEST_ADC_PIN_GND 
+#ifdef TEST_PIN_ANALOG_IO_GND 
 
 /**
  * @brief Verify ADC value for the DEFAULT volatage reference on the pin that is connected to ground.
  */
-TEST_IFX(analogio_single, test_adc_read_default_gnd_pin)
+TEST_IFX(analogio_adc, test_adc_read_default_gnd_pin)
 {
     analogReference(DEFAULT); 
-    int adc_value = analogRead(TEST_ADC_PIN_GND);
+    int adc_value = analogRead(TEST_PIN_ANALOG_IO_GND);
     int expected_value = 0;
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value), "ADC value is not within the expected range");
 }
 
-#endif // TEST_ADC_PIN_GND 
+#endif // TEST_PIN_ANALOG_IO_GND 
 
 
 /**
  * @brief Bundle all tests to be executed for this test group.
  */
-TEST_GROUP_RUNNER(analogio_single)
+TEST_GROUP_RUNNER(analogio_adc)
 {
-    analogio_single_suite_setup();
+    analogio_adc_suite_setup();
 
-#ifdef TEST_ANALOG_IO_VREF 
-    RUN_TEST_CASE(analogio_single, test_adc_read_default_vdda_vref_pin);
+#ifdef TEST_PIN_ANALOG_IO_VREF 
+    RUN_TEST_CASE(analogio_adc, test_adc_read_default_vdda_vref_pin);
 #endif
 
-#ifdef TEST_ANALOG_IO_DIVIDER
-    RUN_TEST_CASE(analogio_single, test_adc_read_default_vdda_divider_pin);
+#ifdef TEST_PIN_ANALOG_IO_DIVIDER
+    RUN_TEST_CASE(analogio_adc, test_adc_read_default_vdda_divider_pin);
 #endif
 
-#ifdef TEST_ADC_PIN_GND
-    RUN_TEST_CASE(analogio_single, test_adc_read_default_gnd_pin);
+#ifdef TEST_PIN_ANALOG_IO_GND
+    RUN_TEST_CASE(analogio_adc, test_adc_read_default_gnd_pin);
 #endif
 
-    analogio_single_suite_teardown();
+    analogio_adc_suite_teardown();
 }

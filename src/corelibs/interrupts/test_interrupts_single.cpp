@@ -1,7 +1,7 @@
 /* test_interrupts_single.cpp
  *
  * This test is used to verify the functionality of the GPIO Interrupts.
- * TEST_DIGITALIO_OUTPUT pin should be connected to TEST_DIGITALIO_INPUT pin
+ * TEST_PIN_DIGITAL_IO_OUTPUT pin should be connected to TEST_PIN_DIGITAL_IO_INPUT pin
  * for the test cases to work as expected.
  */
 
@@ -33,8 +33,8 @@ TEST_GROUP(gpio_interrupts_single_internal);
  */
 static TEST_SETUP(gpio_interrupts_single_internal)
 { 
-    pinMode(TEST_DIGITALIO_OUTPUT, OUTPUT);
-    pinMode(TEST_DIGITALIO_INPUT, INPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_INPUT, INPUT);
     interrupt_triggered = false;
 }
 
@@ -56,21 +56,21 @@ void interrupt_callback() {
  */
 TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_rising_edge)
 {
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW); // initial state
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // initial state
 
-    attachInterrupt(TEST_DIGITALIO_INPUT, interrupt_callback, RISING);
+    attachInterrupt(TEST_PIN_DIGITAL_IO_INPUT, interrupt_callback, RISING);
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH); // triggers interrupt
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // triggers interrupt
     delay(100);
     TEST_ASSERT_TRUE_MESSAGE(interrupt_triggered, "Interrupt should be triggered");
 
     // detach interrupt and test
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW); // initial state
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // initial state
 
-    detachInterrupt(TEST_DIGITALIO_INPUT);
+    detachInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
 
     interrupt_triggered = false;
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH);
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
     delay(100);
     TEST_ASSERT_FALSE_MESSAGE(interrupt_triggered, "Interrupt should not be triggered after detach");
 }
@@ -80,20 +80,20 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_rising_edge)
  */
 TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_falling_edge)
 {
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH); // initial state
-    attachInterrupt(TEST_DIGITALIO_INPUT, interrupt_callback, FALLING);
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // initial state
+    attachInterrupt(TEST_PIN_DIGITAL_IO_INPUT, interrupt_callback, FALLING);
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW); // triggers interrupt
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // triggers interrupt
     delay(100);
     TEST_ASSERT_TRUE_MESSAGE(interrupt_triggered, "Interrupt should be triggered");
 
     // detach interrupt and test
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH); // initial state
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // initial state
 
-    detachInterrupt(TEST_DIGITALIO_INPUT);
+    detachInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
 
     interrupt_triggered = false;
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW);
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
     delay(100);
     TEST_ASSERT_FALSE_MESSAGE(interrupt_triggered, "Interrupt should not be triggered after detach");
 }
@@ -103,29 +103,29 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_falling_edge)
  */
 TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_change_edge)
 {
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW); // initial state
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // initial state
 
-    attachInterrupt(TEST_DIGITALIO_INPUT, interrupt_callback, CHANGE);
+    attachInterrupt(TEST_PIN_DIGITAL_IO_INPUT, interrupt_callback, CHANGE);
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH); // triggers interrupt
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // triggers interrupt
     delay(100);
     TEST_ASSERT_TRUE_MESSAGE(interrupt_triggered, "Interrupt should be triggered");
 
     interrupt_triggered = false;
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW); // triggers interrupt
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // triggers interrupt
     delay(100);
     TEST_ASSERT_TRUE_MESSAGE(interrupt_triggered, "Interrupt should be triggered");
 
     interrupt_triggered = false;
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH); // triggers interrupt
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // triggers interrupt
     delay(100);
     TEST_ASSERT_TRUE_MESSAGE(interrupt_triggered, "Interrupt should be triggered");
 
     // detach interrupt and test
     interrupt_triggered = false;
-    detachInterrupt(TEST_DIGITALIO_INPUT);
+    detachInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH);
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
     delay(100);
     TEST_ASSERT_FALSE_MESSAGE(interrupt_triggered, "Interrupt should not be triggered after detach");
 }
@@ -135,13 +135,13 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_change_edge)
  */
 TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_invalid_mode)
 {
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW); // initial state
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // initial state
 
-    attachInterrupt(TEST_DIGITALIO_INPUT, interrupt_callback, (PinStatus) 255);
+    attachInterrupt(TEST_PIN_DIGITAL_IO_INPUT, interrupt_callback, (PinStatus) 255);
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH); 
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); 
     delay(100);
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW); 
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); 
     delay(100);
     TEST_ASSERT_FALSE_MESSAGE(interrupt_triggered, "Interrupt should not be triggered when invalid mode is set");
 
@@ -152,12 +152,12 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_invalid_mode)
  */
 TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_invalid_pin)
 {
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW);
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
 
     attachInterrupt(255, interrupt_callback, RISING); // Use an invalid pin number
 
     // Trigger the interrupt by writing HIGH to the output pin
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH);
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
 
     // Small delay to ensure the interrupt is processed
     delay(100);
@@ -171,8 +171,8 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_invalid_pin)
  */
 TEST_IFX(gpio_interrupts_single_internal, test_digital_pin_to_interrupt)
 {
-    int interrupt_number = digitalPinToInterrupt(TEST_DIGITALIO_INPUT);
-    TEST_ASSERT_EQUAL_MESSAGE(TEST_DIGITALIO_INPUT, interrupt_number, "Interrupt number should match the input pin");
+    int interrupt_number = digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
+    TEST_ASSERT_EQUAL_MESSAGE(TEST_PIN_DIGITAL_IO_INPUT, interrupt_number, "Interrupt number should match the input pin");
 
     int invalid_interrupt_number = digitalPinToInterrupt(255); // Use an invalid pin number
     TEST_ASSERT_EQUAL_MESSAGE(-1, invalid_interrupt_number, "Interrupt number should be -1 for invalid pin");
