@@ -165,6 +165,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_ONEWIRE_SENSOR
+
+    RUN_TEST_GROUP(onewire_sensor);
+
+#endif
+
 }
 
 
