@@ -14,6 +14,7 @@ static TEST_TEAR_DOWN(wifi_udp_server) {
 }
 
 WiFiUDP udpServer;
+Socket socket;
 
 TEST_IFX(wifi_udp_server, begin_ap) {
     int result = WiFi.beginAP("arduino-wifi-ap", "wifi-ap-password", 1);
@@ -33,10 +34,15 @@ TEST_IFX(wifi_udp_server, udp_beginpacket) {
     TEST_ASSERT_TRUE(udpServer.beginPacket(ip, port)); // Start a packet to send
 }
    
+TEST_IFX(wifi_udp_server, udp_stop) {
+    udpServer.stop();
+    TEST_ASSERT_EQUAL_INT(SOCKET_STATUS_UNINITED, socket.status());
+}
 
 TEST_GROUP_RUNNER(wifi_udp_server) {
     RUN_TEST_CASE(wifi_udp_server, begin_ap);
     RUN_TEST_CASE(wifi_udp_server, udp_begin);
     RUN_TEST_CASE(wifi_udp_server, udp_beginpacket);
+    RUN_TEST_CASE(wifi_udp_server, udp_stop);
     while (true) {}; // Keep the server running
 }
