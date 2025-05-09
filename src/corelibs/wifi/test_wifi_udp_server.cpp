@@ -22,7 +22,7 @@ TEST_IFX(wifi_udp_server, begin_ap) {
 
 TEST_IFX(wifi_udp_server, udp_begin) {
     uint16_t port = 1234;
-    TEST_ASSERT_EQUAL_INT(1, udpServer.begin(port)); // Bind to port 1234
+    TEST_ASSERT_EQUAL_INT(SOCKET_STATUS_BOUND, udpServer.begin(port)); // Bind to port 1234
     Serial.print("UDP server listening on port: ");
     Serial.println(port);
 }
