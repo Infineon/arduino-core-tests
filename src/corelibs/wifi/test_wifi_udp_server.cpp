@@ -17,6 +17,13 @@ WiFiUDP udpServer;
 Socket socket;
 
 TEST_IFX(wifi_udp_server, begin_ap) {
+
+    // Set the server's IP address, subnet mask, and gateway
+    IPAddress local_ip(192, 168, 1, 1); // Server's IP address
+    IPAddress gateway(192, 168, 1, 1); // Gateway (same as server IP in AP mode)
+    IPAddress subnet(255, 255, 255, 0); // Subnet mask
+    WiFi.config(local_ip, gateway, subnet);
+
     int result = WiFi.beginAP("arduino-wifi-ap", "wifi-ap-password", 1);
     TEST_ASSERT_EQUAL_INT(WL_AP_LISTENING, result);
 }
@@ -24,8 +31,6 @@ TEST_IFX(wifi_udp_server, begin_ap) {
 TEST_IFX(wifi_udp_server, udp_begin) {
     uint16_t port = 1234;
     TEST_ASSERT_EQUAL_INT(SOCKET_STATUS_BOUND, udpServer.begin(port)); // Bind to port 1234
-    Serial.print("UDP server listening on port: ");
-    Serial.println(port);
 }
 
 TEST_GROUP_RUNNER(wifi_udp_server) {

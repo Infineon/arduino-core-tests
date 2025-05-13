@@ -20,8 +20,13 @@ TEST_IFX(wifi_udp_client, wifi_connect_to_ap) {
     TEST_ASSERT_EQUAL_INT(WL_CONNECTED, result);
 }
 
+TEST_IFX(wifi_udp_client, udp_begin) {
+    uint16_t port = 1234;
+    TEST_ASSERT_EQUAL_INT(SOCKET_STATUS_BOUND, udpClient.begin(port)); // Bind to port 1234
+}
+
 TEST_IFX(wifi_udp_client, udp_beginpacket) {
-    IPAddress ip(127, 0, 0, 1);
+    IPAddress ip(192, 168, 1, 1);
     uint16_t port = 80;
     TEST_ASSERT_TRUE(udpClient.beginPacket(ip, port)); // Start a packet to send
 }
@@ -35,9 +40,15 @@ TEST_IFX(wifi_udp_client, udp_write){
     TEST_ASSERT_EQUAL_INT(strlen(message), bytes_written); // Check if all bytes were written
 }
 
+TEST_IFX(wifi_udp_client, udp_endpacket) {
+    TEST_ASSERT_TRUE(udpClient.endPacket()); // End the packet
+}
+
 TEST_GROUP_RUNNER(wifi_udp_client) {
     RUN_TEST_CASE(wifi_udp_client, wifi_connect_to_ap);
+    RUN_TEST_CASE(wifi_udp_client, udp_begin);
     RUN_TEST_CASE(wifi_udp_client, udp_beginpacket);
     RUN_TEST_CASE(wifi_udp_client, udp_write);
+    RUN_TEST_CASE(wifi_udp_client, udp_endpacket);
     while (true) {}; // Keep the client running
 }
