@@ -26,7 +26,7 @@ TEST_IFX(wifi_udp_client, udp_begin) {
 }
 
 TEST_IFX(wifi_udp_client, udp_beginpacket) {
-    IPAddress ip(192, 168, 1, 1);
+    IPAddress ip(192, 168, 0, 1);
     uint16_t port = 80;
     TEST_ASSERT_TRUE(udpClient.beginPacket(ip, port)); // Start a packet to send
 }
