@@ -150,6 +150,16 @@ TEST_IFX(uart_rx, read_longer_than_writable) {
                  "after a few calls to Serial.print() or Serial.println() "
                  "with small amount of bytes, the TX buffer seems to "
                  "overflow and the Serial output becomes corrupted.";
+    #elif defined(ARDUINO_ARCH_XMC)
+    char expected_msg[] = "This is a very long string that is meant to be longer "
+                 "than the writable buffer of the UART. "
+                 "The Serial class API provides the mechanisms for "
+                 "user level flow control by availableForWrite(), "
+                 "flush() and the return of the actual bytes written. "
+                 "Still, for some cores, the experience is that only "
+                 "after a few calls to Serial.print() or Serial.println() "
+                 "with small amount of bytes, the TX buffer seems to "
+                 "overflow and the Serial output becomes corrupted.";
     #else
     char expected_msg[] = "This is a (not so) long string example. Adjust length as per core.";
     #endif
