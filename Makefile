@@ -61,18 +61,12 @@ test_%: create_build_dir check_unity_path print_args
 # UART tests targets
 test_uart_connected2_tx: TESTS=-DTEST_UART_CONNECTED2_TX
 test_uart_connected2_rx: TESTS=-DTEST_UART_CONNECTED2_RX
-test_uart_rx: TESTS=-DTEST_UART_RX
-test_uart_tx: TESTS=-DTEST_UART_TX
 
 # Time tests targets
 test_time_single: TESTS=-DTEST_TIME_SINGLE
 
 # Digital IO tests targets
 test_digitalio_single: TESTS=-DTEST_DIGITALIO_SINGLE
-
-# Analog IO tests targets
-test_analogio_adc: TESTS=-DTEST_ANALOGIO_ADC
-test_analogio_pwm: TESTS=-DTEST_ANALOGIO_PWM
 
 # GPIO Interrupts tests targets
 test_interrupts_single: TESTS=-DTEST_INTERRUPTS_SINGLE
@@ -93,15 +87,20 @@ test_wifi_ap: TESTS=-DTEST_WIFI_AP
 test_wifi_client: TESTS=-DTEST_WIFI_CLIENT
 test_wifi_server: TESTS=-DTEST_WIFI_SERVER
 test_wifi_extras: TESTS=-DTEST_WIFI_EXTRAS
-test_wifi_exceptions: TESTS=-DTEST_WIFI_EXCEPTIONS
 
 ## SPI tests targets
 test_spi_connected1_loopback: TESTS=-DTEST_SPI_CONNECTED1_LOOPBACK
-test_spi_connected2_masterpingpong: TESTS=-DTEST_SPI_CONNECTED2_MASTERPINGPONG
-test_spi_connected2_slavepingpong:  TESTS=-DTEST_SPI_CONNECTED2_SLAVEPINGPONG
+test_spi_3wire: TESTS=-DTEST_SPI_3WIRE
 
 ## OneWire tests targets
 test_onewire_sensor: TESTS=-DTEST_ONEWIRE_SENSOR
+
+## analogio
+test_analogio_adc: TESTS=-DTEST_ANALOGIO_ADC
+test_analogio_adc2: TESTS=-DTEST_ANALOGIO_ADC2
+test_analogio_pwm: TESTS=-DTEST_ANALOGIO_PWM
+test_analogio_dac: TESTS=-DTEST_ANALOGIO_DAC
+
 
 # Arduino-cli commands
 
