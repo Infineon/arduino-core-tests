@@ -150,17 +150,7 @@ TEST_IFX(uart_tx, availableForWrite) {
  *       This depends on the core implementation.
  */
 TEST_IFX(uart_tx, write_longer_than_writable) {
-    #if defined(ARDUINO_ARCH_PSOC6)
-    char msg[] = "This is a very long string that is meant to be longer "
-                 "than the writable buffer of the UART. "
-                 "The Serial class API provides the mechanisms for "
-                 "user level flow control by availableForWrite(), "
-                 "flush() and the return of the actual bytes written. "
-                 "Still, for some cores, the experience is that only "
-                 "after a few calls to Serial.print() or Serial.println() "
-                 "with small amount of bytes, the TX buffer seems to "
-                 "overflow and the Serial output becomes corrupted.";
-    #elif defined (ARDUINO_ARCH_XMC)
+    #if defined(ARDUINO_ARCH_PSOC6) || defined (ARDUINO_ARCH_XMC)
     char msg[] = "This is a very long string that is meant to be longer "
                  "than the writable buffer of the UART. "
                  "The Serial class API provides the mechanisms for "
