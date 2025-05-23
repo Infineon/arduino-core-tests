@@ -135,6 +135,8 @@ TEST_IFX(uart_tx, availableForWrite) {
     /* The value 128 is the max value. 
        Only when sufficient time has elapsed after writing.*/
     uint8_t expected_writable = 128;
+    #elif defined(ARDUINO_ARCH_XMC)
+    uint8_t expected_writable = 1;
     #else
     /* Inherited implementation */
     uint8_t expected_writable = 0;
@@ -148,7 +150,7 @@ TEST_IFX(uart_tx, availableForWrite) {
  *       This depends on the core implementation.
  */
 TEST_IFX(uart_tx, write_longer_than_writable) {
-    #if defined(ARDUINO_ARCH_PSOC6)
+    #if defined(ARDUINO_ARCH_PSOC6) || defined (ARDUINO_ARCH_XMC)
     char msg[] = "This is a very long string that is meant to be longer "
                  "than the writable buffer of the UART. "
                  "The Serial class API provides the mechanisms for "

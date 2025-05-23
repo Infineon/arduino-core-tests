@@ -140,7 +140,7 @@ TEST_IFX(uart_rx, wait_for_println) {
  *       This depends on the core implementation.
  */
 TEST_IFX(uart_rx, read_longer_than_writable) {
-    #if defined(ARDUINO_ARCH_PSOC6)
+    #if defined(ARDUINO_ARCH_PSOC6) || defined(ARDUINO_ARCH_XMC)
     char expected_msg[] = "This is a very long string that is meant to be longer "
                  "than the writable buffer of the UART. "
                  "The Serial class API provides the mechanisms for "
