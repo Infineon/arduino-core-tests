@@ -75,7 +75,7 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_full)
     analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     delay(500);
     
-    // Calculate the expected ADC value using the given formula
+    // Calculate expected ADC value using the following formula: 775 is highest resultion, 93 is lowest resolution --> needed a way to compare
     int expected_value = (775 - 93) * write_value / 1023 + 93;
     
     // Read the voltage via the ADC from the DAC input pin (for now A0)
