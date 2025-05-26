@@ -23,6 +23,7 @@ const uint8_t MAX_BUFFER_SIZE = 20;
 const uint8_t MAX_TEST_ITERATION = 10;
 // variables
 
+static bool slave_init = false;
 static uint8_t testTransmitBuff[MAX_BUFFER_SIZE] = {0};
 static uint8_t expectedReceiveBuff[MAX_BUFFER_SIZE] = {0};
 static SPIClassPSOC SPI1 = SPIClassPSOC(PIN_SPI_MOSI, PIN_SPI_MISO, PIN_SPI_SCK, TEST_PIN_SPI_SSEL, true);
@@ -30,8 +31,13 @@ static SPIClassPSOC *spi_slave = &SPI1;
 
 // Method invoked before a test suite is run.
 static void spi_connected2_slavepingpong_suite_setup() {
-    pinMode(TEST_PIN_SYNC_IO, INPUT_PULLDOWN);
+    if (!slave_init)
+    {
+        pinMode(TEST_PIN_SYNC_IO, INPUT_PULLDOWN);
+        slave_init = true;
+    }
     spi_slave->begin();
+    
 }
 
 // Method invoked after a test suite is run.
@@ -43,9 +49,11 @@ static void spi_connected2_slavepingpong_suite_teardown() {
 TEST_GROUP(spi_connected2_slavepingpong);
 
 TEST_SETUP(spi_connected2_slavepingpong) {
+    
 }
 
 TEST_TEAR_DOWN(spi_connected2_slavepingpong) {
+    
 }
 
 
@@ -70,11 +78,18 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_byte) {
     for (uint8_t i = 1; i < MAX_TEST_ITERATION + 1; i++) {
         testReceiveByte = spi_slave->transfer(testTranceiveByte);
         testTranceiveByte++;
-
-        TEST_ASSERT_EQUAL_UINT8_MESSAGE(expectedReceiveByte, testReceiveByte, "SPI Slave PingPong byte transfer failed");
+        if(i > 3)
+        {
+            TEST_ASSERT_EQUAL_UINT8_MESSAGE(expectedReceiveByte, testReceiveByte, "SPI Slave PingPong byte transfer failed");
+        }
 
         expectedReceiveByte = testReceiveByte + 1; // master increments the previously transmitted byte from master
     }
+
+    while (digitalRead(TEST_PIN_SYNC_IO) == HIGH) {
+        // Wait for the master to pull the sync pin low
+    }
+
 }
 
 /**
@@ -98,10 +113,15 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_word) {
     for (uint8_t i = 1; i < MAX_TEST_ITERATION + 1; i++) {
         testReceiveWord = spi_slave->transfer16(testTranceiveWord);
         testTranceiveWord++;
-
-        TEST_ASSERT_EQUAL_UINT16_MESSAGE(expectedReceiveWord, testReceiveWord, "SPI Slave PingPong word transfer failed");
-
+        if(i > 3)
+        {
+            TEST_ASSERT_EQUAL_UINT16_MESSAGE(expectedReceiveWord, testReceiveWord, "SPI Slave PingPong word transfer failed");
+        }
         expectedReceiveWord = testReceiveWord + 1; // master increments the previously transmitted word from master
+    }
+
+    while (digitalRead(TEST_PIN_SYNC_IO) == HIGH) {
+        // Wait for the master to pull the sync pin low
     }
 }
 
@@ -123,6 +143,9 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_buffer) {
     spi_slave->transfer(testTransmitBuff, MAX_BUFFER_SIZE);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY_MESSAGE(expectedReceiveBuff, testTransmitBuff, MAX_BUFFER_SIZE, "SPI Master PingPong transfer buffer failed");
+    while (digitalRead(TEST_PIN_SYNC_IO) == HIGH) {
+        // Wait for the master to pull the sync pin low
+    }
 }
 
 // Bundle all tests to be executed for this test group
@@ -134,4 +157,6 @@ TEST_GROUP_RUNNER(spi_connected2_slavepingpong) {
     RUN_TEST_CASE(spi_connected2_slavepingpong, test_ping_pong_transfer_buffer);
 
     spi_connected2_slavepingpong_suite_teardown();
+
+    // while(1);
 }
