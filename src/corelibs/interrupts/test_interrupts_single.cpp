@@ -10,7 +10,6 @@
 
 // Defines
 #define TRACE_OUTPUT
-
 // Variables
 volatile bool interrupt_triggered = false;
 
@@ -58,7 +57,7 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_rising_edge)
 {
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // initial state
 
-    attachInterrupt(TEST_PIN_DIGITAL_IO_INPUT, interrupt_callback, RISING);
+    attachInterrupt(digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT), interrupt_callback, RISING);
 
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // triggers interrupt
     delay(100);
@@ -67,7 +66,7 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_rising_edge)
     // detach interrupt and test
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // initial state
 
-    detachInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
+    detachInterrupt(digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT));
 
     interrupt_triggered = false;
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
@@ -81,7 +80,7 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_rising_edge)
 TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_falling_edge)
 {
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // initial state
-    attachInterrupt(TEST_PIN_DIGITAL_IO_INPUT, interrupt_callback, FALLING);
+    attachInterrupt(digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT), interrupt_callback, FALLING);
 
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // triggers interrupt
     delay(100);
@@ -90,7 +89,7 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_falling_edge)
     // detach interrupt and test
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // initial state
 
-    detachInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
+    detachInterrupt(digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT));
 
     interrupt_triggered = false;
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
@@ -105,7 +104,7 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_change_edge)
 {
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // initial state
 
-    attachInterrupt(TEST_PIN_DIGITAL_IO_INPUT, interrupt_callback, CHANGE);
+    attachInterrupt(digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT), interrupt_callback, CHANGE);
 
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // triggers interrupt
     delay(100);
@@ -123,7 +122,7 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_change_edge)
 
     // detach interrupt and test
     interrupt_triggered = false;
-    detachInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
+    detachInterrupt(digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT));
 
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
     delay(100);
@@ -136,15 +135,13 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_change_edge)
 TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_invalid_mode)
 {
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); // initial state
-
-    attachInterrupt(TEST_PIN_DIGITAL_IO_INPUT, interrupt_callback, (PinStatus) 255);
-
+    attachInterrupt(digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT), interrupt_callback, (PinStatus) 255);
+    interrupt_triggered = false;
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); 
     delay(100);
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW); 
     delay(100);
     TEST_ASSERT_FALSE_MESSAGE(interrupt_triggered, "Interrupt should not be triggered when invalid mode is set");
-
 }
 
 /**
@@ -154,7 +151,7 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_invalid_pin)
 {
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
 
-    attachInterrupt(255, interrupt_callback, RISING); // Use an invalid pin number
+    attachInterrupt(digitalPinToInterrupt(255), interrupt_callback, RISING); // Use an invalid pin number
 
     // Trigger the interrupt by writing HIGH to the output pin
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
@@ -171,11 +168,19 @@ TEST_IFX(gpio_interrupts_single_internal, test_attach_interrupt_invalid_pin)
  */
 TEST_IFX(gpio_interrupts_single_internal, test_digital_pin_to_interrupt)
 {
+    #if defined(ARDUINO_ARCH_XMC)
+    int interrupt_number = digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
+    TEST_ASSERT_LESS_OR_EQUAL_INT(1, interrupt_number);
+    TEST_ASSERT_GREATER_OR_EQUAL_INT(0, interrupt_number);
+    int invalid_interrupt_number = digitalPinToInterrupt(255); // Use an invalid pin number
+    TEST_ASSERT_EQUAL_MESSAGE(-1, invalid_interrupt_number, "Interrupt number should be -1 for invalid pin");
+    #else
     int interrupt_number = digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
     TEST_ASSERT_EQUAL_MESSAGE(TEST_PIN_DIGITAL_IO_INPUT, interrupt_number, "Interrupt number should match the input pin");
 
     int invalid_interrupt_number = digitalPinToInterrupt(255); // Use an invalid pin number
     TEST_ASSERT_EQUAL_MESSAGE(-1, invalid_interrupt_number, "Interrupt number should be -1 for invalid pin");
+    #endif
 }
 
 /**
