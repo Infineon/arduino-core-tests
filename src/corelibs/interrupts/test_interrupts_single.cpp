@@ -172,15 +172,12 @@ TEST_IFX(gpio_interrupts_single_internal, test_digital_pin_to_interrupt)
     int interrupt_number = digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
     TEST_ASSERT_LESS_OR_EQUAL_INT(1, interrupt_number);
     TEST_ASSERT_GREATER_OR_EQUAL_INT(0, interrupt_number);
-    int invalid_interrupt_number = digitalPinToInterrupt(255); // Use an invalid pin number
-    TEST_ASSERT_EQUAL_MESSAGE(-1, invalid_interrupt_number, "Interrupt number should be -1 for invalid pin");
     #else
     int interrupt_number = digitalPinToInterrupt(TEST_PIN_DIGITAL_IO_INPUT);
     TEST_ASSERT_EQUAL_MESSAGE(TEST_PIN_DIGITAL_IO_INPUT, interrupt_number, "Interrupt number should match the input pin");
-
+    #endif
     int invalid_interrupt_number = digitalPinToInterrupt(255); // Use an invalid pin number
     TEST_ASSERT_EQUAL_MESSAGE(-1, invalid_interrupt_number, "Interrupt number should be -1 for invalid pin");
-    #endif
 }
 
 /**
