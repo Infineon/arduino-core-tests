@@ -105,6 +105,10 @@ test_spi_connected2_slavepingpong:  TESTS=-DTEST_SPI_CONNECTED2_SLAVEPINGPONG
 ## Tone tests targets
 test_tone_no_tone: TESTS=-DTEST_TONE_NO_TONE
 
+## Pulse tests targets
+test_pulse_board1: TESTS=-DTEST_PULSE_BOARD1
+test_pulse_board2: TESTS=-DTEST_PULSE_BOARD2
+
 # Arduino-cli commands
 
 # For WSL and Windows :

@@ -183,6 +183,18 @@ void RunAllTests(void)
 
 #endif 
 
+#ifdef TEST_PULSE_BOARD1
+
+    RUN_TEST_GROUP(pulse_board1);
+
+#endif
+
+#ifdef TEST_PULSE_BOARD2
+
+    RUN_TEST_GROUP(pulse_board2);
+
+#endif
+
 }
 
 
