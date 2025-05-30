@@ -9,8 +9,9 @@
  * - Starts processing the next available incoming packet, checks for the presence of a UDP packet
  * - Reads the packet and checks if the data is correct.
  * - Receives multiple packets from different senders and checks if the data and IP are correct.
- * - Handles packet loss by not sending a packet
  * - Writes a packet to the client
+ * - Handles packet loss by not sending a packet
+ * - Joins a multicast group and receives a packet from it
  * - Stops the UDP server
  * - Disconnect from the client and stop the access point.
  * 
@@ -121,6 +122,25 @@ TEST_IFX(wifi_udp_server, handle_packet_loss)
     TEST_ASSERT_EQUAL_INT(0, udpServer.parsePacket()); 
 }
 
+TEST_IFX(wifi_udp_server, joinmulticast_receive)
+{
+    IPAddress multicastIP(239, 0, 0, 1);
+    uint16_t port = 1234;
+
+    udpServer.stop(); // Stop any previous instance
+    TEST_ASSERT_TRUE(udpServer.beginMulticast(multicastIP, port));
+
+    const char* expected_msg = "Hello, Multicast!";
+    char rcvd_msg[50] = {0};
+
+    int packetSize = 0;
+    while ((packetSize = udpServer.parsePacket()) != (int)strlen(expected_msg)) {}
+    TEST_ASSERT_EQUAL_INT(strlen(expected_msg), packetSize);
+    udpServer.read((uint8_t *)rcvd_msg, packetSize);
+    TEST_ASSERT_EQUAL_STRING(expected_msg, rcvd_msg);
+}
+
+
 TEST_IFX(wifi_udp_server, udp_server_end)
 {
     udpServer.stop();
@@ -144,6 +164,7 @@ TEST_GROUP_RUNNER(wifi_udp_server) {
     RUN_TEST_CASE(wifi_udp_server, receive_multiple_packets);
     RUN_TEST_CASE(wifi_udp_server, udp_server_write);
     RUN_TEST_CASE(wifi_udp_server, handle_packet_loss);
+    RUN_TEST_CASE(wifi_udp_server, joinmulticast_receive);
     RUN_TEST_CASE(wifi_udp_server, udp_server_end);
     RUN_TEST_CASE(wifi_udp_server, wifi_disconnect);
     RUN_TEST_CASE(wifi_udp_server, wifi_end);
