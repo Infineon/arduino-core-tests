@@ -14,6 +14,7 @@
  * - Peek and flush the socket.
  * - Check the senders ip 
  * - Check the senders port
+ * - Sends a packet to a multicast group.
  * - Disconnect from the server and stop the UDP client.
  * 
  *  This test is paired with the "test_wifi_udp_server.cpp" test, which needs to be executed in another 
@@ -131,6 +132,19 @@ TEST_IFX(wifi_udp_client, remote_port)
     TEST_ASSERT_EQUAL(expectedPort, remotePort); 
 }
 
+TEST_IFX(wifi_udp_client, udp_multicast_send){
+    IPAddress multicastIP(239, 0, 0, 1); // Example multicast IP address
+    uint16_t port = 1234;
+   
+    TEST_ASSERT_TRUE(udpClient.beginPacket(multicastIP, port));
+    const char *message = "Hello, Multicast!";
+    size_t bytes_written = udpClient.write(message);
+    TEST_ASSERT_EQUAL_INT(strlen(message), bytes_written); 
+
+    TEST_ASSERT_TRUE(udpClient.endPacket());
+    delay(100); // Wait for the packet to be sent
+}
+
 TEST_IFX(wifi_udp_client, udp_client_end) {
     udpClient.stop(); 
 }
@@ -156,6 +170,7 @@ TEST_GROUP_RUNNER(wifi_udp_client) {
     RUN_TEST_CASE(wifi_udp_client, client_peek_flush);
     RUN_TEST_CASE(wifi_udp_client, remote_ip);
     RUN_TEST_CASE(wifi_udp_client, remote_port);
+    RUN_TEST_CASE(wifi_udp_client, udp_multicast_send);
     RUN_TEST_CASE(wifi_udp_client, udp_client_end);
     RUN_TEST_CASE(wifi_udp_client, wifi_disconnect);
     RUN_TEST_CASE(wifi_udp_client, wifi_end);
