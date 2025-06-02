@@ -195,6 +195,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_RANDOM
+
+    RUN_TEST_GROUP(random);
+
+#endif // TEST_RANDOM
+
 }
 
 

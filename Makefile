@@ -109,6 +109,9 @@ test_tone_no_tone: TESTS=-DTEST_TONE_NO_TONE
 test_pulse_board1: TESTS=-DTEST_PULSE_BOARD1
 test_pulse_board2: TESTS=-DTEST_PULSE_BOARD2
 
+## Random tests targets
+test_random: TESTS=-DTEST_RANDOM
+
 # Arduino-cli commands
 
 # For WSL and Windows :
