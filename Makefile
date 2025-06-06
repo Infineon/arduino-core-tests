@@ -73,6 +73,7 @@ test_digitalio_single: TESTS=-DTEST_DIGITALIO_SINGLE
 # Analog IO tests targets
 test_analogio_adc: TESTS=-DTEST_ANALOGIO_ADC
 test_analogio_pwm: TESTS=-DTEST_ANALOGIO_PWM
+test_analogio_dac: TESTS=-DTEST_ANALOGIO_DAC	
 
 # GPIO Interrupts tests targets
 test_interrupts_single: TESTS=-DTEST_INTERRUPTS_SINGLE
