@@ -114,6 +114,9 @@ TEST_IFX(digitalio_single_internal, test_digitalio_read_write_output_opendrain)
     TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW initially");
 
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); 
+#if defined(ARDUINO_ARCH_PSOC6) 
+    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH");
+#endif // ARDUINO_ARCH_PSOC6
     // Skip assert as it may not be set to HIGH due to open-drain configuration
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
     TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
