@@ -22,6 +22,18 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_ANALOGIO_ADC
+
+    RUN_TEST_GROUP(analogio_adc);
+
+#endif
+
+#ifdef TEST_ANALOGIO_PWM
+
+    RUN_TEST_GROUP(analogio_pwm);
+
+#endif
+
 #ifdef TEST_INTERRUPTS_SINGLE
 
     RUN_TEST_GROUP(gpio_interrupts_single);
@@ -38,6 +50,18 @@ void RunAllTests(void)
 #ifdef TEST_UART_CONNECTED2_RX
 
     RUN_TEST_GROUP(uart_connected2_rx);
+
+#endif
+
+#ifdef TEST_UART_RX
+
+    RUN_TEST_GROUP(uart_rx);
+
+#endif
+
+#ifdef TEST_UART_TX
+
+    RUN_TEST_GROUP(uart_tx);
 
 #endif
 
@@ -117,39 +141,34 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_WIFI_EXCEPTIONS
+
+    RUN_TEST_GROUP(wifi_exceptions);
+
+#endif
+
 #ifdef TEST_SPI_CONNECTED1_LOOPBACK
 
     RUN_TEST_GROUP(spi_connected1_loopback);
 
 #endif
 
-#ifdef TEST_SPI_3WIRE
+#ifdef TEST_SPI_CONNECTED2_MASTERPINGPONG
 
-    RUN_TEST_GROUP(spi_3wire);
-
-#endif
-
-#ifdef TEST_ONEWIRE_SENSOR
-
-    RUN_TEST_GROUP(onewire_sensor);
+    RUN_TEST_GROUP(spi_connected2_masterpingpong);
 
 #endif
 
-#ifdef TEST_ANALOGIO_ADC
-    RUN_TEST_GROUP(analogio_adc);
-#endif
+#ifdef TEST_SPI_CONNECTED2_SLAVEPINGPONG
 
-#ifdef TEST_ANALOGIO_ADC2
-    RUN_TEST_GROUP(analogio_adc2);
-#endif
+    RUN_TEST_GROUP(spi_connected2_slavepingpong);
 
-
-#ifdef TEST_ANALOGIO_PWM
-    RUN_TEST_GROUP(analogio_pwm);
 #endif
 
 #ifdef TEST_ANALOGIO_DAC
+
     RUN_TEST_GROUP(analogio_dac);
+    
 #endif
 
 }
@@ -159,6 +178,7 @@ void setup() {
     Serial.begin(115200);
     Serial.println("setup done.");
 }
+
 
 void loop() {
     Serial.println("\n");
