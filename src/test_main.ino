@@ -168,7 +168,7 @@ void RunAllTests(void)
 #ifdef TEST_ANALOGIO_DAC
 
     RUN_TEST_GROUP(analogio_dac);
-    
+
 #endif
 
 }
