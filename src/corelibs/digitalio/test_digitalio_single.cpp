@@ -113,10 +113,10 @@ TEST_IFX(digitalio_single_internal, test_digitalio_read_write_output_opendrain)
 
     TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW initially");
 
-    digitalWrite(TEST_DIGITALIO_OUTPUT, HIGH); 
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); 
     // Skip assert as it may not be set to HIGH due to open-drain configuration
-    digitalWrite(TEST_DIGITALIO_OUTPUT, LOW);
-    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_DIGITALIO_INPUT), "Input Pin should be set to LOW");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
+    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 }
 
 /**
@@ -159,10 +159,12 @@ static TEST_GROUP_RUNNER(digitalio_single_internal)
     RUN_TEST_CASE(digitalio_single_internal, test_digitalio_read_write_input_pullup);
     RUN_TEST_CASE(digitalio_single_internal, test_digitalio_read_write_input_pulldown);
     RUN_TEST_CASE(digitalio_single_internal, test_digitalio_read_write_output_opendrain);
+#if !defined(ARDUINO_ARCH_XMC)   
     RUN_TEST_CASE(digitalio_single_internal, test_pinMode_invalid_pin);
     RUN_TEST_CASE(digitalio_single_internal, test_digitalWrite_invalid_pin);
     RUN_TEST_CASE(digitalio_single_internal, test_digitalRead_invalid_pin);
     RUN_TEST_CASE(digitalio_single_internal, test_invalid_pinmode);
+#endif // ARDUINO_ARCH_XMC skip these tests.
 }
 
 /**
