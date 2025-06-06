@@ -77,6 +77,9 @@ test_analogio_pwm: TESTS=-DTEST_ANALOGIO_PWM
 # GPIO Interrupts tests targets
 test_interrupts_single: TESTS=-DTEST_INTERRUPTS_SINGLE
 
+# ONEWIRE test targets
+test_onewire_sensor: TESTS=-DTEST_ONEWIRE_SENSOR
+
 ## CAN tests targets
 test_can_single: TESTS=-DTEST_CAN_SINGLE
 test_can_connected2_node1: TESTS=-DTEST_CAN_CONNECTED2_NODE1
