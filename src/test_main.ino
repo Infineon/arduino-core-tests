@@ -34,6 +34,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_ANALOGIO_DAC
+
+    RUN_TEST_GROUP(analogio_dac);   
+
+#endif
+
 #ifdef TEST_INTERRUPTS_SINGLE
 
     RUN_TEST_GROUP(gpio_interrupts_single);
