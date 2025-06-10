@@ -220,7 +220,7 @@ TEST_IFX(tone_no_tone, test_no_tone) {
  */
 TEST_IFX(tone_no_tone, test_tone_overlap_frequency) {
  #if defined(ARDUINO_ARCH_XMC)
-    const unsigned int test_frequencies_hz[] = {35, 50, 39}; //XMC 4700 minimum frequency working from 35Hz
+    const unsigned int test_frequencies_hz[] = {35, 50, 39}; //Tested with XMC 4700 minimum frequency working from 35Hz
 #else
     const unsigned int test_frequencies_hz[] = {5, 10, 20}; 
 #endif
