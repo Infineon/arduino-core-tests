@@ -6,6 +6,9 @@
  * and then reads the voltage using the ADC from TEST_PIN_ANALOG_IO_DAC_INPUT.
  * The tests assert that the ADC reading is within tolerance compared to the expected value computed by:
  *    expected_value = (775 - 93) * written_value / 1023 + 93
+ * The maximum output voltage of the dac is 2.5V, but V_DD is 3.3V. The upper bound is therefore: (2.5 / 3.3) * 1023 = 775
+*  The minimum output voltage of the dac is 0.3V. Therefore, the lower bound is: (0.3 / 3.3) * 1023 = 93
+*  I added this as explanation.
  */
 
 // test includes
@@ -13,8 +16,8 @@
 #include "test_config.h"
 
 // defines
-#define TOLERANCE_Below 0.065
-#define TOLERANCE_Above 0.03
+#define TOLERANCE_BELOW 0.065
+#define TOLERANCE_ABOVE 0.03
 
 /**
  * @brief Validates if the actual ADC value is within the acceptable range of the expected value.
@@ -24,8 +27,8 @@
  * @return true if the actual value is within the acceptable range, false otherwise.
  */
 static bool validate_adc_raw_value(int expected_value, int actual_value) {
-    return (expected_value * (1-TOLERANCE_Below)) < actual_value &&
-           (expected_value * (1 + TOLERANCE_Above)) > actual_value;
+    return (expected_value * (1 - TOLERANCE_BELOW)) < actual_value &&
+           (expected_value * (1 + TOLERANCE_ABOVE)) > actual_value;
 }
 
 /**
@@ -81,12 +84,14 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_full)
     // Read the voltage via the ADC from the DAC input pin (for now A0)
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     
+    /*
     // Print the expected and actual ADC values
     Serial.print("Test Full Scale - Expected ADC value: ");
     Serial.print(expected_value);
     Serial.print(" - Actual ADC value: ");
     Serial.println(adc_value);
-    
+    */
+
     // Assert that the measured ADC value is within tolerance of the expected value.
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value),
         "Full-scale DAC output not received as expected");
@@ -111,11 +116,13 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_half)
     int expected_value = (775 - 93) * write_value / 1023 + 93;
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     
+    /*
     Serial.print("Test Half Scale - Expected ADC value: ");
     Serial.print(expected_value);
     Serial.print(" - Actual ADC value: ");
     Serial.println(adc_value);
-    
+    */
+
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value),
         "Half-scale DAC output not received as expected");
 }
@@ -139,11 +146,13 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_onethird)
     int expected_value = (775 - 93) * write_value / 1023 + 93;
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     
+    /*
     Serial.print("Test One-Third Scale - Expected ADC value: ");
     Serial.print(expected_value);
     Serial.print(" - Actual ADC value: ");
     Serial.println(adc_value);
-    
+    */
+
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value),
         "One-third scale DAC output not received as expected");
 }
