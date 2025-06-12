@@ -58,8 +58,6 @@ static TEST_SETUP(analogio_dac) { }
  */
 static TEST_TEAR_DOWN(analogio_dac) { }
 
-#ifdef TEST_PIN_ANALOG_IO_DAC  // Ensure the DAC output is defined
-
 /**
  * @brief Test 1: Write full-scale (ADC_RESOLUTION) and read back.
  */
@@ -155,8 +153,6 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_onethird)
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value),
         "One-third scale DAC output not received as expected");
 }
-
-#endif // TEST_PIN_ANALOG_IO_DAC
 
 /**
  * @brief Bundle all tests for this test group.
