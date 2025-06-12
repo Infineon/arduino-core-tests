@@ -8,7 +8,6 @@
  *    expected_value = (775 - 93) * written_value / 1023 + 93
  * The maximum output voltage of the dac is 2.5V, but V_DD is 3.3V. The upper bound is therefore: (2.5 / 3.3) * 1023 = 775
 *  The minimum output voltage of the dac is 0.3V. Therefore, the lower bound is: (0.3 / 3.3) * 1023 = 93
-*  I added this as explanation.
  */
 
 // test includes
