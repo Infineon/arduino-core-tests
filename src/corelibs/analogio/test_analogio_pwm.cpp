@@ -95,7 +95,7 @@ static void analogio_pwm_suite_setup() {
  * @brief Suite teardown function, runs after test suite execution is complete.
  */
 static void analogio_pwm_suite_teardown() {
-    
+    detachInterrupt(digitalPinToInterrupt(PWM_PIN_FEEDBACK));
 }
 
 // Define test group name
@@ -117,7 +117,7 @@ static TEST_SETUP(analogio_pwm) {
  * @brief Tear down method called by Unity after every test in this test group.
  */
 static TEST_TEAR_DOWN(analogio_pwm) {
-    noInterrupts();
+
 }
 
 /**
