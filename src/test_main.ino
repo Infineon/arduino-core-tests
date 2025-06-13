@@ -46,6 +46,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_ONEWIRE_SENSOR
+
+    RUN_TEST_GROUP(onewire_sensor);
+
+#endif
+
 #ifdef TEST_UART_CONNECTED2_TX
 
     RUN_TEST_GROUP(uart_connected2_tx);
