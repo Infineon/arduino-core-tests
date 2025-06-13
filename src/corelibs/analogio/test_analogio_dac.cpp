@@ -1,13 +1,31 @@
 /**
- * @brief test_analogio_dac.cpp
+ * @file test_analogio_dac.cpp
+ * @brief DAC Functionality Verification Tests
  *
- * @details This test verifies the DAC functionality.
- * It writes different values via analogWrite() on the DAC output pin (TEST_PIN_ANALOG_IO_DAC, i.e., P14.8)
- * and then reads the voltage using the ADC from TEST_PIN_ANALOG_IO_DAC_INPUT.
- * The tests assert that the ADC reading is within tolerance compared to the expected value computed by:
- *    expected_value = (775 - 93) * written_value / 1023 + 93
- * The maximum output voltage of the dac is 2.5V, but V_DD is 3.3V. The upper bound is therefore: (2.5 / 3.3) * 1023 = 775
-*  The minimum output voltage of the dac is 0.3V. Therefore, the lower bound is: (0.3 / 3.3) * 1023 = 93
+ * @details This test suite verifies the proper operation of the DAC on the board.
+ *          The tests send predetermined digital values to the DAC output pin (TEST_PIN_ANALOG_IO_DAC)
+ *          via analogWrite() and then measure the corresponding analog voltage using the ADC at
+ *          TEST_PIN_ANALOG_IO_DAC_INPUT.
+ *
+ *          The expected ADC reading is computed using a scaled interpolation between two limits:
+ *
+ *              expected_value = (MAX_ADC - MIN_ADC) * (written_value / READ_RESOLUTION) + MIN_ADC
+ *
+ *          Where:
+ *              - READ_RESOLUTION is the full-scale digital value for the DAC (e.g., the maximum for a 10-bit resolution).
+ *              - MAX_ADC represents the ADC reading corresponding to the DAC's maximum output voltage,
+ *                which is defined by the macro ANALOG_MAXIMUM.
+ *              - MIN_ADC represents the ADC reading corresponding to the DAC's minimum output voltage,
+ *                which is defined by the macro ANALOG_MINIMUM.
+ *
+ *          This approach generalizes the test across various hardware configurations by replacing
+ *          fixed numeric values with descriptive macros.
+ *
+ *          The test suite includes the following cases:
+ *              - Full-scale test: Verifies output when the DAC is driven to its full digital range.
+ *              - Half-scale tests (VDD/2): Verifies output when the DAC is set to half of its digital range,
+ *                tested under different resolutions.
+ *              - One-third scale test (VDD/3): Verifies output when the DAC is driven to one-third of its full-scale value.
  */
 
 // test includes
@@ -15,8 +33,17 @@
 #include "test_config.h"
 
 // defines
+#define ANALOG_MAXIMUM 2.5
+#define ANALOG_MINIMUM 0.3
+#define READ_RESOLUTION 1023
+
+// tolerance = gain error, see data sheet
 #define TOLERANCE_BELOW 0.065
 #define TOLERANCE_ABOVE 0.03
+
+// New helper macros
+#define MAX_ADC ((int)((ANALOG_MAXIMUM/3.3)*READ_RESOLUTION))
+#define MIN_ADC ((int)((ANALOG_MINIMUM/3.3)*READ_RESOLUTION))
 
 /**
  * @brief Validates if the actual ADC value is within the acceptable range of the expected value.
@@ -59,7 +86,7 @@ static TEST_SETUP(analogio_dac) { }
 static TEST_TEAR_DOWN(analogio_dac) { }
 
 /**
- * @brief Test 1: Write full-scale (ADC_RESOLUTION) and read back.
+ * @brief Test 1: Write full-scale (READ_RESOLUTION) and read back.
  */
 TEST_IFX(analogio_dac, test_dac_write_and_read_value_full)
 {
@@ -67,7 +94,7 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_full)
     analogReference(DEFAULT);
     analogWriteResolution(10);
     
-    int write_value = ADC_RESOLUTION;
+    int write_value = READ_RESOLUTION;
     // Write the full-scale value (1023) to the DAC output pin (P14.8)
     analogWrite(TEST_PIN_ANALOG_IO_DAC, write_value);
     
@@ -75,21 +102,12 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_full)
     analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     delay(500);
     
-    // Calculate expected ADC value using the following formula: 775 is highest resolution, 93 is lowest resolution --> needed a way to compare
-    int expected_value = (775 - 93) * write_value / 1023 + 93;
+    // Calculate expected ADC value using new definitions:
+    int expected_value = (MAX_ADC - MIN_ADC) * write_value / READ_RESOLUTION + MIN_ADC;
     
     // Read the voltage via the ADC from the DAC input pin (for now A0)
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     
-    /*
-    // Print the expected and actual ADC values
-    Serial.print("Test Full Scale - Expected ADC value: ");
-    Serial.print(expected_value);
-    Serial.print(" - Actual ADC value: ");
-    Serial.println(adc_value);
-    */
-
-    // Assert that the measured ADC value is within tolerance of the expected value.
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value),
         "Full-scale DAC output not received as expected");
 }
@@ -101,8 +119,7 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_full)
  *  - Sets the DAC resolution,
  *  - Writes a half-scale value,
  *  - Computes expected ADC reading based on:
- *         expected = (max_adc - min_adc) * (max_dac/2)/max_dac + min_adc
- *    where max_adc = (2.5/3.3)*max_dac and min_adc = (0.3/3.3)*max_dac.
+ *         expected = (MAX_ADC - MIN_ADC) * (max_dac/2)/max_dac + MIN_ADC
  */
 static void half_dac_test_for_resolution(uint16_t res)
 {
@@ -114,7 +131,7 @@ static void half_dac_test_for_resolution(uint16_t res)
     analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     delay(500);
     
-    int expected_value = (775 - 93) * write_value / max_dac + 93;
+    int expected_value = (MAX_ADC - MIN_ADC) * write_value / max_dac + MIN_ADC;
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     
     char msg[128];
@@ -147,14 +164,14 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_half_12_bit)
 }
 
 /**
- * @brief Test 3: Write one-third scale (ADC_RESOLUTION/3) and read back.
+ * @brief Test 3: Write one-third scale (READ_RESOLUTION/3) and read back.
  */
 TEST_IFX(analogio_dac, test_dac_write_and_read_value_onethird)
 {
     analogReference(DEFAULT);
     analogWriteResolution(10);
     
-    int write_value = ADC_RESOLUTION / 3;
+    int write_value = READ_RESOLUTION / 3;
     // Write one-third scale value to the DAC output pin
     analogWrite(TEST_PIN_ANALOG_IO_DAC, write_value);
     
@@ -162,16 +179,9 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_onethird)
     analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     delay(500);
     
-    int expected_value = (775 - 93) * write_value / 1023 + 93;
+    int expected_value = (MAX_ADC - MIN_ADC) * write_value / READ_RESOLUTION + MIN_ADC;
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     
-    /*
-    Serial.print("Test One-Third Scale - Expected ADC value: ");
-    Serial.print(expected_value);
-    Serial.print(" - Actual ADC value: ");
-    Serial.println(adc_value);
-    */
-
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value),
         "One-third scale DAC output not received as expected");
 }
