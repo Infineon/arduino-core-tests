@@ -75,7 +75,7 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_full)
     analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     delay(500);
     
-    // Calculate expected ADC value using the following formula: 775 is highest resultion, 93 is lowest resolution --> needed a way to compare
+    // Calculate expected ADC value using the following formula: 775 is highest resolution, 93 is lowest resolution --> needed a way to compare
     int expected_value = (775 - 93) * write_value / 1023 + 93;
     
     // Read the voltage via the ADC from the DAC input pin (for now A0)
@@ -95,33 +95,55 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_full)
 }
 
 /**
- * @brief Test 2: Write half-scale (ADC_RESOLUTION/2) and read back.
+ * @brief Helper function for half-scale DAC test.
+ *
+ * For a given resolution 'res', this function:
+ *  - Sets the DAC resolution,
+ *  - Writes a half-scale value,
+ *  - Computes expected ADC reading based on:
+ *         expected = (max_adc - min_adc) * (max_dac/2)/max_dac + min_adc
+ *    where max_adc = (2.5/3.3)*max_dac and min_adc = (0.3/3.3)*max_dac.
  */
-TEST_IFX(analogio_dac, test_dac_write_and_read_value_half)
+static void half_dac_test_for_resolution(uint16_t res)
 {
-    analogReference(DEFAULT);
-    analogWriteResolution(10);
+    analogWriteResolution(res);
+    uint16_t max_dac = (1 << res) - 1;
+    int write_value = max_dac / 2;  // Half scale
     
-    int write_value = ADC_RESOLUTION / 2;
-    // Write half-scale value to the DAC output pin
     analogWrite(TEST_PIN_ANALOG_IO_DAC, write_value);
-    
-    // Discard the first ADC reading
     analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     delay(500);
     
-    int expected_value = (775 - 93) * write_value / 1023 + 93;
+    int expected_value = (775 - 93) * write_value / max_dac + 93;
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DAC_INPUT);
     
-    /*
-    Serial.print("Test Half Scale - Expected ADC value: ");
-    Serial.print(expected_value);
-    Serial.print(" - Actual ADC value: ");
-    Serial.println(adc_value);
-    */
+    char msg[128];
+    sprintf(msg, "%u-bit half-scale test failed: expected %d, got %d", res, expected_value, adc_value);
+    TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value), msg);
+}
 
-    TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value),
-        "Half-scale DAC output not received as expected");
+/**
+ * @brief Test for DAC half-scale (VDD/2) using 8-bit resolution.
+ */
+TEST_IFX(analogio_dac, test_dac_write_and_read_value_half_8_bit)
+{
+    half_dac_test_for_resolution(8);
+}
+
+/**
+ * @brief Test for DAC half-scale (VDD/2) using 10-bit resolution.
+ */
+TEST_IFX(analogio_dac, test_dac_write_and_read_value_half_10_bit)
+{
+    half_dac_test_for_resolution(10);
+}
+
+/**
+ * @brief Test for DAC half-scale (VDD/2) using 12-bit resolution.
+ */
+TEST_IFX(analogio_dac, test_dac_write_and_read_value_half_12_bit)
+{
+    half_dac_test_for_resolution(12);
 }
 
 /**
@@ -163,7 +185,9 @@ TEST_GROUP_RUNNER(analogio_dac)
     
 #ifdef TEST_PIN_ANALOG_IO_DAC
     RUN_TEST_CASE(analogio_dac, test_dac_write_and_read_value_full);
-    RUN_TEST_CASE(analogio_dac, test_dac_write_and_read_value_half);
+    RUN_TEST_CASE(analogio_dac, test_dac_write_and_read_value_half_8_bit);
+    RUN_TEST_CASE(analogio_dac, test_dac_write_and_read_value_half_10_bit);
+    RUN_TEST_CASE(analogio_dac, test_dac_write_and_read_value_half_12_bit);
     RUN_TEST_CASE(analogio_dac, test_dac_write_and_read_value_onethird);
 #endif
 
