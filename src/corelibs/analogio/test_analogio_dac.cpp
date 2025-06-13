@@ -113,7 +113,7 @@ static void dac_test_for_resolution_divider(uint16_t res, uint16_t divider)
 }
 
 /**
- * @brief Test for DAC half-scale (VDD/2) using 8-bit resolution.
+ * @brief Test for DAC using 8-bit resolution.
  */
 TEST_IFX(analogio_dac, test_dac_write_and_read_value_8_bit)
 {
@@ -123,7 +123,7 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_8_bit)
 }
 
 /**
- * @brief Test for DAC half-scale (VDD/2) using 10-bit resolution.
+ * @brief Test for DAC using 10-bit resolution.
  */
 TEST_IFX(analogio_dac, test_dac_write_and_read_value_10_bit)
 {
@@ -134,7 +134,7 @@ TEST_IFX(analogio_dac, test_dac_write_and_read_value_10_bit)
 }
 
 /**
- * @brief Test for DAC half-scale (VDD/2) using 12-bit resolution.
+ * @brief Test for DAC using 12-bit resolution.
  */
 TEST_IFX(analogio_dac, test_dac_write_and_read_value_12_bit)
 {
