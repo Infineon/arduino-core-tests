@@ -31,7 +31,7 @@ TEST(onewire_sensor, test_device_presence) {
 
     // Print result and pass/fail message
     if (deviceFound) {
-        Serial.println(" - Device Found");
+    //    Serial.println(" - Device Found");
     } else {
         TEST_FAIL_MESSAGE(" - No device found on the OneWire bus.");
     }
@@ -47,7 +47,7 @@ TEST(onewire_sensor, test_device_description) {
 
     // Check if the first byte of the address corresponds to a known chip family
     if (addr[0] == 0x10 || addr[0] == 0x28 || addr[0] == 0x22) {
-        Serial.println(" - Chip description found.");
+    //    Serial.println(" - Chip description found.");
     } else {
         TEST_FAIL_MESSAGE(" - No valid chip description found.");
     }
@@ -86,7 +86,7 @@ TEST(onewire_sensor, test_data_returned) {
 
     // Print result and pass/fail message
     if (dataReturned) {
-        Serial.println(" - Data received");
+    //    Serial.println(" - Data received");
     } else {
         TEST_FAIL_MESSAGE(" - No valid data returned from the sensor.");
     }
