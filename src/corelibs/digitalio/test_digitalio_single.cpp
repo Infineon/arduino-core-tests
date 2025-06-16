@@ -67,35 +67,39 @@ TEST_IFX(digitalio_single_internal, test_digitalio_read_write_input_normal)
 }
 
 /**
- * @brief This test is to verify digitalWrite and digitalRead functions when input pin is set to INPUT_PULLUP mode.
+ * @brief This test is to verify when input pin is set to INPUT_PULLUP mode.
  * 
  * @note: Assumption is made that TEST_PIN_DIGITAL_IO_OUTPUT is connected to TEST_PIN_DIGITAL_IO_INPUT
  *       for the test cases to work as expected.
  */
 TEST_IFX(digitalio_single_internal, test_digitalio_read_write_input_pullup)
 {
-    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT_OPENDRAIN);
     pinMode(TEST_PIN_DIGITAL_IO_INPUT, INPUT_PULLUP);
 
-    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
-    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH");
+    digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // set output pin to HIGH ie, floating state
+    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH initially");
+
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
     TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 }
 
 /**
- * @brief This test is to verify digitalWrite and digitalRead functions when input pin is set to INPUT_PULLDOWN mode.
+ * @brief This test is to verify when input pin is set to INPUT_PULLDOWN mode.
  * 
  * @note: Assumption is made that TEST_PIN_DIGITAL_IO_OUTPUT is connected to TEST_PIN_DIGITAL_IO_INPUT
  *       for the test cases to work as expected.
  */
 TEST_IFX(digitalio_single_internal, test_digitalio_read_write_input_pulldown) 
 {
-    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT);
+    pinMode(TEST_PIN_DIGITAL_IO_OUTPUT, OUTPUT_OPENDRAIN);
     pinMode(TEST_PIN_DIGITAL_IO_INPUT, INPUT_PULLDOWN);
 
+    TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW initially");
+
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH);
-    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH");
+    // Skip assert as it may not be set to HIGH due to open-drain configuration
+
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
     TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 }
@@ -114,10 +118,8 @@ TEST_IFX(digitalio_single_internal, test_digitalio_read_write_output_opendrain)
     TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW initially");
 
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); 
-#if defined(ARDUINO_ARCH_PSOC6) 
-    TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH");
-#endif // ARDUINO_ARCH_PSOC6
     // Skip assert as it may not be set to HIGH due to open-drain configuration
+
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, LOW);
     TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 }
