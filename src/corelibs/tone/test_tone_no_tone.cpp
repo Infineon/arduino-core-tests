@@ -133,7 +133,6 @@ static TEST_SETUP(tone_no_tone) {
  * @brief Tear down method called by Unity after every test in this test group.
  */
 static TEST_TEAR_DOWN(tone_no_tone) {
-    noInterrupts();
     reset_tone();
 }
 
