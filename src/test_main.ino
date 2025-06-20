@@ -177,6 +177,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_SPI_3WIRE
+
+    RUN_TEST_GROUP(spi_3wire);
+
+#endif
+
 #ifdef TEST_TONE_NO_TONE
 
     RUN_TEST_GROUP(tone_no_tone);
