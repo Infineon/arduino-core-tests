@@ -206,6 +206,12 @@ void RunAllTests(void)
 
 void setup() {
     Serial.begin(115200);
+    
+    #if defined(TEST_SPI_CONNECTED2_MASTERPINGPONG) || defined(TEST_SPI_CONNECTED2_SLAVEPINGPONG) \
+    || defined(TEST_WIRE_CONNECTED2_MASTERPINGPONG) || defined(TEST_WIRE_CONNECTED2_SLAVEPINGPONG)
+    readSerialAndRespond();
+    #endif
+    
     Serial.println("setup done.");
 }
 
