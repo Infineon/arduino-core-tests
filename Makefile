@@ -101,7 +101,7 @@ test_spi_connected2_masterpingpong: TESTS=-DTEST_SPI_CONNECTED2_MASTERPINGPONG
 test_spi_connected2_slavepingpong:  TESTS=-DTEST_SPI_CONNECTED2_SLAVEPINGPONG
 
 ## OneWire tests targets
-test_onewire_sensor: TESTS=-DTEST_ONEWIRE_SENSOR
+test_onewire_DS18x20: TESTS=-DTEST_onewire_DS18x20
 
 # Arduino-cli commands
 

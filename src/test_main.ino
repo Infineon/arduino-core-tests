@@ -165,9 +165,9 @@ void RunAllTests(void)
 
 #endif
 
-#ifdef TEST_ONEWIRE_SENSOR
+#ifdef TEST_onewire_DS18x20
 
-    RUN_TEST_GROUP(onewire_sensor);
+    RUN_TEST_GROUP(onewire_DS18x20);
 
 #endif
 
