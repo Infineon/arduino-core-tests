@@ -15,6 +15,7 @@
 
 // IFX Unity addons
 #include "unity_ifx.h"
+#include "test_synchronisation.h"
 
 // Arduino includes
 #include <Arduino.h>
