@@ -4,6 +4,7 @@
 #include "test_common_includes.h"
 
 // project includes
+#include <Wire.h>
 
 // defines
 #define TRACE_OUTPUT
