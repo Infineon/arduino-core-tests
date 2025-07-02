@@ -42,10 +42,9 @@ void RunAllTests(void)
 
 #ifdef TEST_INTERRUPTS_SINGLE
 
-    RUN_TEST_GROUP(interrupts_single);   
+    RUN_TEST_GROUP(gpio_interrupts_single);
 
 #endif
-
 
 #ifdef TEST_UART_CONNECTED2_TX
 
@@ -69,25 +68,6 @@ void RunAllTests(void)
 #ifdef TEST_UART_TX
 
     RUN_TEST_GROUP(uart_tx);
-
-#endif
-
-#ifdef TEST_ONEWIRE_DS18B20
-
-    RUN_TEST_GROUP(onewire_DS18B20);
-
-#endif
-
-#ifdef TEST_UART_CONNECTED2_TX
-
-    RUN_TEST_GROUP(uart_connected2_tx);
-
-#endif
-
-
-#ifdef TEST_UART_CONNECTED2_RX
-
-    RUN_TEST_GROUP(uart_connected2_rx);
 
 #endif
 
@@ -191,15 +171,21 @@ void RunAllTests(void)
 
 #endif
 
-#ifdef TEST_SPI_3WIRE
+#ifdef TEST_SPI_CONNECTED2_MASTERPINGPONG
 
-    RUN_TEST_GROUP(spi_3wire);
+    RUN_TEST_GROUP(spi_connected2_masterpingpong);
 
 #endif
 
-#ifdef TEST_ONEWIRE_SENSOR
+#ifdef TEST_SPI_CONNECTED2_SLAVEPINGPONG
 
-    RUN_TEST_GROUP(onewire_DS18x20);
+    RUN_TEST_GROUP(spi_connected2_slavepingpong);
+
+#endif
+
+#ifdef TEST_ONEWIRE_DS18B20
+
+    RUN_TEST_GROUP(onewire_DS18B20);
 
 #endif
 

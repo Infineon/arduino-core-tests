@@ -78,9 +78,6 @@ test_analogio_dac: TESTS=-DTEST_ANALOGIO_DAC
 # GPIO Interrupts tests targets
 test_interrupts_single: TESTS=-DTEST_INTERRUPTS_SINGLE
 
-# ONEWIRE test targets
-test_onewire_DS18B20: TESTS=-DTEST_ONEWIRE_DS18B20
-
 ## CAN tests targets
 test_can_single: TESTS=-DTEST_CAN_SINGLE
 test_can_connected2_node1: TESTS=-DTEST_CAN_CONNECTED2_NODE1
@@ -106,6 +103,9 @@ test_spi_connected1_loopback: TESTS=-DTEST_SPI_CONNECTED1_LOOPBACK
 test_spi_connected2_masterpingpong: TESTS=-DTEST_SPI_CONNECTED2_MASTERPINGPONG
 test_spi_connected2_slavepingpong:  TESTS=-DTEST_SPI_CONNECTED2_SLAVEPINGPONG
 
+## Onewire tests targets
+test_onewire_DS18B20: TESTS=-DTEST_ONEWIRE_DS18B20
+
 ## Tone tests targets
 test_tone_no_tone: TESTS=-DTEST_TONE_NO_TONE
 
@@ -115,9 +115,6 @@ test_pulse_board2: TESTS=-DTEST_PULSE_BOARD2
 
 ## Random tests targets
 test_random: TESTS=-DTEST_RANDOM
-=======
-## OneWire tests targets
-test_onewire_DS18x20: TESTS=-DTEST_onewire_DS18x20
 
 # Arduino-cli commands
 
