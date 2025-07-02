@@ -46,12 +46,6 @@ void RunAllTests(void)
 
 #endif
 
-#ifdef TEST_ONEWIRE_SENSOR
-
-    RUN_TEST_GROUP(onewire_sensor);
-
-#endif
-
 #ifdef TEST_UART_CONNECTED2_TX
 
     RUN_TEST_GROUP(uart_connected2_tx);
@@ -62,18 +56,6 @@ void RunAllTests(void)
 #ifdef TEST_UART_CONNECTED2_RX
 
     RUN_TEST_GROUP(uart_connected2_rx);
-
-#endif
-
-#ifdef TEST_UART_RX
-
-    RUN_TEST_GROUP(uart_rx);
-
-#endif
-
-#ifdef TEST_UART_TX
-
-    RUN_TEST_GROUP(uart_tx);
 
 #endif
 
@@ -177,15 +159,15 @@ void RunAllTests(void)
 
 #endif
 
-#ifdef TEST_SPI_CONNECTED2_MASTERPINGPONG
+#ifdef TEST_SPI_3WIRE
 
-    RUN_TEST_GROUP(spi_connected2_masterpingpong);
+    RUN_TEST_GROUP(spi_3wire);
 
 #endif
 
-#ifdef TEST_SPI_CONNECTED2_SLAVEPINGPONG
+#ifdef TEST_ONEWIRE_SENSOR
 
-    RUN_TEST_GROUP(spi_connected2_slavepingpong);
+    RUN_TEST_GROUP(onewire_DS18x20);
 
 #endif
 
