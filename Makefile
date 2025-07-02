@@ -79,7 +79,7 @@ test_analogio_dac: TESTS=-DTEST_ANALOGIO_DAC
 test_interrupts_single: TESTS=-DTEST_INTERRUPTS_SINGLE
 
 # ONEWIRE test targets
-test_onewire_sensor: TESTS=-DTEST_ONEWIRE_SENSOR
+test_onewire_DS18B20: TESTS=-DTEST_ONEWIRE_DS18B20
 
 ## CAN tests targets
 test_can_single: TESTS=-DTEST_CAN_SINGLE

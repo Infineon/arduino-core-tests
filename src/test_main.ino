@@ -42,7 +42,39 @@ void RunAllTests(void)
 
 #ifdef TEST_INTERRUPTS_SINGLE
 
-    RUN_TEST_GROUP(gpio_interrupts_single);
+    RUN_TEST_GROUP(interrupts_single);   
+
+#endif
+
+
+#ifdef TEST_UART_CONNECTED2_TX
+
+    RUN_TEST_GROUP(uart_connected2_tx);
+
+#endif
+
+
+#ifdef TEST_UART_CONNECTED2_RX
+
+    RUN_TEST_GROUP(uart_connected2_rx);
+
+#endif
+
+#ifdef TEST_UART_RX
+
+    RUN_TEST_GROUP(uart_rx);
+
+#endif
+
+#ifdef TEST_UART_TX
+
+    RUN_TEST_GROUP(uart_tx);
+
+#endif
+
+#ifdef TEST_ONEWIRE_DS18B20
+
+    RUN_TEST_GROUP(onewire_DS18B20);
 
 #endif
 
