@@ -69,22 +69,20 @@ TEST(onewire_DS18x20, test_data_returned) {
     }
 
     // Verify that data was returned (non-zero values in the scratchpad)
-    bool dataReturned = false;
+    bool allDataNonZero = true;
     for (uint8_t i = 0; i < 9; i++) {
-        if (data[i] != 0) {
-            dataReturned = true;
+        if (data[i] == 0) {
+            allDataNonZero = false;
             break;
         }
-        dataReturned = false;
     }
 
-    TEST_ASSERT_TRUE_MESSAGE(dataReturned, " - No data returned from the OneWire device");
+    TEST_ASSERT_TRUE_MESSAGE(allDataNonZero, " - Not all data bytes are non-zero in the OneWire device scratchpad");
 
     TEST_ASSERT_TRUE_MESSAGE(OneWire::crc8(data, 8) == data[8], " - CRC check failed");
 
     // Decode temperature
     int16_t raw = (data[1] << 8) | data[0];
-    float celsius = (float)raw / 16.0;
     if(addr[0] == 0x10) {
         raw = raw << 3; // 9 bit resolution
         if (data[7] == 0x10) {
@@ -98,6 +96,7 @@ TEST(onewire_DS18x20, test_data_returned) {
     else if (cfg == 0x40) raw = raw & ~1; // 11 bit
     }
 
+    float celsius = (float)raw / 16.0;
     // Assert temperature is within expected range
     TEST_ASSERT_TRUE_MESSAGE(
     celsius > -50.0 && celsius < 50.0,
