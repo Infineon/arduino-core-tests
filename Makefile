@@ -113,6 +113,9 @@ test_pulse_board2: TESTS=-DTEST_PULSE_BOARD2
 ## Random tests targets
 test_random: TESTS=-DTEST_RANDOM
 
+## OneWire tests targets
+test_onewire_DS18x20: TESTS=-DTEST_ONEWIRE_DS18x20
+
 # Arduino-cli commands
 
 # For WSL and Windows :

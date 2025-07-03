@@ -207,6 +207,12 @@ void RunAllTests(void)
 
 #endif // TEST_RANDOM
 
+#ifdef TEST_ONEWIRE_DS18x20
+
+    RUN_TEST_GROUP(onewire_DS18x20);
+
+#endif // TEST_ONEWIRE_SENSOR_DS18x20
+
 }
 
 
