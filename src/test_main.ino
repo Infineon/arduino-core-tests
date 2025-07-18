@@ -222,7 +222,7 @@ void setup() {
     Serial.println("synchronising with host...");
     Serial.flush();
     
-    readSerialAndRespond();
+    //readSerialAndRespond();
 
     Serial.println("setup done.");
 }
