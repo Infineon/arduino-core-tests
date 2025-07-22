@@ -221,9 +221,9 @@ void setup() {
 
     Serial.println("synchronising with host...");
     Serial.flush();
-    
+#if defined(TEST_SPI_CONNECTED2_MASTERPINGPONG) || defined(TEST_SPI_CONNECTED2_SLAVEPINGPONG)    
     readSerialAndRespond();
-
+#endif
     Serial.println("setup done.");
 }
 
