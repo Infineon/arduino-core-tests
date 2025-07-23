@@ -11,93 +11,114 @@
 // variables
 const static uint8_t slaveAddress = 8U;
 const static uint8_t slaveIncrement = 10U;
+const static uint8_t masterIncrement = 1U;
 
 const static uint8_t globalQuantityMax = 20U;
 
 static uint8_t globalQuantity = 8U;
 
-volatile static uint8_t slaveData[globalQuantityMax] = {0};
+static uint8_t masterData[globalQuantityMax] = {0};
 
-volatile static uint8_t howManyCopy[globalQuantityMax] = {0};
-volatile static uint8_t availCopy[globalQuantityMax] = {0};
-volatile static uint8_t peekCopy[globalQuantityMax] = {0};
+static TwoWire *master = nullptr;
 
-volatile static uint8_t bytesWrittenCopy = 0;
-
-static TwoWire *slave = nullptr;
-
-static void slaveReceiveEventIIC(int howMany) {
-    uint8_t count = 0;
-
-    while (slave->available() > 0) {
-        howManyCopy[count] = howMany;
-        availCopy[count] = slave->available();
-        peekCopy[count] = slave->peek();
-        slaveData[count] = slave->read();
-        ++count;
-    }
-}
-
-static void slaveRequestEventIIC() {
-    uint8_t count = 0;
-
-    while (count < globalQuantity) {
-        slaveData[count] += slaveIncrement;
-        ++count;
-    }
-
-    bytesWrittenCopy = slave->write((const uint8_t *)slaveData, globalQuantity);
-}
 
 // Method invoked before a test suite is run.
 static void wire_connected2_masterpingpong_suite_setup() {
-    slave = &Wire;
+    master = &Wire;
 
-    slave->begin(slaveAddress);
-    slave->onReceive(slaveReceiveEventIIC);
-    slave->onRequest(slaveRequestEventIIC);
+    master->begin();
 }
 
 // Method invoked after a test suite is run.
-static void wire_connected2_masterpingpong_suite_teardown() {
-    // slave->end(); // TODO: Why can end() not be called here without disrupting the execution ?
-}
+static void wire_connected2_masterpingpong_suite_teardown() { master->end(); }
 
 // define test group name
 TEST_GROUP(wire_connected2_masterpingpong);
 TEST_GROUP(wire_connected2_masterpingpong_internal);
 
 // Setup method called by Unity before every individual test defined for this test group.
-static TEST_SETUP(wire_connected2_masterpingpong_internal) {}
+static TEST_SETUP(wire_connected2_masterpingpong_internal) {
+    for (uint8_t count = 0; count < globalQuantity; ++count) {
+        masterData[count] = 0;
+    }
+}
 
 // Tear down method called by Unity after every individual test defined for this test group.
 static TEST_TEAR_DOWN(wire_connected2_masterpingpong_internal) {}
 
-TEST_IFX(wire_connected2_masterpingpong_internal, checkPingPong) {
+static bool masterSend(const uint8_t *data, const uint8_t quantity) {
+    master->beginTransmission(slaveAddress);
+
+    TEST_ASSERT_EQUAL_UINT8(quantity, master->write(data, quantity));
+    TEST_ASSERT_EQUAL_UINT8(0U, master->endTransmission()); // TODO: Fails from time to time !
+
+    return true;
+}
+
+static bool masterReceive(uint8_t *data, uint8_t &quantity) {
+    uint8_t count = 0;
+    uint8_t locQuantity = quantity;
+
+    TEST_ASSERT_EQUAL_UINT8(quantity, master->requestFrom(slaveAddress, quantity));
+    TEST_ASSERT_EQUAL_UINT8(quantity, master->available());
+
+    while (master->available() > 0) {
+        uint8_t peekValue = master->peek();
+        data[count] = master->read();
+
+        TEST_ASSERT_EQUAL_UINT8(peekValue, data[count]);
+
+        ++count;
+    }
+
+    TEST_ASSERT_EQUAL_UINT8(quantity, count);
+
+    quantity = count;
+
+    return quantity == locQuantity;
+}
+
+static void IIC_pingPong(uint8_t quantity, uint8_t iterations) {
+    globalQuantity = quantity;
+
+    uint8_t masterDataCopy[quantity];
+
+    for (uint8_t loop = 0; loop < iterations; ++loop) {
+        TEST_ASSERT_TRUE(masterSend(masterData, quantity));
+
 #ifdef TRACE_OUTPUT
 
-    printArray("\nslaveData", slaveData, globalQuantity);
-    printArray("howManyCopy", howManyCopy, globalQuantity);
-    printArray("availCopy", availCopy, globalQuantity);
-    printArray("peekCopy", peekCopy, globalQuantity);
-    Serial.flush();
-
-    Serial.print("bytesWrittenCopy : ");
-    Serial.println(bytesWrittenCopy);
-    Serial.flush();
+        printArray("\nMaster send", masterData, quantity);
 
 #endif
 
-    for (uint8_t i = 0; i < globalQuantity; ++i) {
-        TEST_ASSERT_EQUAL_UINT8(globalQuantity, howManyCopy[i]);
-        TEST_ASSERT_EQUAL_UINT8(availCopy[i], globalQuantity - i);
+        for (uint8_t i = 0; i < quantity; ++i) {
+            masterDataCopy[i] = masterData[i] + slaveIncrement;
+        }
 
-        peekCopy[i] += slaveIncrement;
+        TEST_ASSERT_TRUE(masterReceive(masterData, quantity));
+
+#ifdef TRACE_OUTPUT
+
+        printArray("\nMaster received", masterData, quantity);
+
+#endif
+
+        TEST_ASSERT_EQUAL_UINT8_ARRAY(masterDataCopy, masterData, quantity);
+
+        for (uint8_t i = 0; i < quantity; ++i) {
+            masterData[i] += masterIncrement;
+        }
     }
+}
 
-    TEST_ASSERT_EQUAL_UINT8_ARRAY(slaveData, peekCopy, globalQuantity);
-
-    TEST_ASSERT_EQUAL_UINT8(globalQuantity, bytesWrittenCopy);
+TEST_IFX(wire_connected2_masterpingpong_internal, checkPingPong) {
+    // TODO: Loop over different amounts of data, clock frequencies and other parameters !
+    // Must set variable globalQuantity identically in slave and master ! This can be done by
+    // communicating that value from master to slave, thereby allowing for a more dynamic behaviour.
+    // IIC_pingPong(1, 15);
+    // IIC_pingPong(2, 15);
+    IIC_pingPong(8, 15);
 }
 
 static TEST_GROUP_RUNNER(wire_connected2_masterpingpong_internal) {
