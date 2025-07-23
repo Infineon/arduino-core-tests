@@ -121,6 +121,36 @@ static TEST_TEAR_DOWN(analogio_pwm) {
 }
 
 /**
+ * @brief Verify SetAnalog frequency. 
+ */
+
+TEST_IFX(analogio_pwm, test_analog_set_fz)
+{   
+    //Set the frequency followed by a analogWrite
+    analogWriteResolution(16); 
+    setAnalogWriteFrequency(PWM_PIN_OUTPUT, 100); 
+    delay(1000); 
+    analogWrite(PWM_PIN_OUTPUT, 32767); 
+    delay(1000); 
+    feedback_measurement_handler();
+    TEST_ASSERT_FLOAT_WITHIN(TOLERANCE_FREQUENCY, 100, measured_frequency_hz);
+
+    const float frequency[] = {1, 50, 5000, 50000};
+
+    for(size_t i=0; i< sizeof(frequency)/sizeof(frequency[i]); i++)
+    {
+        // Set different frequencies and verify the output
+        setAnalogWriteFrequency(PWM_PIN_OUTPUT, frequency[i]);
+        delay(1000); // Wait for the signal to stabilize
+        feedback_measurement_handler();
+        TEST_ASSERT_FLOAT_WITHIN(TOLERANCE_FREQUENCY, frequency[i], measured_frequency_hz);
+    }
+
+    setAnalogWriteFrequency(PWM_PIN_OUTPUT, 1000); //set back to default fz
+    delay(1000);
+}
+
+/**
  * @brief Verify PWM duty cycle for various percentages (25%, 50%, 75%) with default 8-bit resolution.
  */
 TEST_IFX(analogio_pwm, test_analog_write_pwm_8_bit_resolution)
@@ -247,6 +277,7 @@ TEST_GROUP_RUNNER(analogio_pwm)
 {
     analogio_pwm_suite_setup();
 
+    RUN_TEST_CASE(analogio_pwm, test_analog_set_fz);
     RUN_TEST_CASE(analogio_pwm, test_analog_write_pwm_8_bit_resolution);
     RUN_TEST_CASE(analogio_pwm, test_analog_write_pwm_10_bit_resolution);
     RUN_TEST_CASE(analogio_pwm, test_analog_write_pwm_12_bit_resolution);
