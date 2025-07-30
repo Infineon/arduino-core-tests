@@ -136,7 +136,7 @@ else
 ifeq ($(SERIAL),)
 	arduino-cli upload --log --log-level info -v -p $(PORT) --fqbn $(FQBN) --upload-property upload.custom_flags=--no-fw-update build
 else
-	arduino-cli upload --log --log-level info -v -p $(PORT) --fqbn $(FQBN) --upload-property upload.custom_flags=--no-fw-update upload.port.properties.serialNumber=$(SERIAL) build
+	arduino-cli upload --log --log-level info -v -p $(PORT) --fqbn $(FQBN) --upload-property upload.custom_flags=--no-fw-update --upload-property upload.port.properties.serialNumber=$(SERIAL) build
 endif
 endif
 
