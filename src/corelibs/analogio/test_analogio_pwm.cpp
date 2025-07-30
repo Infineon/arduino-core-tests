@@ -146,7 +146,7 @@ TEST_IFX(analogio_pwm, test_analog_set_fz)
         TEST_ASSERT_FLOAT_WITHIN(TOLERANCE_FREQUENCY, frequency[i], measured_frequency_hz);
     }
 
-    setAnalogWriteFrequency(PWM_PIN_OUTPUT, 1000); //set back to default fz
+    setAnalogWriteFrequency(PWM_PIN_OUTPUT, PWM_FREQUENCY_HZ); //set back to default fz
     delay(1000);
 }
 
