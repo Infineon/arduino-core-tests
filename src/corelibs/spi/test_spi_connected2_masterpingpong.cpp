@@ -14,6 +14,7 @@
 
 // test includes
 #include "test_common_includes.h"
+#include "test_config.h"
 
 // project includes
 #include <SPI.h>
@@ -22,16 +23,15 @@ const uint8_t MAX_BUFFER_SIZE = 20;
 const uint8_t MAX_TEST_ITERATION = 10;
 
 // variables
-static SPIClassPSOC *spi_master = nullptr;
 static uint8_t testTransmitBuff[MAX_BUFFER_SIZE+1] = {0};
 static uint8_t expectedReceiveBuff[MAX_BUFFER_SIZE] = {0};
 
+SPIClass *spi_master = &SPI;
 
 // Method invoked before a test suite is run.
 static void spi_connected2_masterpingpong_suite_setup() {
     pinMode(TEST_PIN_SPI_SSEL, OUTPUT);
     pinMode(TEST_PIN_SYNC_IO, OUTPUT);
-    spi_master = &SPI;
 
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
     digitalWrite(TEST_PIN_SYNC_IO, LOW);

@@ -14,14 +14,14 @@
 
 // defines
 // Variables for SPI testing
-static SPIClassPSOC *spi = nullptr;
 static const uint8_t testDataByte = 0xA5; // Example test byte
 static const uint16_t testDataWord = 0x55AA; // Example test word
 static uint8_t testTranceiveBuff[8] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xAB, 0xCD, 0xEF};
 
+SPIClass *spi = &SPI;
+
 // Setup and teardown methods for the test suite
 static void spi_test_suite_setup() {
-    spi = &SPI;
     spi->begin();
 }
 
