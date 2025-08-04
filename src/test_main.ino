@@ -218,12 +218,12 @@ void RunAllTests(void)
 
 void setup() {
     Serial.begin(115200);
-
+ #ifdef ENABLE_SYNC
     Serial.println("synchronising with host...");
     Serial.flush();
     
     readSerialAndRespond();
-
+#endif
     Serial.println("setup done.");
 }
 
