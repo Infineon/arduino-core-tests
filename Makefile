@@ -6,6 +6,7 @@ UNITY_PATH ?= Unity
 BAUD_RATE ?= 115200
 SERIAL ?=
 Q?=@
+ENABLE_SYNC ?= 1
 
 .PHONY: print_args clean check_unity_path unity flash compile upload monitor
 
@@ -119,9 +120,9 @@ ifeq ($(FQBN),)
 	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
 else
 	arduino-cli compile --clean --log --warnings all --fqbn $(FQBN) \
-	                    --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
-					    --build-property compiler.cpp.extra_flags="$(TESTS)" \
-			        build
+		                    --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
+		--build-property compiler.cpp.extra_flags="$(TESTS) $(if $(filter 1,$(ENABLE_SYNC)),-DENABLE_SYNC,)" \
+		build
 
 
 # 	                        --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
@@ -157,4 +158,3 @@ ifeq ($(PORT),)
 	$(error "Must set variable PORT (Windows port naming convention, ie COM16) in order to be able to flash Arduino sketches !")
 endif
 	arduino-cli monitor -c baudrate=115200 -p $(PORT)
-	
