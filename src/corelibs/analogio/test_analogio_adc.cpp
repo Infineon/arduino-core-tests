@@ -89,7 +89,7 @@ TEST_IFX(analogio_adc, test_adc_read_default_vdda_vref_pin)
 {
     analogReference(DEFAULT); 
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_VREF);
-    int expected_value = TEST_ADC_MAX_VALUE;
+    int expected_value = ADC_MAX_VALUE;
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value), "ADC value is not within the expected range for default resolution");
 
     const int resolutions[] = {8, 10, 12}; 
@@ -118,7 +118,7 @@ TEST_IFX(analogio_adc, test_adc_read_default_vdda_divider_pin)
 {
     analogReference(DEFAULT); // Configure reference to VDDA
     int adc_value = analogRead(TEST_PIN_ANALOG_IO_DIVIDER);
-    int expected_value = TEST_ADC_MAX_VALUE / 2;
+    int expected_value = ADC_MAX_VALUE / 2;
     TEST_ASSERT_TRUE_MESSAGE(validate_adc_raw_value(expected_value, adc_value), "ADC value is not within the expected range for default resolution");
 
     const int resolutions[] = {8, 10, 12}; 
