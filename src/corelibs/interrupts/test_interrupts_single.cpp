@@ -7,7 +7,7 @@
 
 #include "test_common_includes.h"
 #include "test_config.h"
-
+typedef int PinStatus;
 // Defines
 #define TRACE_OUTPUT
 // Variables
