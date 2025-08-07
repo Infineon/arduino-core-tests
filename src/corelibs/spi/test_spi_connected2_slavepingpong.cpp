@@ -15,18 +15,19 @@
 // test includes
 #include "test_common_includes.h"
 #include "pins_arduino.h"
+#include "test_config.h"
 
 // project includes
 #include <SPI.h>
 
 const uint8_t MAX_BUFFER_SIZE = 20;
 const uint8_t MAX_TEST_ITERATION = 10;
-// variables
 
+// variables
 static uint8_t testTransmitBuff[MAX_BUFFER_SIZE] = {0};
 static uint8_t expectedReceiveBuff[MAX_BUFFER_SIZE] = {0};
-static SPIClassPSOC SPI1 = SPIClassPSOC(PIN_SPI_MOSI, PIN_SPI_MISO, PIN_SPI_SCK, TEST_PIN_SPI_SSEL, true);
-static SPIClassPSOC *spi_slave = &SPI1;
+
+SPIClass *spi_slave = &SPI1; 
 
 // Method invoked before a test suite is run.
 static void spi_connected2_slavepingpong_suite_setup() {
