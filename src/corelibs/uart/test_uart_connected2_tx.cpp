@@ -53,7 +53,6 @@ static void uart_connected2_tx_suite_setup() {
 
 // Method invoked after a test suite is run.
 static void uart_connected2_tx_suite_teardown() {
-    uart->end(); // End UART communication
 }
 
 // define test group name
