@@ -18,8 +18,6 @@
 #define TONE_PIN_OUTPUT TEST_PIN_DIGITAL_IO_OUTPUT  
 #define TONE_PIN_FEEDBACK TEST_PIN_DIGITAL_IO_INPUT 
 
-typedef int PinStatus;
-
 // Variables
 volatile uint32_t current_time = 0;         // Timestamp of the last rising/falling edge
 volatile uint32_t start_time = 0;           // Timestamp of the last rising edge
@@ -89,7 +87,6 @@ void feedback_measurement_handler_frequency() {
 
     // Wait until a full PWM cycle has been measured
     while (!tone_measured);
-    
 
     // Disable interrupts temporarily to avoid race conditions
     noInterrupts();
@@ -108,10 +105,8 @@ void feedback_measurement_handler_frequency() {
  * @brief Suite setup function, runs before test suite execution begins.
  */
 static void tone_no_tone_suite_setup() {
-
     pinMode(TONE_PIN_FEEDBACK, INPUT);
     attachInterrupt(digitalPinToInterrupt(TONE_PIN_FEEDBACK), feedback_interrupt_handler, CHANGE);
-   
 }
 
 /**

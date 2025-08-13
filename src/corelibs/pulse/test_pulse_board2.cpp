@@ -3,7 +3,7 @@
  *
  * @details This test suite verifies the functionality of the `pulseIn` and `pulseInLong` APIs.
  *      The test requires TEST_PIN_PULSE of board1 connected to the TEST_PIN_PULSE board2 and additionally 
- *      TEST_PIN_SYNC_IO of board1 connected to the  TEST_PIN_SYNC_IO board2 inorder to synchronize the pulse 
+ *      TEST_PIN_SYNC_IO of board1 connected to the TEST_PIN_PULSE board2 inorder to synchronize the pulse 
  *      generation and measurement.
  * 
  * @note The board1 test shall be started first before the board2 tests for proper synchronization.
@@ -90,6 +90,41 @@ TEST_IFX(pulse_board2, test_low_pulse_duration) {
     TEST_ASSERT_FLOAT_WITHIN(tolerance, test_duration_us, measured_pulse_us);
 }
 
+/**
+ * @brief Test case: Measure HIGH pulse duration.
+ */
+TEST_IFX(pulse_board2, test_high_pulse_long_duration) {
+    const unsigned long test_duration_us = 1000; // 1 ms pulse
+
+    digitalWrite(TEST_PIN_SYNC_IO, HIGH);
+
+    // Measure the pulse duration
+    measured_pulse_us = pulseInLong(TEST_PIN_PULSE, HIGH);
+
+    digitalWrite(TEST_PIN_SYNC_IO, LOW);
+
+    // Validate the pulse duration within tolerance
+    float tolerance = TOLERANCE_DURATION_PERCENTAGE * test_duration_us / 100.0f;
+    TEST_ASSERT_FLOAT_WITHIN(tolerance, test_duration_us, measured_pulse_us);  
+
+}
+
+/**
+ * @brief Test case: Measure LOW pulse duration.
+ */
+TEST_IFX(pulse_board2, test_low_pulse_long_duration) {
+    const unsigned long test_duration_us = 2000; // 2 ms pulse
+
+    digitalWrite(TEST_PIN_SYNC_IO, HIGH);
+
+    // Measure the LOW pulse duration
+    measured_pulse_us = pulseInLong(TEST_PIN_PULSE, LOW, TIMEOUT_MICROSECONDS);
+    
+    digitalWrite(TEST_PIN_SYNC_IO, LOW);
+
+    float tolerance = TOLERANCE_DURATION_PERCENTAGE * test_duration_us / 100.0f;
+    TEST_ASSERT_FLOAT_WITHIN(tolerance, test_duration_us, measured_pulse_us);
+}
 
 /**
  * @brief Test case: Timeout when no pulse is detected.
@@ -165,6 +200,8 @@ TEST_GROUP_RUNNER(pulse_board2) {
 
     RUN_TEST_CASE(pulse_board2, test_high_pulse_duration);
     RUN_TEST_CASE(pulse_board2, test_low_pulse_duration);
+    RUN_TEST_CASE(pulse_board2, test_high_pulse_long_duration);
+    RUN_TEST_CASE(pulse_board2, test_low_pulse_long_duration);    
     RUN_TEST_CASE(pulse_board2, test_pulse_timeout);
     RUN_TEST_CASE(pulse_board2, test_short_pulse_duration);
     RUN_TEST_CASE(pulse_board2, test_long_pulse_duration);
