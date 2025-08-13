@@ -44,13 +44,12 @@ void feedback_interrupt_handler() {
         if (start_time > 0) { // Ensure this is not the first edge
             low_time = current_time - start_time; // Measure LOW time (previous cycle)
         }
-        
         start_time = current_time; // Update start_time for HIGH period
     } else {
         // Falling edge detected
         high_time = current_time - start_time; // Measure HIGH time
         start_time = current_time;             // Update start_time for LOW period
-       
+
         // Indicate that we have captured a full PWM cycle (HIGH + LOW)
         high_measured = true;
     }
@@ -61,7 +60,7 @@ void feedback_interrupt_handler() {
  */
 void feedback_measurement_handler() {
     uint32_t t_period;
- 
+
     // Wait until a full PWM cycle has been measured
     while (!high_measured);
 
@@ -87,7 +86,6 @@ void feedback_measurement_handler() {
  * @brief Suite setup function, runs before test suite execution begins.
  */
 static void analogio_pwm_suite_setup() {
-
     pinMode(PWM_PIN_FEEDBACK, INPUT);
     attachInterrupt(digitalPinToInterrupt(PWM_PIN_FEEDBACK), feedback_interrupt_handler, CHANGE);
 }
@@ -226,8 +224,7 @@ TEST_IFX(analogio_pwm, test_analog_write_pwm_12_bit_resolution)
  */
 TEST_IFX(analogio_pwm, test_analog_write_pwm_16_bit_resolution)
 {
-    analogWriteResolution(16); 
-   
+    analogWriteResolution(20); // Any value greater than 12 will be considered as 16-bit resolution
 
     // Array of expected duty cycle percentages and their corresponding analogWrite values (16-bit resolution, 0 to 65535)
     const float expected_duty_cycles[] = {25.0f, 50.0f, 75.0f};
