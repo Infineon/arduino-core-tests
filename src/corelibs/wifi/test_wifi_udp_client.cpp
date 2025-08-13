@@ -174,5 +174,4 @@ TEST_GROUP_RUNNER(wifi_udp_client) {
     RUN_TEST_CASE(wifi_udp_client, udp_client_end);
     RUN_TEST_CASE(wifi_udp_client, wifi_disconnect);
     RUN_TEST_CASE(wifi_udp_client, wifi_end);
-    while (true) {}; // Keep the client running
 }

@@ -203,7 +203,6 @@ TEST_GROUP_RUNNER(wifi_sta) {
     RUN_TEST_CASE(wifi_sta, check_encryption_type);
     RUN_TEST_CASE(wifi_sta, disconnect);
     RUN_TEST_CASE(wifi_sta, wifi_end);  
-    while(true) {};
 }
 
 

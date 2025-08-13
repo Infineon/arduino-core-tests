@@ -168,5 +168,4 @@ TEST_GROUP_RUNNER(wifi_udp_server) {
     RUN_TEST_CASE(wifi_udp_server, udp_server_end);
     RUN_TEST_CASE(wifi_udp_server, wifi_disconnect);
     RUN_TEST_CASE(wifi_udp_server, wifi_end);
-    while (true) {}; // Keep the server running
 }

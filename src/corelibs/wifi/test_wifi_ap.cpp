@@ -134,10 +134,6 @@ TEST_GROUP_RUNNER(wifi_ap) {
     RUN_TEST_CASE(wifi_ap, check_ssid);
     RUN_TEST_CASE(wifi_ap, check_bssid);
     RUN_TEST_CASE(wifi_ap, check_encryption_type);
-    /* Wait forever for now. */
-    /* This allows to check the sta
-    test manually. */
-    while(true) {};
     RUN_TEST_CASE(wifi_ap, disconnect);
     RUN_TEST_CASE(wifi_ap, wifi_end);
 }
