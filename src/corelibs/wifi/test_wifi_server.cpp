@@ -180,12 +180,4 @@ TEST_GROUP_RUNNER(wifi_server) {
     RUN_TEST_CASE(wifi_server, server_end);
     RUN_TEST_CASE(wifi_server, wifi_disconnect);
     RUN_TEST_CASE(wifi_server, wifi_end);
-    /** 
-     * TODO: Remove when this is added to cicd 
-     * and more tests are added to the suite together with the 
-     * WiFi ones.
-     * For now it is more controllable like this to run tests 
-     * manually. 
-     */
-    while(true) {};
 }
