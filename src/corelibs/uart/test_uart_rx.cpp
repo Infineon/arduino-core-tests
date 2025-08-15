@@ -208,9 +208,5 @@ TEST_GROUP_RUNNER(uart_rx) {
     RUN_TEST_CASE(uart_rx, check_no_available_read_peek);
     RUN_TEST_CASE(uart_rx, write_reply_back);
     RUN_TEST_CASE(uart_rx, end);
-    /* Wait forever for now. */
-    /* This allows to check the rx
-    test manually. */
-    while(true) {};
 }
 

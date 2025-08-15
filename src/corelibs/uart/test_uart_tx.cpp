@@ -214,8 +214,4 @@ TEST_GROUP_RUNNER(uart_tx) {
     RUN_TEST_CASE(uart_tx, read_reply);
     RUN_TEST_CASE(uart_tx, end);
     uart_tx_suite_teardown();
-    /* Wait forever for now. */
-    /* This allows to check the tx
-    test manually. */
-    while(true) {};
 }
