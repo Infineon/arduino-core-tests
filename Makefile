@@ -97,6 +97,8 @@ test_wifi_sta: TESTS=-DTEST_WIFI_STA
 test_wifi_ap: TESTS=-DTEST_WIFI_AP
 test_wifi_client: TESTS=-DTEST_WIFI_CLIENT
 test_wifi_server: TESTS=-DTEST_WIFI_SERVER
+test_wifi_udp_client: TESTS=-DTEST_WIFI_UDP_CLIENT
+test_wifi_udp_server: TESTS=-DTEST_WIFI_UDP_SERVER
 test_wifi_extras: TESTS=-DTEST_WIFI_EXTRAS
 test_wifi_exceptions: TESTS=-DTEST_WIFI_EXCEPTIONS
 
