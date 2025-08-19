@@ -7,7 +7,6 @@
 #include <Wire.h>
 
 // defines
-#define TRACE_OUTPUT 0
 
 // variables
 const static uint8_t slaveAddress = 8U;
