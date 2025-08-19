@@ -1,0 +1,41 @@
+# Makefile.multiboard_test
+# Example usage:
+#   make -f Makefile.multiboard_test test_wire_connected2 PORT_BOARD1=/dev/ttyACM0 PORT_BOARD2=/dev/ttyACM1 FQBN_BOARD1=arduino-git:xmc:kit_xmc47_relax FQBN_BOARD2=arduino-git:xmc:kit_xmc47_relax
+#
+# This Makefile is designed for multi-board testing and flashing.
+# It will flash two boards, run sync (/utils/sync_ports.py),
+# and start the monitor on the master board.
+
+FQBN_BOARD1 ?=
+FQBN_BOARD2 ?=
+
+PORT_BOARD1 ?=
+PORT_BOARD2 ?=
+PORT_LIST ?=
+
+UNITY_PATH ?= Unity
+BAUD_RATE ?= 115200
+
+.PHONY: test_wire_connected2 sync
+
+# Target: test_wire_connected2
+# 1. Flash slave board with test_wire_connected2_slavepingpong
+# 2. Flash master board with test_wire_connected2_masterpingpong
+# 3. Run sync script to synchronize both boards
+# 4. Start monitor on the master board
+test_wire_connected2:
+	$(MAKE) -f Makefile test_wire_connected2_slavepingpong PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
+	$(MAKE) -f Makefile test_wire_connected2_masterpingpong PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
+	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
+	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
+
+test_uart_connected2:
+	$(MAKE) -f Makefile test_uart_connected2_rx PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
+	$(MAKE) -f Makefile test_uart_connected2_tx PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
+	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
+	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
+
+# Target: sync
+# Calls the Python script to send start tokens to all boards in PORT_LIST
+sync:
+	python3 utils/sync_ports.py $(PORT_LIST)
