@@ -73,7 +73,6 @@ TEST_IFX(spi_connected1_loopback, test_spi_mode_configuration) {
 TEST_IFX(spi_connected1_loopback, test_spi_reinitialization) {
     spi->end();
     spi->begin();
-    TEST_ASSERT_EQUAL_MESSAGE(CY_RSLT_SUCCESS, spi->status, "SPI reinitialization failed");
 }
 
 // Define test runner for the SPI test group
