@@ -104,6 +104,7 @@ test_wifi_exceptions: TESTS=-DTEST_WIFI_EXCEPTIONS
 test_spi_connected1_loopback: TESTS=-DTEST_SPI_CONNECTED1_LOOPBACK
 test_spi_connected2_masterpingpong: TESTS=-DTEST_SPI_CONNECTED2_MASTERPINGPONG
 test_spi_connected2_slavepingpong:  TESTS=-DTEST_SPI_CONNECTED2_SLAVEPINGPONG
+test_spi_3wire: TESTS=-DTEST_SPI_3WIRE
 
 
 ## OneWire tests targets
