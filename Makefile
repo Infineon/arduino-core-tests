@@ -43,7 +43,7 @@ unity: print_args clean check_unity_path
 	$(Q) find $(UNITY_PATH) -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
 	$(Q) find src/utils -name '*.[hc]*' -exec \cp {} build \;
 	$(Q) find src -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
-	$(Q) find ../../tests -maxdepth 1 -name 'test_config.*' -exec \cp {} build \;
+	$(Q) find ../../tests -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
 	$(Q) cp src/test_main.ino build/build.ino
 
 # Helper to extract the second word from the target name

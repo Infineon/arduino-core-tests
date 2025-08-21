@@ -7,7 +7,11 @@
 #include <WiFi.h>
 #include <WiFiClient.h>
 
-#include "secrets.h" // Add your SSID_NAME and SSID_PASS to the secrets.h file. Place the "secrets.h" file directly in the src/ directory.
+/** 
+ * Add your SSID_NAME and SSID_PASS to the secrets.h file. 
+ * Ensure that the secrets.h file is placed directly in the ./test directory of the project root.
+ */
+#include "secrets.h" 
 
 TEST_GROUP(wifi_exceptions);
 
