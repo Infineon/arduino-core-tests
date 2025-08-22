@@ -36,20 +36,20 @@ test_uart_connected2:
 	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
 
 test_spi_connected2:
-	$(MAKE) -f Makefile test_spi_connected2_slavepingpong  PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
-	$(MAKE) -f Makefile test_spi_connected2_masterpingpong  PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
+	$(MAKE) -f Makefile test_spi_connected2_slavepingpong PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
+	$(MAKE) -f Makefile test_spi_connected2_masterpingpong PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
 	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
 	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
 
 test_pulse:
-	$(MAKE) -f Makefile test_pulse_board1  PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
-	$(MAKE) -f Makefile test_pulse_board2   PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
+	$(MAKE) -f Makefile test_pulse_board1 PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
+	$(MAKE) -f Makefile test_pulse_board2 PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
 	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
 	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
 
 test-wifi-tcp:
-	$(MAKE) -f Makefile test_wifi_server   PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
-	$(MAKE) -f Makefile test_wifi_client   PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
+	$(MAKE) -f Makefile test_wifi_server PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
+	$(MAKE) -f Makefile test_wifi_client PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
 	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
 	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
 
