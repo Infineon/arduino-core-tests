@@ -53,6 +53,10 @@ CATEGORY = $(word 2, $(subst _, ,$@))
 test_%: unity
 	$(eval CATEGORY := $(word 2, $(subst _, ,$@)))
 	$(Q) cp src/corelibs/$(CATEGORY)/$@.cpp build 2>/dev/null || true
+	@if [ -z "$(TESTS)" ]; then \
+        echo "Must set variable TESTS in order to be able to flash a specific arduino core test !"; \
+        exit 1; \
+    fi
 	$(MAKE) flash TESTS=$(TESTS)
 
 # UART tests targets
