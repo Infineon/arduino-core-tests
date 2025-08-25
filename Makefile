@@ -1,4 +1,5 @@
-# Vairables for project configuration
+# Makefile for running unit tests and handling Arduino builds
+# Variables for project configuration
 FQBN  ?=
 PORT  ?=
 TESTS ?=
@@ -9,6 +10,74 @@ Q?=@
 ENABLE_SYNC ?= 1
 
 .PHONY: print_args clean check_unity_path unity flash compile upload monitor
+
+# Default target: Show help when no target is specified
+.DEFAULT_GOAL := help
+
+help:
+	@echo "============================================================================================================"
+	@echo "Makefile Usage Guide"
+	@echo "============================================================================================================"
+	@echo ""
+	@echo "Usage:"
+	@echo "  make [TARGET] [VARIABLES]"
+	@echo ""
+	@echo "Available Targets:"
+	@echo "  help                     Show this help guide and documentation"
+	@echo "  list_tests               List all available test targets"
+	@echo "  print_args               Print current configuration variables for debugging"
+	@echo "  clean                    Clean the build directory (removes all intermediate files)"
+	@echo "  prepare_test_environment Prepare the environment by copying common, test-specific files"
+	@echo "  compile                  Compile the sketch for the specified board"
+	@echo "  upload                   Upload the compiled sketch to the board via the specified port"
+	@echo "  flash                    Perform both 'compile' and 'upload' in one go"
+	@echo "  monitor                  Open the serial monitor for the given board and port"
+	@echo ""
+	@echo "Test Targets:"
+	@echo "  test_<test_name>         Runs a specific test by preparing the test environment, compiling, uploading the firmware,"
+	@echo "                           and running it on the target board."
+	@echo "                           Example: test_digitalio_single or test_wifi_sta"
+	@echo ""
+	@echo "Variables:"
+	@echo "  FQBN=<board_name>        Fully Qualified Board Name (default: empty). Used to specify the microcontroller board."
+	@echo "                           Example: infineon:psoc6:cy8ckit_062s2_ai"
+	@echo ""
+	@echo "  PORT=<serial_port>       Serial port to connect to the board (default: empty)."
+	@echo "                           Examples: /dev/ttyUSB0"
+	@echo ""
+	@echo "  ENABLE_SYNC=<0|1>        Enable (1) or disable (0) synchronization for multi boards (default: 1)."
+	@echo "                           This is primarily used in CI/CD HIL checks."
+	@echo ""
+	@echo "  BAUD_RATE=<rate>         Baud rate for serial communication (default: 115200)."
+	@echo "                           Example: BAUD_RATE=9600"
+	@echo ""
+	@echo "  SERIAL=<serial_number>   Optional serial number for advanced port identification (default: empty)."
+	@echo "                           Example: SERIAL=123456789ABC"
+	@echo ""
+	@echo "Examples:"
+	@echo "  1. Prepare the test environment:"
+	@echo "     make prepare_test_environment"
+	@echo ""
+	@echo "  2. Run a specific test for DigitalIO with board and port:"
+	@echo "     make FQBN=infineon:psoc6:cy8ckit_062s2_ai PORT=/dev/ttyUSB0 test_digitalio_single"
+	@echo ""
+	@echo "  3. Run a test with synchronization disabled:"
+	@echo "     make FQBN=infineon:psoc6:cy8ckit_062s2_ai PORT=/dev/ttyUSB0 test_digitalio_single ENABLE_SYNC=0"
+	@echo ""
+	@echo "  4. Open the serial monitor with a specific port:"
+	@echo "     make PORT=/dev/ttyUSB0 monitor"
+	@echo ""
+	@echo "  5. Combine running a test and opening the serial monitor:"
+	@echo "     make FQBN=infineon:psoc6:cy8ckit_062s2_ai PORT=/dev/ttyUSB0 test_digitalio_single monitor"
+	@echo ""
+	@echo "============================================================================================================"
+	@echo ""
+
+list_tests:
+	@echo "Available Test Targets:"
+	@echo ""
+	@grep -E '^test_[a-zA-Z0-9_]+:' $(MAKEFILE_LIST) | cut -d':' -f1 | sort
+	@echo ""
 
 print_args:
 #	@:
@@ -24,33 +93,27 @@ print_args:
 	$(info ----------------------------------)
 	$(info )
 
-
 # Clean and create build directory for arduino compilation
 clean:
 	$(Q) -rm -rf build/*
 	$(Q) mkdir -p build
 
-
-
 # Check if UNITY_PATH variable is set
 check_unity_path:
 ifndef UNITY_PATH
-    $(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests!")
+	$(error "Must set variable UNITY_PATH in order to be able to compile Arduino unit tests!")
 endif
 
 # Copy common files and test-specific files to build directory
-unity: print_args clean check_unity_path
+prepare_test_environment: print_args clean check_unity_path
 	$(Q) find $(UNITY_PATH) -name '*.[hc]' \( -path '*extras*' -a -path '*src*' -or -path '*src*' -a \! -path '*example*' \) -exec \cp {} build \;
 	$(Q) find src/utils -name '*.[hc]*' -exec \cp {} build \;
 	$(Q) find src -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
-	$(Q) find ../../tests -maxdepth 1 -name 'test_config.*' -exec \cp {} build \;
+	$(Q) find ../../tests -maxdepth 1 -name '*.[hc]*' -exec \cp {} build \;
 	$(Q) cp src/test_main.ino build/build.ino
 
-# Helper to extract the second word from the target name
-CATEGORY = $(word 2, $(subst _, ,$@))
-
 # Test target example
-test_%: unity
+test_%: prepare_test_environment
 	$(eval CATEGORY := $(word 2, $(subst _, ,$@)))
 	$(Q) cp src/corelibs/$(CATEGORY)/$@.cpp build 2>/dev/null || true
 	@if [ -z "$(TESTS)" ]; then \
@@ -92,6 +155,7 @@ test_can_single: TESTS=-DTEST_CAN_SINGLE
 test_can_connected2_node1: TESTS=-DTEST_CAN_CONNECTED2_NODE1
 test_can_connected2_node2: TESTS=-DTEST_CAN_CONNECTED2_NODE2
 
+## Wire tests targets
 test_wire_connected1_pingpong: TESTS=-DTEST_WIRE_CONNECTED1_PINGPONG
 test_wire_connected2_masterpingpong: TESTS=-DTEST_WIRE_CONNECTED2_MASTERPINGPONG
 test_wire_connected2_slavepingpong:  TESTS=-DTEST_WIRE_CONNECTED2_SLAVEPINGPONG
@@ -123,30 +187,20 @@ test_onewire_DS18x20: TESTS=-DTEST_ONEWIRE_DS18x20
 
 compile:
 ifeq ($(FQBN),)
-	$(error "Must set variable FQBN in order to be able to compile Arduino sketches !")
+	 $(error "Error: FQBN must be set to compile Arduino sketches!")
 else
 	arduino-cli compile --clean --log --warnings all --fqbn $(FQBN) \
-		                    --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
+		--build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
 		--build-property compiler.cpp.extra_flags="$(TESTS) $(if $(filter 1,$(ENABLE_SYNC)),-DENABLE_SYNC,)" \
 		build
-
-
-# 	                        --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
-
-# --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\" -I/myLocalWorkingDir/extras/arduino-core-api -I/myLocalWorkingDir/extras/arduino-core-api/api" \
-# --build-property compiler.cpp.extra_flags="$(TESTS) -I/myLocalWorkingDir/extras/arduino-core-api -I/myLocalWorkingDir/extras/arduino-core-api/api" \
-# --build-property compiler.c.extra_flags="\"-DUNITY_INCLUDE_CONFIG_H=1\"" \
-# --build-property compiler.cpp.extra_flags="$(TESTS)" \
-
 endif
-
 
 upload:	compile
 ifeq ($(PORT),)
-	$(error "Must set variable PORT (Windows port naming convention, ie COM16) in order to be able to flash Arduino sketches !")
+	$(error "Error: PORT must be set to upload Arduino sketches!")
 endif
 ifeq ($(FQBN),)
-	$(error "Must set variable FQBN in order to be able to flash Arduino sketches !")
+	$(error "Error: FQBN must be set to upload Arduino sketches!")
 else
 ifeq ($(SERIAL),)
 	arduino-cli upload --log --log-level info -v -p $(PORT) --fqbn $(FQBN) build
@@ -155,12 +209,10 @@ else
 endif
 endif
 
-
 flash: compile upload
-
 
 monitor:
 ifeq ($(PORT),)
-	$(error "Must set variable PORT (Windows port naming convention, ie COM16) in order to be able to flash Arduino sketches !")
+	$(error "Error: PORT must be set to open the serial monitor!")
 endif
-	arduino-cli monitor -c baudrate=115200 -p $(PORT)
+	arduino-cli monitor -c baudrate=$(BAUD_RATE) -p $(PORT)
