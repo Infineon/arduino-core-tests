@@ -12,26 +12,26 @@ In this table you find an overview of the Arduino cores the tests are currently 
 
 | Test                           |   XMC3.x-XMC14002go |    XMC3.x-XMC4700    |   XMC4.x-XMC14002go  |    XMC4.x-XMC4700    |
 |--------------------------------|:--------------------:|:--------------------:|:--------------------:|:--------------------:|
-| analogio_adc                   | :white_check_mark:   | :white_check_mark:   |     :question:       |     :question:       |
-| analogio_dac                   |   :no_entry_sign:    | :white_check_mark:   |   :no_entry_sign:    |   :no_entry_sign:    |
-| analogio_pwm                   |         :x:          | :white_check_mark:   |     :question:       |     :question:       |
+| analogio_adc                   | :white_check_mark:   | :white_check_mark:   |     :question:       | :white_check_mark:   |
+| analogio_dac                   |   :no_entry_sign:    | :white_check_mark:   |   :no_entry_sign:    | :white_check_mark:   |
+| analogio_pwm                   |         :x:          | :white_check_mark:   |     :question:       | :white_check_mark:   |
 | can_connected2_node1           | :white_check_mark:   |     :question:       |     :question:       |     :question:       |
 | can_connected2_node2           | :white_check_mark:   |         :x:          |     :question:       |     :question:       |
 | can_single                     |         :x:          |         :x:          |     :question:       |     :question:       |
-| digitalio_single               | :white_check_mark:   | :white_check_mark:   |     :question:       |     :question:       |
-| interrupts_single              |         :x:          | :white_check_mark:   |     :question:       |     :question:       |
+| digitalio_single               | :white_check_mark:   | :white_check_mark:   |     :question:       | :white_check_mark:   |
+| interrupts_single              |         :x:          | :white_check_mark:   |     :question:       | :white_check_mark:   |
 | pulse_board1                   | :white_check_mark:   | :white_check_mark:   |     :question:       |     :question:       |
 | pulse_board2                   | :white_check_mark:   | :white_check_mark:   |     :question:       |     :question:       |
 | random                         | :white_check_mark:   | :white_check_mark:   |     :question:       |     :question:       |
 | spi_connected1_loopback        |         :x:          |         :x:          |     :question:       |     :question:       |
 | spi_connected2_masterpingpong  |         :x:          |         :x:          |     :question:       |     :question:       |
 | spi_connected2_slavepingpong   |         :x:          |         :x:          |     :question:       |     :question:       |
-| time_single                    |         :x:          |         :x:          |     :question:       |     :question:       |
-| tone_no_tone                   |         :x:          |         :x:          |     :question:       |     :question:       |
-| uart_connected2_rx             |   :no_entry_sign:    | :white_check_mark:   |   :no_entry_sign:    |   :no_entry_sign:    |
-| uart_connected2_tx             |   :no_entry_sign:    | :white_check_mark:   |   :no_entry_sign:    |   :no_entry_sign:    |
-| uart_rx                        |   :no_entry_sign:    |         :x:          |   :no_entry_sign:    |   :no_entry_sign:    |
-| uart_tx                        |   :no_entry_sign:    |         :x:          |   :no_entry_sign:    |   :no_entry_sign:    |
+| time_single                    |         :x:          |         :x:          |     :question:       | :white_check_mark:   |
+| tone_no_tone                   |         :x:          |         :x:          |     :question:       | :white_check_mark:   |
+| uart_connected2_rx             |     :question:       |     :question:       |     :question:       |     :question:       |
+| uart_connected2_tx             |     :question:       |     :question:       |     :question:       |     :question:       |
+| uart_rx                        |     :question:       |     :question:       |     :question:       |     :question:       |
+| uart_tx                        |     :question:       |     :question:       |     :question:       |     :question:       |
 | wifi_ap                        |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |
 | wifi_client                    |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |
 | wifi_exceptions                |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |
@@ -41,8 +41,8 @@ In this table you find an overview of the Arduino cores the tests are currently 
 | wifi_udp_client                |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |
 | wifi_udp_server                |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |   :no_entry_sign:    |
 | wire_connected1_pingpong       |         :x:          | :white_check_mark:   |     :question:       |     :question:       |
-| wire_connected2_masterpingpong | :white_check_mark:   | :white_check_mark:   |     :question:       |     :question:       |
-| wire_connected2_slavepingpong  | :white_check_mark:   | :white_check_mark:   |     :question:       |     :question:       |
+| wire_connected2_masterpingpong | :white_check_mark:   | :white_check_mark:   |     :question:       | :white_check_mark:   |
+| wire_connected2_slavepingpong  | :white_check_mark:   | :white_check_mark:   |     :question:       | :white_check_mark:   |
 
 ## Pre-conditions
 Before running Unity tests, please ensure the following pre-conditions are met:
