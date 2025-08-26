@@ -77,14 +77,18 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_byte) {
     digitalWrite(TEST_PIN_SYNC_IO, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+    delayMicroseconds(200);
     testReceiveByte =  spi_master->transfer(testTransmitByte); // first byte received is dummy and ignored
+    delayMicroseconds(200);
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
     for (uint8_t i = 1; i < MAX_TEST_ITERATION; i++) {   
         testTransmitByte++;
         
         digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+        delayMicroseconds(200);
         testReceiveByte = spi_master->transfer(testTransmitByte);
+        delayMicroseconds(200);
         digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
         TEST_ASSERT_EQUAL_UINT8_MESSAGE(expectedReceiveByte, testReceiveByte, "SPI Master PingPong transfer byte failed");
@@ -118,7 +122,9 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_word) {
     digitalWrite(TEST_PIN_SYNC_IO, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+    delayMicroseconds(2000);
     testReceiveWord =  spi_master->transfer16(testTransmitWord); // first byte received is dummy and ignored
+    delayMicroseconds(2000);
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
 
@@ -127,7 +133,9 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_word) {
         result = testReceiveWord << 8;
 
         digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+        delayMicroseconds(2000);
         testReceiveWord = spi_master->transfer16(testTransmitWord);
+        delayMicroseconds(2000);
         digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
         result = result | testReceiveWord >> 8; // combine the two bytes to form a 16-bit word
@@ -161,7 +169,9 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_buffer) {
     digitalWrite(TEST_PIN_SYNC_IO, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+    delayMicroseconds(2000);
     spi_master->transfer(testTransmitBuff, MAX_BUFFER_SIZE+1); 
+    delayMicroseconds(2000);
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
     digitalWrite(TEST_PIN_SYNC_IO, LOW);
