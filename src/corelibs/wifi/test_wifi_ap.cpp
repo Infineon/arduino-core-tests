@@ -39,6 +39,8 @@ TEST_IFX(wifi_ap, begin_ap) {
 }
 
 TEST_IFX(wifi_ap, is_status_listening) {
+    // wait for the station to connect
+    while (WiFi.connected()==0) {}
     TEST_ASSERT_EQUAL_INT(WL_AP_LISTENING, WiFi.status());
 }
 
@@ -113,6 +115,9 @@ TEST_IFX(wifi_ap, check_encryption_type) {
 }
 
 TEST_IFX(wifi_ap, disconnect) {
+    // wait for the station to disconnect first
+    while (WiFi.connected()!=0) {}
+
     WiFi.disconnect();
     TEST_ASSERT_EQUAL_INT(WIFI_STATUS_AP_DISCONNECTED, WiFi.status());
 }
