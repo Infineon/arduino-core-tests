@@ -29,9 +29,21 @@ test_wire_connected2:
 	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
 	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
 
+test_can_connected2:
+	$(MAKE) -f Makefile test_can_connected2_node1 PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
+	$(MAKE) -f Makefile test_can_connected2_node2 PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
+	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
+	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
+
 test_uart_connected2:
 	$(MAKE) -f Makefile test_uart_connected2_rx PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
 	$(MAKE) -f Makefile test_uart_connected2_tx PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
+	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
+	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
+
+test_uart:
+	$(MAKE) -f Makefile test_uart_rx PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
+	$(MAKE) -f Makefile test_uart_tx PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
 	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
 	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
 
@@ -59,7 +71,7 @@ test-wifi-udp:
 	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
 	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
 
-test-wifi-sta-ap
+test-wifi-sta-ap:
 	$(MAKE) -f Makefile test_wifi_ap PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
 	$(MAKE) -f Makefile test_wifi_sta PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
 	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
