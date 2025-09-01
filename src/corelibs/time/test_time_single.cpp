@@ -74,7 +74,7 @@ TEST_IFX(time_single_internal, testDelay)
 TEST_IFX(time_single_internal, testDelayMicroseconds)
 {
     unsigned long start_time, end_time;
-    unsigned long expected_delay_us = 500000; 
+    unsigned long expected_delay_us = 500; 
 
     start_time = micros();
     delayMicroseconds(expected_delay_us);
