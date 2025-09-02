@@ -18,8 +18,9 @@
 
 // project includes
 #include <SPI.h>
-#define SPI_TRANSFER_DELAY_US 2000
-
+#ifndef SPI_TRANSFER_DELAY
+#define SPI_TRANSFER_DELAY 500
+#else
 const uint8_t MAX_BUFFER_SIZE = 20;
 const uint8_t MAX_TEST_ITERATION = 10;
 
