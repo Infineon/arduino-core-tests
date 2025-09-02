@@ -18,7 +18,9 @@
 
 // project includes
 #include <SPI.h>
-
+#ifndef SPI_TRANSFER_DELAY
+#define SPI_TRANSFER_DELAY 500
+#else
 const uint8_t MAX_BUFFER_SIZE = 20;
 const uint8_t MAX_TEST_ITERATION = 10;
 
@@ -77,14 +79,18 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_byte) {
     digitalWrite(TEST_PIN_SYNC_IO, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+    delayMicroseconds(SPI_TRANSFER_DELAY_US);
     testReceiveByte =  spi_master->transfer(testTransmitByte); // first byte received is dummy and ignored
+    delayMicroseconds(SPI_TRANSFER_DELAY_US);
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
     for (uint8_t i = 1; i < MAX_TEST_ITERATION; i++) {   
         testTransmitByte++;
         
         digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+        delayMicroseconds(SPI_TRANSFER_DELAY_US);
         testReceiveByte = spi_master->transfer(testTransmitByte);
+        delayMicroseconds(SPI_TRANSFER_DELAY_US);
         digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
         TEST_ASSERT_EQUAL_UINT8_MESSAGE(expectedReceiveByte, testReceiveByte, "SPI Master PingPong transfer byte failed");
@@ -118,7 +124,9 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_word) {
     digitalWrite(TEST_PIN_SYNC_IO, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+    delayMicroseconds(SPI_TRANSFER_DELAY_US);
     testReceiveWord =  spi_master->transfer16(testTransmitWord); // first byte received is dummy and ignored
+    delayMicroseconds(SPI_TRANSFER_DELAY_US);
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
 
@@ -127,7 +135,9 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_word) {
         result = testReceiveWord << 8;
 
         digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+        delayMicroseconds(SPI_TRANSFER_DELAY_US);
         testReceiveWord = spi_master->transfer16(testTransmitWord);
+        delayMicroseconds(SPI_TRANSFER_DELAY_US);
         digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
         result = result | testReceiveWord >> 8; // combine the two bytes to form a 16-bit word
@@ -161,7 +171,9 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_buffer) {
     digitalWrite(TEST_PIN_SYNC_IO, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
+    delayMicroseconds(SPI_TRANSFER_DELAY_US);
     spi_master->transfer(testTransmitBuff, MAX_BUFFER_SIZE+1); 
+    delayMicroseconds(SPI_TRANSFER_DELAY_US);
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
     digitalWrite(TEST_PIN_SYNC_IO, LOW);
