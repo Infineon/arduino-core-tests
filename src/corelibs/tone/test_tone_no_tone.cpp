@@ -140,8 +140,11 @@ static TEST_TEAR_DOWN(tone_no_tone) {
  * @brief Verify tone functionality for various frequencies without duration.
  */
 TEST_IFX(tone_no_tone, test_tone_without_duration) {
-    const unsigned int test_frequencies_hz[] = {500, 1000, 2000}; 
-
+    #if defined(ARDUINO_ARCH_XMC)
+        const unsigned int test_frequencies_hz[] = {100, 250, 500}; 
+    #else
+        const unsigned int test_frequencies_hz[] = {500, 1000, 2000}; 
+    #endif
     for (size_t i = 0; i < sizeof(test_frequencies_hz) / sizeof(test_frequencies_hz[0]); i++) {
         reset_tone();
 
@@ -163,8 +166,11 @@ TEST_IFX(tone_no_tone, test_tone_without_duration) {
  * @brief Verify if the frequency changes correctly on same pin without calling notone.
  */
 TEST_IFX(tone_no_tone, test_tone_change_frequency) {
-    const unsigned int test_frequencies_hz[] = {500, 1000, 2000}; 
-
+    #if defined(ARDUINO_ARCH_XMC)
+        const unsigned int test_frequencies_hz[] = {100, 250, 500};
+    #else
+        const unsigned int test_frequencies_hz[] = {500, 1000, 2000}; 
+    #endif
     for (size_t i = 0; i < sizeof(test_frequencies_hz) / sizeof(test_frequencies_hz[0]); i++) {
         reset_tone();
         tone(TONE_PIN_OUTPUT, test_frequencies_hz[i]);
@@ -186,8 +192,11 @@ TEST_IFX(tone_no_tone, test_tone_with_duration) {
 
     for (size_t i = 0; i < sizeof(test_durations_ms) / sizeof(test_durations_ms[0]); i++) {
         reset_tone();
-
-        tone(TONE_PIN_OUTPUT, 2000, test_durations_ms[i]);
+        #if defined(ARDUINO_ARCH_XMC)
+            tone(TONE_PIN_OUTPUT, 250, test_durations_ms[i]);
+        #else
+            tone(TONE_PIN_OUTPUT, 2000, test_durations_ms[i]);
+        #endif
         delay(test_durations_ms[i] + 100); // wait for the tone duration to elapse
 
         float tolerance = TOLERANCE_DURATION_PERCENTAGE * test_durations_ms[i] / 100.0f;
@@ -200,7 +209,11 @@ TEST_IFX(tone_no_tone, test_tone_with_duration) {
  * @brief Verify noTone functionality stops the tone immediately.
  */
 TEST_IFX(tone_no_tone, test_no_tone) {
-    tone(TONE_PIN_OUTPUT, 1000);
+    #if defined(ARDUINO_ARCH_XMC)
+        tone(TONE_PIN_OUTPUT, 250);
+    #else
+        tone(TONE_PIN_OUTPUT, 1000);
+    #endif
     delay(100); 
     noTone(TONE_PIN_OUTPUT); 
     delay(1000); 
@@ -218,11 +231,7 @@ TEST_IFX(tone_no_tone, test_no_tone) {
  *        The tone is expected to change frequency without stopping with duration specified.
  */
 TEST_IFX(tone_no_tone, test_tone_overlap_frequency) {
- #if defined(ARDUINO_ARCH_XMC)
-    const unsigned int test_frequencies_hz[] = {35, 50, 39}; //Tested with XMC 4700 minimum frequency working from 35Hz
-#else
     const unsigned int test_frequencies_hz[] = {5, 10, 20}; 
-#endif
     const unsigned int array_size = sizeof(test_frequencies_hz) / sizeof(test_frequencies_hz[0]);
     const unsigned int tone_duration_ms = 1000;
     const unsigned int delay_introduced_ms = 300;
@@ -246,8 +255,11 @@ TEST_IFX(tone_no_tone, test_tone_overlap_frequency) {
  * @brief Verify that calling tone again with different pin does not affect the output.
  */
 TEST_IFX(tone_no_tone, test_tone_second_call) {
-    const unsigned int test_frequencies_hz = 1000;
-    
+    #if defined(ARDUINO_ARCH_XMC)
+        const unsigned int test_frequencies_hz = 250;
+    #else
+        const unsigned int test_frequencies_hz = 1000;
+    #endif
     tone(TONE_PIN_OUTPUT, test_frequencies_hz); 
     delay(500); 
     tone(TEST_PIN_SYNC_IO, test_frequencies_hz); // no effect on the second call
