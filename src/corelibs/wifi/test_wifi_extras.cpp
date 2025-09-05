@@ -34,6 +34,10 @@ TEST_IFX(wifi_extras, wifi_connect_to_ap) {
     TEST_ASSERT_EQUAL_INT(WL_CONNECTED, result);
 }
 
+/* This IP address variable is declared as global
+because it will be obtained in client_connect_by_hostname, 
+and used by check_host_by_name */
+IPAddress host_ip;
 
 TEST_IFX(wifi_extras, client_connect_by_hostname) {
     WiFiClient client;
@@ -48,7 +52,8 @@ TEST_IFX(wifi_extras, client_connect_by_hostname) {
     TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_CONNECTED, client.status());
    
     Serial.print("Remote IP: ");
-    Serial.print(client.remoteIP().toString().c_str());
+    host_ip = client.remoteIP();
+    Serial.print(host_ip.toString().c_str());
     TEST_ASSERT_EQUAL_UINT16(port, client.remotePort());
     
     client.stop();
@@ -56,9 +61,10 @@ TEST_IFX(wifi_extras, client_connect_by_hostname) {
 
 TEST_IFX(wifi_extras, check_host_by_name) {
     IPAddress ip; 
-    IPAddress ip_expected = IPAddress(127, 0, 0, 1);
+    IPAddress ip_expected = host_ip;
     /* This domain provides a fix IP for testing */
-    const char *hostname = "localhost";
+    const char *hostname = "google.com";
+
 
     int ret = WiFi.hostByName(hostname, ip);
     TEST_ASSERT_TRUE(ret);
@@ -109,10 +115,9 @@ TEST_IFX(wifi_extras, wifi_end) {
 TEST_GROUP_RUNNER(wifi_extras) {
     RUN_TEST_CASE(wifi_extras, wifi_connect_to_ap);
     RUN_TEST_CASE(wifi_extras, client_connect_by_hostname);
-    // TODO: This test needs to fixed as the host name is not resolved with expected ip address
-    // RUN_TEST_CASE(wifi_extras, check_host_by_name);
     RUN_TEST_CASE(wifi_extras, check_dns);
     RUN_TEST_CASE(wifi_extras, check_ping);
+    RUN_TEST_CASE(wifi_extras, check_host_by_name);
     RUN_TEST_CASE(wifi_extras, check_set_dns);
     RUN_TEST_CASE(wifi_extras, wifi_disconnect);
     RUN_TEST_CASE(wifi_extras, wifi_end);    
