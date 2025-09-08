@@ -175,9 +175,14 @@ test_spi_connected1_loopback: TESTS=-DTEST_SPI_CONNECTED1_LOOPBACK
 test_spi_connected2_masterpingpong: TESTS=-DTEST_SPI_CONNECTED2_MASTERPINGPONG
 test_spi_connected2_slavepingpong:  TESTS=-DTEST_SPI_CONNECTED2_SLAVEPINGPONG
 
+.PHONY: install_onewire_libs
+install_onewire_libs:
+	$(Q) arduino-cli lib update-index
+	$(Q) arduino-cli lib install "OneWire"
 
 ## OneWire tests targets
 test_onewire_DS18x20: TESTS=-DTEST_ONEWIRE_DS18x20
+test_onewire_DS18x20: install_onewire_libs
 
 # Arduino-cli commands
 
