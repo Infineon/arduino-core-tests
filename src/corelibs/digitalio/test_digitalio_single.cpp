@@ -88,6 +88,9 @@ TEST_IFX(digitalio_single_internal, test_digitalio_read_write_input_pullup)
     TEST_ASSERT_EQUAL_MESSAGE(LOW, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to LOW");
 
     digitalWrite(TEST_PIN_DIGITAL_IO_OUTPUT, HIGH); // set output pin to HIGH ie, floating state
+#if defined(ARDUINO_ARCH_XMC)   
+    delay(1); //To stablize the floating voltage need small delay in XMC board.
+#endif
     TEST_ASSERT_EQUAL_MESSAGE(HIGH, digitalRead(TEST_PIN_DIGITAL_IO_INPUT), "Input Pin should be set to HIGH when output is floating and input is pullup");
 }
 
