@@ -8,6 +8,9 @@
 #include <OneWire.h>
 #include "test_common_includes.h"
 
+#ifndef TEST_PIN_ONEWIRE
+#define TEST_PIN_ONEWIRE 0
+#endif
 // OneWire instance and variables
 static OneWire oneWire(TEST_PIN_ONEWIRE);
 static uint8_t addr[8];
