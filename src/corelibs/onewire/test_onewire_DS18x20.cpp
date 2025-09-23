@@ -9,7 +9,7 @@
 #include "test_common_includes.h"
 
 // OneWire instance and variables
-static OneWire oneWire(TEST_PIN_ONEWIRE); // Pin TEST_PIN_ONEWIRE is used for the OneWire bus
+static OneWire oneWire(TEST_PIN_ONEWIRE);
 static uint8_t addr[8];
 static uint8_t data[12];
 
