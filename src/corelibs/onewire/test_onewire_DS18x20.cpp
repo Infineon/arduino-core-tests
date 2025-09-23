@@ -8,8 +8,11 @@
 #include <OneWire.h>
 #include "test_common_includes.h"
 
+#ifndef TEST_PIN_ONEWIRE
+#define TEST_PIN_ONEWIRE 0
+#endif
 // OneWire instance and variables
-static OneWire oneWire(0); // Pin 0 is used for the OneWire bus
+static OneWire oneWire(TEST_PIN_ONEWIRE);
 static uint8_t addr[8];
 static uint8_t data[12];
 
