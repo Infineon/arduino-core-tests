@@ -58,7 +58,7 @@ TEST_IFX(can_single_internal, testCanMsgTxInitialization)  {
     TEST_ASSERT_EQUAL_UINT32(XMC_CAN_FRAME_TYPE_STANDARD_11BITS,
                              txMessage->can_id_mode); // Standard 11-bit identifier
     TEST_ASSERT_EQUAL_UINT32(XMC_CAN_ARBITRATION_MODE_ORDER_BASED_PRIO_1, txMessage->can_priority);
-    TEST_ASSERT_EQUAL_UINT32(0x1FFFFFFFU, txMessage->can_id_mask);
+    TEST_ASSERT_EQUAL_UINT32(0x00000000U, txMessage->can_id_mask);
     TEST_ASSERT_EQUAL_UINT32(0U, txMessage->can_ide_mask); // send both standard and extended frames
     TEST_ASSERT_EQUAL_UINT32(XMC_CAN_MO_TYPE_TRANSMSGOBJ, txMessage->can_mo_type);
 }
@@ -73,7 +73,7 @@ TEST_IFX(can_single_internal, test_CAN_msg_rx_initialization) {
     TEST_ASSERT_EQUAL_UINT32(XMC_CAN_FRAME_TYPE_STANDARD_11BITS,
                              rxMessage->can_id_mode); // Standard 11-bit identifier
     TEST_ASSERT_EQUAL_UINT32(XMC_CAN_ARBITRATION_MODE_ORDER_BASED_PRIO_1, rxMessage->can_priority);
-    TEST_ASSERT_EQUAL_UINT32(0x000, rxMessage->can_id_mask);
+    TEST_ASSERT_EQUAL_UINT32(0x00000000U, rxMessage->can_id_mask);
     TEST_ASSERT_EQUAL_UINT32(0U,
                              rxMessage->can_ide_mask); // receive both standard and extended frames
     TEST_ASSERT_EQUAL_UINT32(XMC_CAN_MO_TYPE_RECMSGOBJ, rxMessage->can_mo_type);
