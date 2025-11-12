@@ -104,8 +104,10 @@ TEST_GROUP(analogio_pwm);
 /**
  * @brief Setup method called by Unity before every test in this test group.
  */
-static TEST_SETUP(analogio_pwm) { 
+static TEST_SETUP(analogio_pwm) {
     interrupts();
+    setAnalogWriteFrequency(PWM_PIN_OUTPUT, PWM_FREQUENCY_HZ); //set back to default fz
+    delay(1000); 
     // Reset the measurement variables
     start_time = 0;
     high_time = 0;
@@ -130,24 +132,21 @@ TEST_IFX(analogio_pwm, test_analog_set_fz)
     analogWriteResolution(16); 
     setAnalogWriteFrequency(PWM_PIN_OUTPUT, 100); 
     delay(1000); 
+    // 32767 for 50% duty cycle
     analogWrite(PWM_PIN_OUTPUT, 32767); 
     delay(1000); 
     feedback_measurement_handler();
     TEST_ASSERT_FLOAT_WITHIN(TOLERANCE_FREQUENCY, 100, measured_frequency_hz);
 
-    const float frequency[] = {1, 50, 5000, 50000};
-
-    for(size_t i=0; i< sizeof(frequency)/sizeof(frequency[i]); i++)
+    // Frequency array in test_config.h
+    for(size_t i=0; i< sizeof(test_pwm_frequencies)/sizeof(test_pwm_frequencies[i]); i++)
     {
         // Set different frequencies and verify the output
-        setAnalogWriteFrequency(PWM_PIN_OUTPUT, frequency[i]);
+        setAnalogWriteFrequency(PWM_PIN_OUTPUT, test_pwm_frequencies[i]);
         delay(1000); // Wait for the signal to stabilize
         feedback_measurement_handler();
-        TEST_ASSERT_FLOAT_WITHIN(TOLERANCE_FREQUENCY, frequency[i], measured_frequency_hz);
+        TEST_ASSERT_FLOAT_WITHIN(TOLERANCE_FREQUENCY, test_pwm_frequencies[i], measured_frequency_hz);
     }
-
-    setAnalogWriteFrequency(PWM_PIN_OUTPUT, PWM_FREQUENCY_HZ); //set back to default fz
-    delay(1000);
 }
 
 /**
