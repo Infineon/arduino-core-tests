@@ -15,7 +15,11 @@
 #include "test_config.h"
 
 // Defines  
-#define TOLERANCE_DURATION_PERCENTAGE 10              
+#if defined(KIT_XMC11_BOOT_001)
+#define TOLERANCE_DURATION_PERCENTAGE 30  // Due to pulse generating 12.5 micro seconds
+#else
+#define TOLERANCE_DURATION_PERCENTAGE 10 
+#endif         
 #define TIMEOUT_MICROSECONDS 10000000 // 10 second timeout for pulse measurement 
 
 // Variables
