@@ -24,6 +24,13 @@
 const uint8_t MAX_BUFFER_SIZE = 20;
 const uint8_t MAX_TEST_ITERATION = 10;
 
+// Use TEST_PIN_SYNC_SPI if defined, otherwise use TEST_PIN_SYNC_IO
+#ifdef TEST_PIN_SYNC_SPI
+    #define SYNC_PIN TEST_PIN_SYNC_SPI
+#else
+    #define SYNC_PIN TEST_PIN_SYNC_IO
+#endif
+
 // variables
 static uint8_t testTransmitBuff[MAX_BUFFER_SIZE+1] = {0};
 static uint8_t expectedReceiveBuff[MAX_BUFFER_SIZE] = {0};
@@ -33,17 +40,17 @@ SPIClass *spi_master = &SPI;
 // Method invoked before a test suite is run.
 static void spi_connected2_masterpingpong_suite_setup() {
     pinMode(TEST_PIN_SPI_SSEL, OUTPUT);
-    pinMode(TEST_PIN_SYNC_IO, OUTPUT);
+    pinMode(SYNC_PIN, OUTPUT);
 
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
-    digitalWrite(TEST_PIN_SYNC_IO, LOW);
+    digitalWrite(SYNC_PIN, LOW);
     spi_master->begin();
 }
 
 // Method invoked after a test suite is run.
 static void spi_connected2_masterpingpong_suite_teardown() {
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
-    digitalWrite(TEST_PIN_SYNC_IO, LOW);
+    digitalWrite(SYNC_PIN, LOW);
     spi_master->end();
 }
 
@@ -76,7 +83,7 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_byte) {
     uint8_t testReceiveByte = 0xCC;
     uint8_t expectedReceiveByte = testReceiveByte;
 
-    digitalWrite(TEST_PIN_SYNC_IO, HIGH);
+    digitalWrite(SYNC_PIN, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
     delayMicroseconds(SPI_TRANSFER_DELAY_US);
@@ -98,7 +105,7 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_byte) {
         expectedReceiveByte = testReceiveByte + 1; // slave increments the previously transmitted byte from slave
     }
 
-    digitalWrite(TEST_PIN_SYNC_IO, LOW);
+    digitalWrite(SYNC_PIN, LOW);
 }
 
 
@@ -121,7 +128,7 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_word) {
     uint16_t expectedReceiveWord = testReceiveWord;
     uint16_t result = 0;
 
-    digitalWrite(TEST_PIN_SYNC_IO, HIGH);
+    digitalWrite(SYNC_PIN, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
     delayMicroseconds(SPI_TRANSFER_DELAY_US);
@@ -147,7 +154,7 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_word) {
         expectedReceiveWord = result + 1; // slave increments the previously transmitted word from slave
     }
 
-    digitalWrite(TEST_PIN_SYNC_IO, LOW);
+    digitalWrite(SYNC_PIN, LOW);
 }
 
 
@@ -168,7 +175,7 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_buffer) {
         expectedReceiveBuff[i] = 0xBB + i;
     }
 
-    digitalWrite(TEST_PIN_SYNC_IO, HIGH);
+    digitalWrite(SYNC_PIN, HIGH);
 
     digitalWrite(TEST_PIN_SPI_SSEL, LOW);
     delayMicroseconds(SPI_TRANSFER_DELAY_US);
@@ -176,7 +183,7 @@ TEST_IFX(spi_connected2_masterpingpong, test_ping_pong_transfer_buffer) {
     delayMicroseconds(SPI_TRANSFER_DELAY_US);
     digitalWrite(TEST_PIN_SPI_SSEL, HIGH);
 
-    digitalWrite(TEST_PIN_SYNC_IO, LOW);
+    digitalWrite(SYNC_PIN, LOW);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY_MESSAGE(expectedReceiveBuff, testTransmitBuff+1, MAX_BUFFER_SIZE, "SPI Master PingPong transfer word failed");
 }
