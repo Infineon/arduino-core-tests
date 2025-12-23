@@ -24,6 +24,7 @@ const uint8_t MAX_BUFFER_SIZE = 20;
 const uint8_t MAX_TEST_ITERATION = 10;
 
 // Use TEST_PIN_SYNC_SPI if defined, otherwise use TEST_PIN_SYNC_IO
+// XMC1x need a separate sync pin for SPI tests
 #ifdef TEST_PIN_SYNC_SPI
     #define SYNC_PIN TEST_PIN_SYNC_SPI
 #else
@@ -70,9 +71,15 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_byte) {
     uint8_t testTranceiveByte = 0xCC;
     uint8_t testReceiveByte = 0xAA;
     uint8_t expectedReceiveByte = testReceiveByte;
+    unsigned long timeout = millis() + 5000;
     
     while (digitalRead(SYNC_PIN) == LOW) {
         // Wait for the master to pull the sync pin high
+        if (millis() > timeout) {
+            Serial.println("Timeout waiting for SYNC");
+            TEST_FAIL_MESSAGE("Master not ready - SYNC pin LOW");
+            return;
+        }
     }
 
     for (uint8_t i = 1; i < MAX_TEST_ITERATION + 1; i++) {
@@ -98,9 +105,15 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_word) {
     uint16_t testTranceiveWord = 0x5522;
     uint16_t testReceiveWord = 0x4433; // first word read from master
     uint16_t expectedReceiveWord = testReceiveWord;
+    unsigned long timeout = millis() + 5000;
     
     while (digitalRead(SYNC_PIN) == LOW) {
         // Wait for the master to pull the sync pin high
+        if (millis() > timeout) {
+            Serial.println("Timeout waiting for SYNC");
+            TEST_FAIL_MESSAGE("Master not ready - SYNC pin LOW");
+            return;
+        }
     }
 
     for (uint8_t i = 1; i < MAX_TEST_ITERATION + 1; i++) {
@@ -123,9 +136,15 @@ TEST_IFX(spi_connected2_slavepingpong, test_ping_pong_transfer_buffer) {
         testTransmitBuff[i] = 0xBB + i;
         expectedReceiveBuff[i] = 0xAA + i;
     }
+    unsigned long timeout = millis() + 5000;
 
     while (digitalRead(SYNC_PIN) == LOW) {
         // Wait for the master to pull the sync pin high
+        if (millis() > timeout) {
+            Serial.println("Timeout waiting for SYNC");
+            TEST_FAIL_MESSAGE("Master not ready - SYNC pin LOW");
+            return;
+        }
     }
 
     spi_slave->transfer(testTransmitBuff, MAX_BUFFER_SIZE);
