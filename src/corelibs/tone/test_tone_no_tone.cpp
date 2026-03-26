@@ -15,10 +15,10 @@
 #define TRACE_OUTPUT
 #define TOLERANCE_FREQUENCY_PERCENTAGE 5 
 
-#if defined(ARDUINO_ARCH_XMC)                
-#define TOLERANCE_DURATION_PERCENTAGE 5
+#if defined(ARDUINO_ARCH_PSOC6)                
+#define TOLERANCE_DURATION_PERCENTAGE 10//Increased tolerance for PSOC6 boards.
 #else
-#define TOLERANCE_DURATION_PERCENTAGE 10  //Increased tolerance for PSOC6 boards.
+#define TOLERANCE_DURATION_PERCENTAGE 5  
 #endif
 
 #define TONE_PIN_OUTPUT TEST_PIN_DIGITAL_IO_OUTPUT  
