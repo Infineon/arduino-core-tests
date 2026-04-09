@@ -58,12 +58,15 @@ static TEST_TEAR_DOWN(uart_rx) {
  * And that can lead to potential reception of invalid data.
  */
 TEST_IFX(uart_rx, wait_for_synch_signal) {
+    
     pinMode(TEST_PIN_SYNC_IO, INPUT_PULLDOWN);
     while (digitalRead(TEST_PIN_SYNC_IO) == LOW) {}
+    delay(5000);
 }
 
 TEST_IFX(uart_rx, begin) {
     Serial1.begin(UART_TEST_BAUDRATE);
+    delay(500);
     TEST_ASSERT_TRUE(Serial1);
 }
 

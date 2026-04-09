@@ -69,7 +69,7 @@ TEST_IFX(uart_tx, notify_readiness_to_uart_rx) {
     digitalWrite(TEST_PIN_SYNC_IO, HIGH);
     /* Let some time for the other to initialize 
     and be ready for the communication. */
-    delay(500);
+    delay(5000);
 }
 
 TEST_IFX(uart_tx, not_ready) {
@@ -78,6 +78,7 @@ TEST_IFX(uart_tx, not_ready) {
 
 TEST_IFX(uart_tx, begin) {
     Serial1.begin(UART_TEST_BAUDRATE);
+    delay(500);
     /* No assertion. Just checking that this calls
     does not crash. */
     /* Evaluating bool operator */
