@@ -170,6 +170,9 @@ test_wifi_udp_server: TESTS=-DTEST_WIFI_UDP_SERVER
 test_wifi_extras: TESTS=-DTEST_WIFI_EXTRAS
 test_wifi_exceptions: TESTS=-DTEST_WIFI_EXCEPTIONS
 
+## Bluetooth tests targets
+test_bluetooth_single: TESTS=-DTEST_BLUETOOTH_SINGLE
+
 ## SPI tests targets
 test_spi_connected1_loopback: TESTS=-DTEST_SPI_CONNECTED1_LOOPBACK
 test_spi_connected2_masterpingpong: TESTS=-DTEST_SPI_CONNECTED2_MASTERPINGPONG
