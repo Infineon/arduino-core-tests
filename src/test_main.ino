@@ -165,6 +165,12 @@ void RunAllTests(void)
 
 #endif
 
+#ifdef TEST_BLUETOOTH_SINGLE
+
+    RUN_TEST_GROUP(bluetooth_single);
+
+#endif
+
 #ifdef TEST_SPI_CONNECTED1_LOOPBACK
 
     RUN_TEST_GROUP(spi_connected1_loopback);
