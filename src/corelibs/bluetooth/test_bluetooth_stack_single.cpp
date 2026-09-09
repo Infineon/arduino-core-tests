@@ -20,20 +20,20 @@
 #include <BLE.h>
 #endif
 
-TEST_GROUP(bluetooth_single);
+TEST_GROUP(bluetooth_stack_single);
 
-static TEST_SETUP(bluetooth_single)
+static TEST_SETUP(bluetooth_stack_single)
 {
 }
 
-static TEST_TEAR_DOWN(bluetooth_single)
+static TEST_TEAR_DOWN(bluetooth_stack_single)
 {
     /* Make sure a failed test does not leave the stack running for the
      * next test case. */
     BLE.end();
 }
 
-TEST_IFX(bluetooth_single, begin_poll_end)
+TEST_IFX(bluetooth_stack_single, begin_poll_end)
 {
     TEST_ASSERT_TRUE_MESSAGE(BLE.begin(), "BLE.begin() failed");
 #if !defined(ARDUINO_ARCH_RENESAS)
@@ -56,7 +56,7 @@ TEST_IFX(bluetooth_single, begin_poll_end)
 #endif
 }
 
-TEST_IFX(bluetooth_single, begin_twice_fails)
+TEST_IFX(bluetooth_stack_single, begin_twice_fails)
 {
     TEST_ASSERT_TRUE_MESSAGE(BLE.begin(), "BLE.begin() failed");
 
@@ -75,8 +75,8 @@ TEST_IFX(bluetooth_single, begin_twice_fails)
     BLE.end();
 }
 
-TEST_GROUP_RUNNER(bluetooth_single)
+TEST_GROUP_RUNNER(bluetooth_stack_single)
 {
-    RUN_TEST_CASE(bluetooth_single, begin_poll_end);
-    RUN_TEST_CASE(bluetooth_single, begin_twice_fails);
+    RUN_TEST_CASE(bluetooth_stack_single, begin_poll_end);
+    RUN_TEST_CASE(bluetooth_stack_single, begin_twice_fails);
 }

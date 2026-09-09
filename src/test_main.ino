@@ -165,9 +165,27 @@ void RunAllTests(void)
 
 #endif
 
-#ifdef TEST_BLUETOOTH_SINGLE
+#ifdef TEST_BLUETOOTH_STACK_SINGLE
 
-    RUN_TEST_GROUP(bluetooth_single);
+    RUN_TEST_GROUP(bluetooth_stack_single);
+
+#endif
+
+#ifdef TEST_BLUETOOTH_GATT_SINGLE
+
+    RUN_TEST_GROUP(bluetooth_gatt_single);
+
+#endif
+
+#ifdef TEST_BLUETOOTH_CONNECTED2_PERIPHERAL
+
+    RUN_TEST_GROUP(bluetooth_connected2_peripheral);
+
+#endif
+
+#ifdef TEST_BLUETOOTH_CONNECTED2_CENTRAL
+
+    RUN_TEST_GROUP(bluetooth_connected2_central);
 
 #endif
 
@@ -237,7 +255,7 @@ void setup() {
 void loop() {
     Serial.println("\n");
 
-    const int   argc       = 2;
+    const int   argc = 2;
     const char *argv[argc] = { "", "-v" };
 
     (void) UnityMain(argc, argv, RunAllTests);
