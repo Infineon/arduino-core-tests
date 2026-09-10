@@ -2,7 +2,7 @@
  * @brief Single-board sanity test for the BLE stack lifecycle
  * (BLE.begin() / BLE.poll() / BLE.end()).
  *
- * @details This is a happy-path smoke test only: it verifies that the BLE
+ * @details This is a smoke test only: it verifies that the BLE
  * stack can be initialized, that poll() can be called repeatedly without
  * error while the stack is up, and that the stack can be cleanly
  * de-initialized. It requires a single BLE-capable board (CY8CPROTO-063-BLE

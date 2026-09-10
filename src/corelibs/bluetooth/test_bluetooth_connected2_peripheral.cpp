@@ -1,24 +1,11 @@
-/* test_bluetooth_connected2_peripheral.cpp
+/**
+ * @brief Verifies the BLE library in peripheral role.
  *
- * Two-board hardware test for the BLE library, peripheral role.
- * ONLY WORKS WHEN THE OTHER BOARD HAS BEEN FLASHED
- * test_bluetooth_connected2_central.cpp.
+ * @details The peripheral advertises a service, exchanges characteristic
+ * values with the central, and sends notifications.
  *
- * Advertises a GATT service with a writable "command" characteristic and a
- * read/notify "counter" characteristic, then walks through the flows
- * exercised by the central side: connection, GATT discovery (implicit,
- * performed by the central), a characteristic write detected on this side,
- * a characteristic read served to the central, and a notification sent to
- * a subscribed central.
- *
- * Modeled after the small-test-case-per-API-call style used by the WiFi
- * connected tests (see test_wifi_ap.cpp / test_wifi_sta.cpp): each step of
- * the interaction with the central is its own TEST_IFX case sharing state
- * (via file-scope statics) with the steps around it, run in order by
- * TEST_GROUP_RUNNER, so a failure at any one step is reported against that
- * specific API call rather than a single monolithic test.
- *
- * Requires two BLE-capable PSOC6 boards (CY8CPROTO-063-BLE).
+ * @note This test requires two BLE-capable PSOC6 boards (CY8CPROTO-063-BLE)
+ * with test_bluetooth_connected2_central.cpp flashed to the other board.
  */
 
 // std includes
