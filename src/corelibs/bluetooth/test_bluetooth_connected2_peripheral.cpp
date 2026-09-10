@@ -196,7 +196,7 @@ TEST_IFX(bluetooth_connected2_peripheral, stopAdvertiseAndEnd) {
     BLE.end();
 }
 
-static TEST_GROUP_RUNNER(bluetooth_connected2_peripheral) {
+TEST_GROUP_RUNNER(bluetooth_connected2_peripheral) {
     RUN_TEST_CASE(bluetooth_connected2_peripheral, begin);
     RUN_TEST_CASE(bluetooth_connected2_peripheral, buildAndRegisterGattService);
     RUN_TEST_CASE(bluetooth_connected2_peripheral, writeInitialCharacteristicValues);
