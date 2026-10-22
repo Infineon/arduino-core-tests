@@ -1,0 +1,160 @@
+/**
+ * @brief This test starts a WiFi (TCP) server to which multiple WiFi
+ * clients connect and communicate with testing the WiFiServer API functions.
+ * 
+ * @details The tests runs the following sequence:
+ * - Start the server
+ * - Check the server is listening
+ * - Check the local IP address
+ * - Wait for a client to connect
+ * - Read from the client
+ * - Write to the client
+ * - Read from the client using print()
+ * - Print to all clients
+ * - Wait for the client to disconnect
+ * - Stop the server
+ * - Disconnect the WiFi connection
+ * - End the WiFi
+ * 
+ * This test is meant as a happy path verification. Exception and corner/edge cases
+ * are not covered in this test. 
+ * 
+ * This test is paired in the "client.ino" test, which needs to be executed in 
+ * a second board to operate the clients connecting to this server.
+ * 
+ * @note This test must be run before the "client.ino" test.
+ */
+#include <WiFi.h>
+#include <WiFiServer.h>
+#include "ottu.hpp"
+
+OTTUNITY_TEST(wifi_begin_ap) {
+    int result = WiFi.beginAP("arduino-wifi-ap", "wifi-ap-password", 1);
+    TEST_ASSERT_EQUAL_INT(WL_AP_LISTENING, result);
+}
+
+OTTUNITY_TEST(check_local_ip) {
+    IPAddress ip = WiFi.localIP();
+    TEST_ASSERT_EQUAL_INT(192, ip[0]);
+    TEST_ASSERT_EQUAL_INT(168, ip[1]);
+    TEST_ASSERT_EQUAL_INT(0, ip[2]);
+    TEST_ASSERT_EQUAL_INT(1, ip[3]);
+    TEST_ASSERT_EQUAL_STRING("192.168.0.1", ip.toString().c_str());
+}
+
+WiFiServer server;
+
+OTTUNITY_TEST(server_begin) {
+    server.begin(80);   
+    TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_LISTENING, server.status());
+}
+
+WiFiClient client;
+
+OTTUNITY_TEST(server_available) {
+    /* The boolean operator of a client object
+    is true when the client is connected and it has 
+    data available to be read.*/
+    do {
+        /* The available returns a client which is connected
+        and has available data*/
+         client = server.available();
+    } while(!client);
+
+    TEST_ASSERT_TRUE(client);
+    TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_CONNECTED, client.status());
+    TEST_ASSERT_TRUE(client.remoteIP() == IPAddress(192, 168, 0, 2));
+    TEST_ASSERT_EQUAL_UINT16(80, client.remotePort());
+}
+
+OTTUNITY_TEST(server_client_read) {
+    const char expected_msg[] = "hello server!";
+    char rcvd_msg[16] = {0};
+
+    /* Wait for the client to have available data */
+    while(client.available() < (int)strlen(expected_msg)) { }
+
+    rcvd_msg[0] = client.read();
+    TEST_ASSERT_EQUAL_CHAR('h',rcvd_msg[0]);
+
+    int read_bytes = client.read((uint8_t *)&rcvd_msg[1], strlen(expected_msg));
+    TEST_ASSERT_EQUAL_INT(strlen(expected_msg) - 1, read_bytes);
+    TEST_ASSERT_EQUAL_STRING(expected_msg, rcvd_msg);
+
+    TEST_ASSERT_EQUAL_UINT8(0, client.available());
+    /* Check the client is still connected */
+    TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_CONNECTED, client.status());
+}
+
+OTTUNITY_TEST(server_client_write) {
+    const char msg[] = "yo yo client!";
+
+    size_t written_bytes = client.write(msg[0]);
+    TEST_ASSERT_EQUAL_INT(1, written_bytes);
+    
+    written_bytes = client.write((const uint8_t *)&msg[1], strlen(msg) - 1);
+    TEST_ASSERT_EQUAL_INT(strlen(msg) - 1, written_bytes);
+
+    /* Check the client is still connected */
+    TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_CONNECTED, client.status());
+}
+
+OTTUNITY_TEST(server_client_read_print) {
+    const char expected_prompt[] = ">> "; 
+    const char expected_msg[] = "print from client!\r\n";
+    char rcvd_msg[32] = {0};
+
+    while(client.available() < (int)(strlen(expected_prompt) + strlen(expected_msg))) { }
+
+    int read_bytes = client.read((uint8_t *)rcvd_msg, strlen(expected_prompt));
+    TEST_ASSERT_EQUAL_INT(strlen(expected_prompt), read_bytes);
+    TEST_ASSERT_EQUAL_STRING(expected_prompt, rcvd_msg);
+
+    memset(rcvd_msg, 0, sizeof(rcvd_msg));
+    
+    read_bytes = client.read((uint8_t *)rcvd_msg, strlen(expected_msg));
+    TEST_ASSERT_EQUAL_INT(strlen(expected_msg), read_bytes);
+    TEST_ASSERT_EQUAL_STRING(expected_msg, rcvd_msg);
+
+    /* Check the client is still connected */
+    TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_CONNECTED, client.status());
+}
+
+OTTUNITY_TEST(server_print_to_all_clients) {
+    const char msg_a[] = "konnichiwa ";
+    const char msg_b[] = "all clients!";
+
+    /* Wait for the server to have more than 1 client connected */
+    while(server.connectedSize() < 2) {}
+
+    size_t written_bytes = server.print(msg_a);
+    TEST_ASSERT_EQUAL_INT(strlen(msg_a), written_bytes);
+    
+    written_bytes = server.println(msg_b);
+    TEST_ASSERT_EQUAL_INT(strlen(msg_b) + strlen("\r\n"), written_bytes);
+}
+
+OTTUNITY_TEST(server_client_stop) {
+    /* Wait until the first client is disconnected
+    from the other side */
+    while(server.connectedSize() > 1) { }
+
+    TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_DELETED, client.status());
+}
+
+OTTUNITY_TEST(server_end) {
+    server.end();
+    TEST_ASSERT_EQUAL_UINT8(SOCKET_STATUS_DELETED, server.status());
+}
+
+OTTUNITY_TEST(wifi_disconnect) {
+    WiFi.disconnect();
+    TEST_ASSERT_EQUAL_INT(WIFI_STATUS_STA_DISCONNECTED, WiFi.status());
+}
+
+OTTUNITY_TEST(wifi_end) {
+    WiFi.end();
+    TEST_ASSERT_EQUAL_UINT8(WIFI_STATUS_UNINITED, WiFi.status());
+}
+
+OTTUNITY_RUN();

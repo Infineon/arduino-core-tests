@@ -1,0 +1,36 @@
+/**
+ @brief This test runs basic tests that throws the exceptions.
+ *
+ */
+
+#include <WiFi.h>
+#include <WiFiClient.h>
+#include "ottu.hpp"
+
+/** 
+ * Add your SSID_NAME and SSID_PASS to the secrets.h file. 
+ * Ensure that the secrets.h file is placed directly in this directory.
+ */
+#include "secrets.h" 
+
+/// Test for WiFi.begin() timeout
+/// @note This test should fail due to timeout. so make the WiFi not available
+OTTUNITY_TEST(wifi_timeout) {
+    // Set a short timeout for the connection attempt
+    WiFi.setTimeout(10); // 10 ms timeout
+    int result = WiFi.begin(SSID_NAME, SSID_PASS);
+    //This should fail due to timeout
+    TEST_ASSERT_EQUAL_INT(WIFI_ERROR_STA_CONNECT_FAILED, result);
+    //Check if the connection is not established
+    TEST_ASSERT_EQUAL_INT(WIFI_STATUS_STA_DISCONNECTED, WiFi.status());
+}
+
+/// Test for WiFi.reasonCode()
+OTTUNITY_TEST(wifi_reasoncode){    
+    uint8_t reason_code = WiFi.reasonCode();
+    TEST_ASSERT_EQUAL_UINT8(WIFI_ERROR_STA_CONNECT_FAILED, reason_code);
+    reason_code = WiFi.ping("google.com");
+    TEST_ASSERT_EQUAL_UINT8(WIFI_ERROR_PING_FAILED, reason_code);
+}
+
+OTTUNITY_RUN();
