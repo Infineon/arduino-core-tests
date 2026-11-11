@@ -1,0 +1,13 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#if defined(ARDUINO_KIT_PSC3M5_EVK)
+#define TEST_PIN_ANALOG_IO_VREF 22
+#define TEST_PIN_ANALOG_IO_DIVIDER 23
+#define TEST_PIN_ANALOG_IO_GND 24
+
+#define DEFAULT ADC_REF_INTERNAL // Use internal reference for ADC
+#define TEST_ADC_MAX_VALUE 1023
+#endif // ARDUINO_KIT_PSC3M5_EVK
+
+#endif // CONFIG_H
