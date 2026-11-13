@@ -1,13 +1,12 @@
-#include "ottu.hpp"
-#include <CAN.h>
-
-#include "config.hpp"
+/**
+ * @file single.ino
+ * @brief Tests CAN initialization and single-controller loopback, including
+ * frame integrity, receive filters, and callback/polling delivery.
+ */
+#include "config.h"
 #include "ottu.hpp"
 #include <errno.h>
 #include <string.h>
-
-static const struct device *const canDevice =
-    DEVICE_DT_GET(DT_PHANDLE_BY_IDX(DT_PATH(zephyr_user), cans, 0));
 
 struct CallbackFrame {
     uint32_t id;
