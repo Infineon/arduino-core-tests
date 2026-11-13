@@ -1,0 +1,9 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#if defined(ARDUINO_KIT_PSC3M5_EVK)
+#define TEST_PIN_ANALOG_IO_DAC PIN_D7
+#define TEST_PIN_ANALOG_IO_DAC_INPUT A0
+#endif // ARDUINO_KIT_PSC3M5_EVK
+
+#endif // CONFIG_H
