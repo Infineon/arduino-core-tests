@@ -1,8 +1,13 @@
-#ifndef CONFIG_HPP
-#define CONFIG_HPP
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #include <Arduino.h>
 #include <CAN.h>
+
+#if defined(ARDUINO_KIT_PSC3M5_EVK)
+static const struct device *const canDevice =
+    DEVICE_DT_GET(DT_PHANDLE_BY_IDX(DT_PATH(zephyr_user), cans, 0));
+#endif // ARDUINO_KIT_PSC3M5_EVK
 
 constexpr CanBitRate TEST_CAN_BITRATE = CanBitRate::BR_500k;
 constexpr uint32_t TEST_CAN_ID = 0x123;
@@ -19,4 +24,4 @@ static_assert(TEST_CAN_LIFECYCLE_CYCLES > 0 &&
                   TEST_CAN_CALLBACK_TRANSITIONS > 0,
               "Reliability checks must run at least one cycle");
 
-#endif // CONFIG_HPP
+#endif // CONFIG_H
