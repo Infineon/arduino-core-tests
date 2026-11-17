@@ -6,4 +6,9 @@
 #define TEST_PIN_ANALOG_IO_DAC_INPUT A0
 #endif // ARDUINO_KIT_PSC3M5_EVK
 
+#if defined(KIT_XMC47_RELAX)
+#define TEST_PIN_ANALOG_IO_DAC 48 // P14.9 (Pin 29) on X1 header
+#define TEST_PIN_ANALOG_IO_DAC_INPUT A0
+#endif // KIT_XMC47_RELAX
+
 #endif // CONFIG_H
