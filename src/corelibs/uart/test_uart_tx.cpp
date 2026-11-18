@@ -139,6 +139,9 @@ TEST_IFX(uart_tx, availableForWrite) {
     uint8_t expected_writable = 128;
     #elif defined(ARDUINO_ARCH_XMC)
     uint8_t expected_writable = 1;
+    #elif defined(ARDUINO_ARCH_ZEPHYR)
+    Serial1.flush();
+    const int expected_writable = CONFIG_ARDUINO_API_SERIAL_BUFFER_SIZE;
     #else
     /* Inherited implementation */
     uint8_t expected_writable = 0;
