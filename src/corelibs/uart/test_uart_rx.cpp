@@ -22,7 +22,7 @@
  * - read a longer string than the writable buffer
  * - check that no data is available
  * - write a reply back to the other end
- * - end the UART communication
+ * - end the UART communication and, on Zephyr, restart and exchange a byte
  * 
  * This test is meant as a happy path verification of the API functions 
  * of the UART class RX mode. 
@@ -67,7 +67,9 @@ TEST_IFX(uart_rx, wait_for_synch_signal) {
 TEST_IFX(uart_rx, begin) {
     Serial1.begin(UART_TEST_BAUDRATE);
     delay(500);
+#ifndef ARDUINO_ARCH_ZEPHYR
     TEST_ASSERT_TRUE(Serial1);
+#endif
 }
 
 TEST_IFX(uart_rx, wait_and_read_one_byte) {
@@ -190,13 +192,30 @@ TEST_IFX(uart_rx, write_reply_back) {
 }
 
 TEST_IFX(uart_rx, end) {
+#ifdef ARDUINO_ARCH_ZEPHYR
+    Serial1.flush();
+    Serial1.end();
+
+    // TX lowers the sync line once its UART has restarted.
+    const unsigned long start = millis();
+    while (digitalRead(TEST_PIN_SYNC_IO) == HIGH) {
+        if (millis() - start >= 3000) {
+            TEST_FAIL_MESSAGE("Timeout waiting for TX to restart");
+        }
+    }
+
+    Serial1.begin(UART_TEST_BAUDRATE);
+    TEST_ASSERT_EQUAL(1, Serial1.write(static_cast<uint8_t>(0xA5)));
+    uint8_t reply = 0;
+    TEST_ASSERT_EQUAL_MESSAGE(1, Serial1.readBytes(&reply, 1), "No reply after UART restart");
+    TEST_ASSERT_EQUAL_HEX8(0x5A, reply);
+#else
     /* Wait for the other end to complete its reading operations
      to avoid read errors due to closing the bus too early.*/
     delay(300);
     Serial1.end();
     TEST_ASSERT_FALSE(Serial1);
-    /* No assertion. Just checking that this calls
-    does not crash. */
+#endif
 }
 
 TEST_GROUP_RUNNER(uart_rx) {
@@ -212,4 +231,3 @@ TEST_GROUP_RUNNER(uart_rx) {
     RUN_TEST_CASE(uart_rx, write_reply_back);
     RUN_TEST_CASE(uart_rx, end);
 }
-
