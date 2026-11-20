@@ -29,6 +29,12 @@ test_wire_connected2:
 	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
 	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
 
+test_bluetooth_connected2:
+	$(MAKE) -f Makefile test_bluetooth_connected2_peripheral PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
+	$(MAKE) -f Makefile test_bluetooth_connected2_central PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
+	$(MAKE) -f Makefile.multiboard_test sync PORT_LIST="$(PORT_BOARD1) $(PORT_BOARD2)"
+	$(MAKE) -f Makefile monitor PORT=$(PORT_BOARD2)
+
 test_can_connected2:
 	$(MAKE) -f Makefile test_can_connected2_node1 PORT=$(PORT_BOARD1) FQBN=$(FQBN_BOARD1)
 	$(MAKE) -f Makefile test_can_connected2_node2 PORT=$(PORT_BOARD2) FQBN=$(FQBN_BOARD2)
