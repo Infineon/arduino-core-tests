@@ -110,8 +110,6 @@ OTTUNITY_TEST_TEAR_DOWN() {
     detachInterrupt(digitalPinToInterrupt(PWM_PIN_FEEDBACK));
 }
 
-// OTTUNITY_GROUP(pwm);
-
 OTTUNITY_TEST(set_fz) {
     // Set the frequency followed by a analogWrite
     analogWriteResolution(16);
