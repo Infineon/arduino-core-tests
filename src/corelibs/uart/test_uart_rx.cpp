@@ -194,7 +194,9 @@ TEST_IFX(uart_rx, end) {
      to avoid read errors due to closing the bus too early.*/
     delay(300);
     Serial1.end();
+#ifndef ARDUINO_ARCH_ZEPHYR
     TEST_ASSERT_FALSE(Serial1);
+#endif
     /* No assertion. Just checking that this calls
     does not crash. */
 }
@@ -212,4 +214,3 @@ TEST_GROUP_RUNNER(uart_rx) {
     RUN_TEST_CASE(uart_rx, write_reply_back);
     RUN_TEST_CASE(uart_rx, end);
 }
-

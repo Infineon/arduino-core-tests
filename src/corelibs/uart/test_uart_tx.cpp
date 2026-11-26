@@ -72,9 +72,12 @@ TEST_IFX(uart_tx, notify_readiness_to_uart_rx) {
     delay(5000);
 }
 
+/* Serial1 is always true on Zephyr, so it can't be false here. */
+#ifndef ARDUINO_ARCH_ZEPHYR
 TEST_IFX(uart_tx, not_ready) {
     TEST_ASSERT_FALSE(Serial1);
 }
+#endif
 
 TEST_IFX(uart_tx, begin) {
     Serial1.begin(UART_TEST_BAUDRATE);
@@ -138,6 +141,9 @@ TEST_IFX(uart_tx, availableForWrite) {
     uint8_t expected_writable = 128;
     #elif defined(ARDUINO_ARCH_XMC)
     uint8_t expected_writable = 1;
+    #elif defined(ARDUINO_ARCH_ZEPHYR)
+    Serial1.flush();
+    const int expected_writable = CONFIG_ARDUINO_API_SERIAL_BUFFER_SIZE;
     #else
     /* Inherited implementation */
     uint8_t expected_writable = 0;
@@ -196,7 +202,9 @@ TEST_IFX(uart_tx, read_reply) {
 
 TEST_IFX(uart_tx, end) {
     Serial1.end();
+#ifndef ARDUINO_ARCH_ZEPHYR
     TEST_ASSERT_FALSE(Serial1);
+#endif
     /* No assertion. Just checking that this calls
     does not crash. */
 }
@@ -204,7 +212,9 @@ TEST_IFX(uart_tx, end) {
 TEST_GROUP_RUNNER(uart_tx) {
     uart_tx_suite_setup();
     RUN_TEST_CASE(uart_tx, notify_readiness_to_uart_rx);
+#ifndef ARDUINO_ARCH_ZEPHYR
     RUN_TEST_CASE(uart_tx, not_ready);
+#endif
     RUN_TEST_CASE(uart_tx, begin);
     RUN_TEST_CASE(uart_tx, write_one_byte);
     RUN_TEST_CASE(uart_tx, write_bytes);
