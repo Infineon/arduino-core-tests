@@ -21,7 +21,7 @@
  * - check the availableForWrite
  * - write a longer string than the writable buffer
  * - read the reply back from the other end
- * - end the UART communication and, on Zephyr, restart and exchange a byte
+ * - end the UART communication
  * 
  * This test is meant as a happy path verification of the API functions 
  * of the UART class TX mode. 
@@ -81,9 +81,7 @@ TEST_IFX(uart_tx, not_ready) {
 TEST_IFX(uart_tx, begin) {
     Serial1.begin(UART_TEST_BAUDRATE);
     delay(500);
-#ifndef ARDUINO_ARCH_ZEPHYR
     TEST_ASSERT_TRUE(Serial1);
-#endif
 }
 
 TEST_IFX(uart_tx, write_one_byte) {
@@ -198,18 +196,13 @@ TEST_IFX(uart_tx, read_reply) {
     TEST_ASSERT_EQUAL_STRING(expected_msg, received_msg);
 }
 
+/**
+ * @note On Zephyr, Serial1 always evaluates to true, as the Arduino reference
+ * specifies for non-USB ports, so it is not checked to be false after end().
+ */
 TEST_IFX(uart_tx, end) {
     Serial1.end();
-#ifdef ARDUINO_ARCH_ZEPHYR
-    Serial1.begin(UART_TEST_BAUDRATE);
-    digitalWrite(TEST_PIN_SYNC_IO, LOW);
-
-    uint8_t ready = 0;
-    TEST_ASSERT_EQUAL_MESSAGE(1, Serial1.readBytes(&ready, 1), "No RX byte after UART restart");
-    TEST_ASSERT_EQUAL_HEX8(0xA5, ready);
-    TEST_ASSERT_EQUAL(1, Serial1.write(static_cast<uint8_t>(0x5A)));
-    Serial1.flush();
-#else
+#ifndef ARDUINO_ARCH_ZEPHYR
     TEST_ASSERT_FALSE(Serial1);
 #endif
 }
